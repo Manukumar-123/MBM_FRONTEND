@@ -201,7 +201,7 @@ const ScrollAnimation: React.FC = () => {
                 Experience Music <br /> Beyond the Screen
               </h2>
               <p className="text-sm sm:text-base text-gray-600 mt-4">
-                JoyJam goes beyond digital engagement — we bring creators and
+                M_B_M goes beyond digital engagement — we bring creators and
                 fans together in real life.
               </p>
 

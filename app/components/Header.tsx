@@ -38,7 +38,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6">
-        <div className="text-white font-bold text-2xl">JOYJAM</div>
+        <div className="text-white font-bold text-2xl">M_B_META</div>
         <nav className="hidden md:flex gap-6 text-white font-medium">
           <Link href="/">For creators</Link>
           <Link href="/">For fans</Link>

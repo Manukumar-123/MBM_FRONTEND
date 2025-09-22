@@ -15,101 +15,130 @@ const Creator: React.FC = () => {
   useEffect(() => {
     if (!videoWrapperRef.current) return;
 
-    ScrollTrigger.matchMedia({
-      // ✅ Desktop (with pinning & morph effect)
-      "(min-width: 768px)": () => {
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: videoWrapperRef.current,
-            start: "top top",
-            end: "+=1200",
-            scrub: 1,
-            pin: true,
-            anticipatePin: 1,
-          },
-        });
+    const mm = gsap.matchMedia();
 
-        tl.to(videoWrapperRef.current, {
-          width: "320px",
-          height: "640px",
-          borderRadius: "3rem",
-          rotate: 10,
-          left: "50%",
-          top: "50%",
-          xPercent: -50,
-          yPercent: -50,
-          duration: 1,
-          ease: "power2.inOut",
-        });
-
-        return () => tl.kill();
+    mm.add(
+      {
+        isDesktop: "(min-width: 768px)",
+        isMobile: "(max-width: 767px)",
       },
+      (context) => {
+        const { isDesktop } = context.conditions as {
+          isDesktop: boolean;
+          isMobile: boolean;
+        };
 
-      // ✅ Mobile (no pin, smooth zoom instead)
-      "(max-width: 767px)": () => {
-        gsap.fromTo(
-          videoWrapperRef.current,
-          { scale: 1, borderRadius: "0rem" },
-          {
-            scale: 1.1,
-            borderRadius: "1.5rem",
-            duration: 1.5,
-            ease: "power2.out",
+        if (isDesktop) {
+          const tl = gsap.timeline({
             scrollTrigger: {
               trigger: videoWrapperRef.current,
               start: "top top",
-              end: "bottom top",
-              scrub: true,
+              end: "+=1600",
+              scrub: 1,
+              pin: true,
+              anticipatePin: 1,
+              pinSpacing: true,
             },
-          }
-        );
-      },
-    });
+          });
 
-    // ✅ Fade-in Heading (works on all devices)
-    if (HeadingRef.current) {
-      gsap.fromTo(
-        HeadingRef.current,
-        { opacity: 0, filter: "blur(10px)", y: 50 },
-        {
-          opacity: 1,
-          filter: "blur(0px)",
-          y: 0,
-          duration: 1.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: HeadingRef.current,
-            start: "top 80%",
-          },
+          // Shrink and rotate video
+          tl.to(videoWrapperRef.current, {
+            width: "320px",
+            height: "640px",
+            borderRadius: "3rem",
+            rotate: 10,
+            left: "50%",
+            top: "50%",
+            xPercent: -50,
+            yPercent: -50,
+            duration: 4,
+            ease: "power2.inOut",
+          });
+
+          // Fade headings in with blur effect
+          const animateHeading = (el: HTMLDivElement, offset: number) => {
+            if (!el) return;
+            tl.from(
+              el,
+              {
+                autoAlpha: 0,
+                y: 50,
+                filter: "blur(10px)",
+                duration: 1.2,
+                ease: "power2.out",
+                onUpdate: function () {
+                  this.targets().forEach((target: HTMLDivElement) => {
+                    const progress = this.progress();
+                    target.style.filter = `blur(${10 * (1 - progress)}px)`;
+                  });
+                },
+              },
+              `-=${offset}`
+            );
+          };
+
+          animateHeading(HeadingRef.current!, 3);
+          animateHeading(HeadingSecondRef.current!, 2.5);
+
+          // Slide video up at end
+          tl.to(
+            videoWrapperRef.current,
+            {
+              yPercent: -100,
+              autoAlpha: 0,
+              duration: 1.2,
+              ease: "power2.inOut",
+            },
+            "+=0.5"
+          );
+        } else {
+          // Mobile: simple scale + fade
+          gsap.fromTo(
+            videoWrapperRef.current,
+            { scale: 1, borderRadius: "0rem" },
+            {
+              scale: 1.1,
+              borderRadius: "1.5rem",
+              autoAlpha: 0.8,
+              scrollTrigger: {
+                trigger: videoWrapperRef.current,
+                start: "top top",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+
+          // Headings fade-up + blur for mobile
+          [HeadingRef.current, HeadingSecondRef.current].forEach((el) => {
+            if (!el) return;
+            gsap.fromTo(
+              el,
+              { autoAlpha: 0, y: 50, filter: "blur(10px)" },
+              {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: 1.2,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: el,
+                  start: "top 80%",
+                },
+              }
+            );
+          });
         }
-      );
-    }
 
-    if (HeadingSecondRef.current) {
-      gsap.fromTo(
-        HeadingSecondRef.current,
-        { opacity: 0, filter: "blur(10px)", y: 50 },
-        {
-          opacity: 1,
-          filter: "blur(0px)",
-          y: 0,
-          duration: 1.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: HeadingSecondRef.current,
-            start: "top 80%",
-          },
-        }
-      );
-    }
+        return () => ScrollTrigger.killAll();
+      }
+    );
 
-    return () => {
-      ScrollTrigger.killAll();
-    };
+    return () => mm.revert();
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-black">
+    <section className="relative w-full min-h-screen bg-black overflow-hidden">
       {/* Video pinned / animated */}
       <div
         ref={videoWrapperRef}
@@ -152,7 +181,7 @@ const Creator: React.FC = () => {
             Fan Experience
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-white">
-            JoyJam puts you in control. Engage with your <br />
+            M_B_M puts you in control. Engage with your <br />
             favorite music creators, explore new talent, access exclusive
             content, and <br /> experience music on your terms.
           </p>
