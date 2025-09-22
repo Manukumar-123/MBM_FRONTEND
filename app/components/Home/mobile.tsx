@@ -160,9 +160,9 @@ const ScrollAnimation: React.FC = () => {
       >
         <h1
           ref={HeadingRef}
-          className="mx-auto mb-10 text-7xl font-extrabold text-white text-center relative z-10"
+          className="mx-auto my-20 text-6xl font-bold text-white text-center relative z-10"
         >
-          The Music App
+          The Global Media <br /> Marketplace!
         </h1>
 
         {/* Mobile Shell */}
@@ -198,7 +198,7 @@ const ScrollAnimation: React.FC = () => {
           >
             <div className="max-w-5xl w-full mx-auto">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mt-6 md:mt-24">
-                Experience Music <br /> Beyond the Screen
+                Experience Creativity <br /> Beyond the Screen
               </h2>
               <p className="text-sm sm:text-base text-gray-600 mt-4">
                 M_B_M goes beyond digital engagement — we bring creators and

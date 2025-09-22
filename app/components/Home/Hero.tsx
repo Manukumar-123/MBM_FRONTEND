@@ -39,11 +39,11 @@ export default function Hero() {
         className="relative lg:mt-40 mt-10 z-10 flex flex-col items-center justify-center h-full text-center text-white"
       >
         <h1 className="md:text-5xl text-lg font-bold lg:mt-10 mt-0">
-          Built for Creators. Powered <br /> by Fans.
+          Built for Creators. Powered <br /> by MeBookMeta
         </h1>
         <p className="md:mt-6 mt-2 md:text-lg text-xs text-gray-300 px-8">
-          A Direct-to-Fan Music Platform for Discovery, <br /> Community, and
-          Culture.
+          A Direct-to MeBookMeta Creatives Platform for <br /> Discovery,{" "}
+          Community, and Culture.
         </p>
         <button className="md:mt-10 mt-4 px-6 py-3 border border-white rounded-full hover:bg-white hover:text-black transition">
           Join the Beta
