@@ -94,48 +94,42 @@ const FlipC: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col justify-center items-center  gap-12 bg-black">
-      <div ref={leftCardRef} className="w-full md:w-[30%]">
+    <div className="flex md:flex-row flex-col justify-center items-center w-full  gap-12 bg-black">
+      <div ref={leftCardRef} className="">
         <FlipCard
-          front={
-            <div className="bg-blue-500 w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              <h2 className="text-3xl font-bold">Front Side</h2>
-              <button className="mt-4 px-4 py-2 bg-white text-black rounded-full">
-                Join Beta
+          videoUrl="/ally.mkv"
+          Title="MEBOOKMETA PITCH ALLEY PREVIEW"
+          Back={
+            <div className=" w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
+              <button
+                onClick={() => {
+                  alert("coming soon");
+                }}
+                className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full"
+              >
+                Visit Profile
               </button>
             </div>
           }
-          back={
-            <div>
-              <h2 className="text-2xl font-bold">Back Side</h2>
-              <p className="mt-2">
-                This is dummy content on top of an image with overlay.
-              </p>
-            </div>
-          }
-          backImage="https://img.freepik.com/premium-vector/rock-star-dog-skull-head-vector_1023984-25965.jpg"
         />
       </div>
 
-      <div ref={rightCardRef} className="w-full md:w-[45%]">
+      <div ref={rightCardRef} className="">
         <FlipCard
-          front={
-            <div className="bg-blue-500 w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              <h2 className="text-3xl font-bold">Front Side</h2>
-              <button className="mt-4 px-4 py-2 bg-white text-black rounded-full">
-                Join Beta
+          videoUrl="/charly.mkv"
+          Title="MEBOOKMETA ASK THE UNIVERSE PREVIEW"
+          Back={
+            <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
+              <button
+                onClick={() => {
+                  alert("coming soon");
+                }}
+                className="mt-4 px-4 py-2 bg-white text-black rounded-full"
+              >
+                Visit Profile
               </button>
             </div>
           }
-          back={
-            <div>
-              <h2 className="text-2xl font-bold">Back Side</h2>
-              <p className="mt-2">
-                This is dummy content on top of an image with overlay.
-              </p>
-            </div>
-          }
-          backImage="https://st2.depositphotos.com/2170303/5449/i/450/depositphotos_54498235-stock-photo-young-rockstar-playing-on-guitar.jpg"
         />
       </div>
     </div>

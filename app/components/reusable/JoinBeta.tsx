@@ -4,23 +4,22 @@ import { useRef, useState } from "react";
 import { gsap } from "gsap";
 
 interface FlipCardProps {
-  front: React.ReactNode;
-  back: React.ReactNode;
+  // Can be a video now
+  Title?: string;
+  Back: React.ReactNode;
   width?: string;
   height?: string;
   flipDuration?: number;
-  backImage?: string;
-  frontImage?: string;
+  videoUrl?: string;
 }
 
 const FlipCard: React.FC<FlipCardProps> = ({
-  front,
-  back,
+  Title,
+  Back,
   width = "w-96",
   height = "h-[400px] sm:h-[500px]",
   flipDuration = 0.8,
-  backImage = "https://via.placeholder.com/400x500",
-  frontImage = "https://via.placeholder.com/400x500",
+  videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4", // default video
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [flipped, setFlipped] = useState(false);
@@ -58,35 +57,40 @@ const FlipCard: React.FC<FlipCardProps> = ({
           className="relative w-full h-full rounded-xl shadow-lg"
           style={{ transformStyle: "preserve-3d" }}
         >
-          {/* Front */}
+          {/* Front with Video */}
           <div
             className="absolute w-full h-full rounded-xl overflow-hidden flex justify-center items-center"
             style={{
               backfaceVisibility: "hidden",
-              backgroundImage: `url(${frontImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
             }}
           >
-            <div className="absolute inset-0 bg-black opacity-20 pointer-events-none"></div>
-            <div className="relative z-10 w-full h-full flex justify-center items-center text-white">
-              {front}
+            <video
+              src={videoUrl}
+              className="w-full h-full object-cover rounded-xl"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+
+            {/* Bottom Overlay with Name */}
+            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent p-8">
+              <h6 className="text-white text-xl font-semibold tracking-widest">
+                {Title}
+              </h6>
             </div>
           </div>
 
-          {/* Back */}
+          {/* Back with Buttons/Text */}
           <div
-            className="absolute w-full h-full rounded-xl flex flex-col justify-center items-center text-white overflow-hidden"
+            className="absolute w-full h-full rounded-xl flex flex-col justify-center items-center text-white overflow-hidden bg-gradient-to-r from-black via-gray-900 to-black"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              backgroundImage: `url(${backImage})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
             }}
           >
-            <div className="absolute inset-0 bg-black opacity-50 pointer-events-none"></div>
-            <div className="relative z-10 px-4 text-center">{back}</div>
+            <div className="absolute inset-0 bg-black/50"></div>
+            <div className="absolute z-10 text-white">{Back}</div>
           </div>
         </div>
       </div>
