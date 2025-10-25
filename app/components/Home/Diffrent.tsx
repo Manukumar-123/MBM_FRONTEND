@@ -1,19 +1,44 @@
 "use client";
 
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Diffrent = () => {
+const Diffrent: React.FC = () => {
   const outerRef = useRef<HTMLDivElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const images = [
+    {
+      src: "https://flowbite.com/docs/images/people/profile-picture-1.jpg",
+      label: "Podcasts",
+    },
+    {
+      src: "https://flowbite.com/docs/images/people/profile-picture-2.jpg",
+      label: "Audio Books",
+    },
+    {
+      src: "https://flowbite.com/docs/images/people/profile-picture-3.jpg",
+      label: "Audio Music",
+    },
+    {
+      src: "https://flowbite.com/docs/images/people/profile-picture-4.jpg",
+      label: "Video Music",
+    },
+    {
+      src: "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
+      label: "Live Shows",
+    },
+  ];
+
+  const radius = 140;
 
   useEffect(() => {
     if (outerRef.current) {
-      // Continuous rotation
       gsap.to(outerRef.current, {
         rotation: 360,
         transformOrigin: "50% 50%",
@@ -24,7 +49,6 @@ const Diffrent = () => {
     }
 
     if (containerRef.current) {
-      // Pop-in animation on scroll
       gsap.from(containerRef.current, {
         opacity: 0,
         scale: 0.5,
@@ -38,24 +62,13 @@ const Diffrent = () => {
     }
   }, []);
 
-  const images = [
-    "https://flowbite.com/docs/images/people/profile-picture-1.jpg",
-    "https://flowbite.com/docs/images/people/profile-picture-2.jpg",
-    "https://flowbite.com/docs/images/people/profile-picture-3.jpg",
-    "https://flowbite.com/docs/images/people/profile-picture-4.jpg",
-    "https://flowbite.com/docs/images/people/profile-picture-5.jpg",
-    "https://flowbite.com/docs/images/people/profile-picture-2.jpg",
-  ];
-
-  const radius = 140; // distance from center
-
   return (
     <div className="bg-black py-20">
-      <div>
-        <h1 className="text-4xl md:text-5xl font-bold text-white text-center mb-10">
+      <div className="text-center">
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
           What makes us <br /> different?
         </h1>
-        <p className="text-white text-center text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-white text-sm md:text-base max-w-2xl mx-auto">
           Other social media apps treat music <br /> as just another piece of
           content, M_B_M treats <br /> it as an experience.
         </p>
@@ -63,14 +76,14 @@ const Diffrent = () => {
 
       <div
         ref={containerRef}
-        className="relative md:h-[400px] md:w-[400px] h-80 w-80 mx-auto mt-20"
+        className="relative md:h-[500px] md:w-[500px] h-70 w-70 mx-auto mt-20"
       >
         {/* Rotating outer ring */}
         <div
           ref={outerRef}
-          className="absolute inset-0 flex items-center justify-center rounded-full border-2 border-dashed border-gray-400/50"
+          className="absolute inset-0 flex items-center justify-center rounded-full border-2 border-dashed border-gray-400 z-0"
         >
-          {images.map((src, index) => {
+          {images.map((item, index) => {
             const angle = (index / images.length) * 360;
             const x = radius * Math.cos((angle * Math.PI) / 180);
             const y = radius * Math.sin((angle * Math.PI) / 180);
@@ -78,24 +91,45 @@ const Diffrent = () => {
             return (
               <div
                 key={index}
-                className="absolute w-[60px] h-[60px] rounded-full overflow-hidden border-2 border-gray-400/50"
-                style={{
-                  transform: `translate(${x}px, ${y}px)`,
-                }}
+                className="absolute"
+                style={{ transform: `translate(${x}px, ${y}px)` }}
               >
-                <Image
-                  src={src}
-                  alt={`Profile ${index + 1}`}
-                  fill
-                  className="object-cover rounded-full"
-                />
+                {/* Image circle */}
+                <div
+                  className="md:w-[60px] md:h-[60px] w-16 h-16 md:p-12  p-4 rounded-full overflow-hidden border-2 border-white border-dashed border-gray-400/50 cursor-pointer relative z-10"
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <Image
+                    src={item.src}
+                    alt={item.label}
+                    fill
+                    className="object-cover rounded-full p-2 hover:scale-125 transition duration-300 -z-20"
+                  />
+                </div>
+
+                {/* Tooltip always on the right side */}
+                {hoveredIndex === index && (
+                  <div
+                    className="absolute top-1/2 left-full -translate-y-1/2 ml-3 w-80 h-40 rounded-lg overflow-hidden shadow-lg z-100 cursor-pointer"
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    {/* Overlay label */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+                      <span className="text-white text-lg font-bold">
+                        {item.label}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
 
         {/* Central static circle */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="absolute inset-0 flex items-center justify-center -z-20">
           <div className="w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center border-2 border-gray-300">
             <h1 className="text-2xl font-bold text-black">M_B_M</h1>
           </div>

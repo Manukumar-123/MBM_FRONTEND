@@ -160,7 +160,7 @@ const ScrollAnimation: React.FC = () => {
       >
         <h1
           ref={HeadingRef}
-          className="mx-auto my-20 text-6xl font-bold text-white text-center relative z-10"
+          className="mx-auto my-20 text-5xl font-bold text-white text-center relative z-10"
         >
           The Global Media <br /> Marketplace!
         </h1>

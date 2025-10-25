@@ -70,11 +70,12 @@ const Testimonial = () => {
             prevEl: ".swiper-button-prev",
           }}
           loop={true}
-          className="h-[400px]"
+          className="mySwiper"
+          style={{ paddingBottom: "40px" }}
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className="flex flex-col p-8 h-60 rounded-2xl bg-white">
+              <div className="flex flex-col p-8 h-68 rounded-2xl bg-white">
                 <div className="flex">
                   <div className=" flex gap-4">
                     <Image

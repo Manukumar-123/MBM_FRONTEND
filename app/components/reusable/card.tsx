@@ -58,11 +58,11 @@ const Creator: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
+    <section className="relative w-full  overflow-hidden min-h-screen text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
       {/* Left Content */}
       <div ref={leftRef} className="lg:px-40 px-4">
         <h2 className="text-sm md:text-sml font-bold leading-7 tracking-widest ">
-          Whether you're a new or established <br /> music creator, we provide
+          Whether you are a new or established <br /> music creator, we provide
           the tools <br /> to engage with fans, earn from your <br /> music, and
           grow a sustainable career.
         </h2>
@@ -81,7 +81,7 @@ const Creator: React.FC = () => {
           grabCursor={true}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           modules={[EffectCards]}
-          className="w-[280px] sm:w-[320px] md:w-[360px] h-[500px]"
+          className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px]"
         >
           <SwiperSlide>
             <div className="relative bg-gradient-to-b from-orange-400 to-red-500 rounded-3xl shadow-xl text-white p-6 h-full flex flex-col justify-between">

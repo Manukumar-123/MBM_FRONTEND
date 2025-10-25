@@ -27,7 +27,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full h-screen  overflow-hidden">
       {/* Carousel as full background */}
       <div className="absolute inset-0 w-full h-full">
         <Carousel />

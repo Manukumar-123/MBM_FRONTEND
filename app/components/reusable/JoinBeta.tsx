@@ -43,7 +43,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
   };
 
   return (
-    <div className="flex justify-center items-center p-4">
+    <div className="flex justify-center items-center  ">
       <div
         className={`${width} ${height} cursor-pointer`}
         style={{ perspective: 1000 }}
@@ -54,7 +54,7 @@ const FlipCard: React.FC<FlipCardProps> = ({
       >
         <div
           ref={cardRef}
-          className="relative w-full h-full rounded-xl shadow-lg"
+          className="relative w-full h-full rounded-xl  shadow-lg"
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* Front with Video */}

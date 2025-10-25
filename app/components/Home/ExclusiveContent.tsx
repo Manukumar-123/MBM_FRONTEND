@@ -5,7 +5,7 @@ import { EffectCards, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import "swiper/css/pagination";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -13,6 +13,27 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ExclusivePage() {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const videoLink = [
+    "https://mebook-work-v2.s3.us-east-2.amazonaws.com/1688492047308-Mebookmeta+video.mp4",
+    "https://mebook-work-v2.s3.us-east-2.amazonaws.com/1726321479769-Welcome.mov",
+    "https://mebook-work-v2.s3.us-east-2.amazonaws.com/1725393224250-A+Universe+Of+Creativity+%281%29.mov",
+  ];
+
+  const videoRefs = useRef<HTMLVideoElement[]>([]);
+
+  // Play only the active slide
+  useEffect(() => {
+    videoRefs.current.forEach((video, index) => {
+      if (!video) return;
+      if (index === activeIndex) {
+        video.play().catch(() => {});
+      } else {
+        video.pause();
+      }
+    });
+  }, [activeIndex]);
 
   useEffect(() => {
     // Inject custom styles for swiper pagination (pills)
@@ -73,50 +94,31 @@ export default function ExclusivePage() {
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-black">
-      <div ref={containerRef} className="w-[90%] max-w-4xl relative">
+      <div ref={containerRef} className="w-[80%] max-w-4xl relative">
         <Swiper
           effect={"cards"}
           grabCursor={true}
           modules={[EffectCards, Pagination]}
           pagination={{ clickable: true }}
           className="pb-16"
+          onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
         >
-          {/* Card 1 */}
-          <SwiperSlide>
-            <div className="bg-gradient-to-r from-orange-400 to-yellow-500 rounded-2xl p-8 text-black font-bold text-xl flex items-center justify-center h-[400px]">
-              Curate Your Experience
-            </div>
-          </SwiperSlide>
-
-          {/* Card 2 */}
-          <SwiperSlide>
-            <div className="bg-blue-500 rounded-2xl p-8 text-white font-bold text-xl flex flex-col items-center justify-center h-[400px]">
-              <p>Unlock Exclusive Content</p>
-              <button className="mt-6 bg-white text-blue-500 px-6 py-2 rounded-full font-medium shadow-md">
-                Join the Beta
-              </button>
-            </div>
-          </SwiperSlide>
-
-          {/* Card 3 */}
-          <SwiperSlide>
-            <div className="bg-white rounded-2xl p-8 h-[400px] flex flex-col md:flex-row items-center justify-center gap-6">
-              <div className="flex-1 font-bold text-black text-2xl">
-                Connect & Engage
-              </div>
-              <div className="flex-1">
-                <img
-                  src="/phone-mockup.png"
-                  alt="App Preview"
-                  className="rounded-2xl"
+          {videoLink?.map((link, index) => (
+            <SwiperSlide key={link}>
+              <div className="rounded-2xl overflow-hidden h-[480px] relative">
+                <video
+                  ref={(el) => {
+                    if (el) videoRefs.current[index] = el;
+                  }}
+                  src={link}
+                  className="w-full h-full object-cover"
+                  loop
+                  muted
+                  playsInline
                 />
-                <p className="mt-4 text-gray-800 text-sm">
-                  Interact with music creators and other fans through live
-                  streams, direct messaging, and creator-led communities
-                </p>
               </div>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </div>
     </div>

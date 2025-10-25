@@ -4,24 +4,26 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(MotionPathPlugin);
 
 const allImages = [
-  "/hero.webp",
-  "/hero2.webp",
-  "/hero3.webp",
-  "/hero4.webp",
-  "/hero9.webp",
-  "/hero10.webp",
+  { src: "/hero.webp", label: "Authors and Writers" },
+  { src: "/hero2.webp", label: "Performance Art Creatives" },
+  { src: "/hero3.webp", label: "Music, Recording & Production" },
+  { src: "/hero4.webp", label: "Television, Film & News Media" },
+  { src: "/hero9.webp", label: "Print, Internet, Streaming & Publishing" },
+  { src: "/hero10.webp", label: "Visual Art Creatives" },
 ];
 
 export default function SemiCircularCarousel() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
 
-  // ✅ Watch screen size
+  // ✅ Screen size watcher
   useEffect(() => {
     const checkScreen = () => {
       setIsMobile(window.innerWidth < 640);
@@ -31,7 +33,7 @@ export default function SemiCircularCarousel() {
     return () => window.removeEventListener("resize", checkScreen);
   }, []);
 
-  // ✅ Animate carousel
+  // ✅ GSAP animation
   useEffect(() => {
     if (!containerRef.current || !pathRef.current) return;
 
@@ -39,7 +41,6 @@ export default function SemiCircularCarousel() {
       containerRef.current.querySelectorAll(".orbit-item")
     );
 
-    // Kill everything before re-initializing
     gsap.killTweensOf(items);
     gsap.set(items, { clearProps: "all" });
 
@@ -55,7 +56,6 @@ export default function SemiCircularCarousel() {
     pathRef.current?.setAttribute("d", pathD);
 
     if (!isMobile) {
-      // 🖥 Desktop orbit
       const count = items.length;
       const gap = 1 / count;
       items.forEach((item, i) => {
@@ -74,13 +74,11 @@ export default function SemiCircularCarousel() {
         });
       });
     } else {
-      // 📱 Mobile slideshow
       items.forEach((item) => {
         gsap.set(item, { opacity: 0, xPercent: 100, rotateY: -90 });
       });
 
       const tl = gsap.timeline({ repeat: -1 });
-
       items.forEach((item) => {
         tl.to(item, {
           opacity: 1,
@@ -99,15 +97,14 @@ export default function SemiCircularCarousel() {
           });
       });
     }
-  }, [isMobile]); // ✅ Re-run whenever screen type changes
+  }, [isMobile]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full md:h-screen h-[80vh] overflow-hidden">
       <div
         ref={containerRef}
-        className="absolute -top-40 md:top-80 w-full h-full flex items-center justify-center perspective-1000"
+        className="absolute -top-20 md:top-80 w-full h-full flex items-center justify-center perspective-1000"
       >
-        {/* Orbit path (desktop only) */}
         <svg className="absolute w-full h-full">
           <path
             ref={pathRef}
@@ -117,27 +114,35 @@ export default function SemiCircularCarousel() {
           />
         </svg>
 
-        {allImages.map((src, i) => (
+        {allImages.map((img, i) => (
           <div
             key={i}
-            className="orbit-item absolute w-40 h-40 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44 
-                       rounded-2xl overflow-hidden shadow-xl backface-hidden"
+            className="orbit-item absolute flex flex-col items-center cursor-pointer group z-100"
+            onClick={() => router.push("/searchAll")}
           >
-            <Image
-              src={src}
-              alt={`carousel-${i}`}
-              priority
-              fill
-              style={{ objectFit: "cover" }}
-              quality={100}
-              unoptimized
-            />
+            <div
+              className="relative w-40 h-40 sm:w-28 sm:h-28 md:w-36 md:h-36 lg:w-44 lg:h-44
+                         rounded-2xl overflow-hidden shadow-xl backface-hidden"
+            >
+              <Image
+                src={img.src}
+                alt={img.label}
+                fill
+                style={{ objectFit: "cover" }}
+                quality={100}
+                priority
+                unoptimized
+              />
+            </div>
+            <p className="mt-2 text-center text-white text-sm md:text-sm font-medium bg-black/40 px-2 py-1 rounded-md backdrop-blur-sm break-words whitespace-normal ">
+              {img.label}
+            </p>
           </div>
         ))}
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
+      <div className="absolute z-1000 bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/100 to-transparent pointer-events-none" />
     </div>
   );
 }

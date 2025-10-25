@@ -152,8 +152,8 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed w-full top-0 z-50 transition-all backdrop-blur-md bg-black/30 ${
-        isScrolled ? "bg-black/70 shadow-lg" : ""
+      className={`fixed z-1000 w-full top-0 z-50 transition-all backdrop-blur-md bg-black/30 ${
+        isScrolled ? "bg-black/70 shadow-lg " : ""
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6 relative">
@@ -166,12 +166,12 @@ export default function Header() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="John Doe"
-            className="w-full px-4 py-2 rounded-md border-2 border-white text-white focus:outline-none"
+            className="w-full px-4 py-2 rounded-full border-2 border-[#323232] text-white focus:outline-none"
           />
           {filteredProfiles.length > 0 && (
             <div
               ref={resultRef}
-              className="absolute mt-2 w-full bg-black border-2 text-white border-white rounded-md shadow-lg p-2 z-50"
+              className="absolute mt-2 w-full bg-black border-2 text-white border-[#323232] rounded-2xl shadow-lg p-2 z-50"
             >
               {filteredProfiles.map((profile) => (
                 <div
