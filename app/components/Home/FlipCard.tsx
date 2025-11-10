@@ -27,8 +27,8 @@ const FlipC: React.FC = () => {
           isMobile: boolean;
         };
 
-        // Desktop animation: left comes from left, right comes from right
         if (isDesktop) {
+          // Desktop: left from left, right from right
           gsap.from(leftCardRef.current, {
             x: -200,
             autoAlpha: 0,
@@ -41,9 +41,11 @@ const FlipC: React.FC = () => {
             },
             onUpdate: function () {
               const progress = this.progress();
-              leftCardRef.current!.style.filter = `blur(${
-                10 * (1 - progress)
-              }px)`;
+              if (leftCardRef.current) {
+                leftCardRef.current.style.filter = `blur(${
+                  10 * (1 - progress)
+                }px)`;
+              }
             },
           });
 
@@ -59,13 +61,15 @@ const FlipC: React.FC = () => {
             },
             onUpdate: function () {
               const progress = this.progress();
-              rightCardRef.current!.style.filter = `blur(${
-                10 * (1 - progress)
-              }px)`;
+              if (rightCardRef.current) {
+                rightCardRef.current.style.filter = `blur(${
+                  10 * (1 - progress)
+                }px)`;
+              }
             },
           });
         } else {
-          // Mobile: fade-up with blur for both cards
+          // Mobile: fade-up with blur
           [leftCardRef.current, rightCardRef.current].forEach((el) => {
             gsap.from(el, {
               y: 50,
@@ -79,7 +83,9 @@ const FlipC: React.FC = () => {
               },
               onUpdate: function () {
                 const progress = this.progress();
-                el!.style.filter = `blur(${10 * (1 - progress)}px)`;
+                if (el) {
+                  el.style.filter = `blur(${10 * (1 - progress)}px)`;
+                }
               },
             });
           });
@@ -94,17 +100,15 @@ const FlipC: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col justify-center items-center w-full  gap-12 bg-black">
-      <div ref={leftCardRef} className="">
+    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-black">
+      <div ref={leftCardRef}>
         <FlipCard
           videoUrl="/ally.mkv"
           Title="MEBOOKMETA PITCH ALLEY PREVIEW"
           Back={
-            <div className=" w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
+            <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
               <button
-                onClick={() => {
-                  alert("coming soon");
-                }}
+                onClick={() => alert("coming soon")}
                 className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full"
               >
                 Visit Profile
@@ -114,16 +118,14 @@ const FlipC: React.FC = () => {
         />
       </div>
 
-      <div ref={rightCardRef} className="">
+      <div ref={rightCardRef}>
         <FlipCard
           videoUrl="/charly.mkv"
           Title="MEBOOKMETA ASK THE UNIVERSE PREVIEW"
           Back={
             <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
               <button
-                onClick={() => {
-                  alert("coming soon");
-                }}
+                onClick={() => alert("coming soon")}
                 className="mt-4 px-4 py-2 bg-white text-black rounded-full"
               >
                 Visit Profile

@@ -198,9 +198,12 @@ export default function Header() {
           <Link href="/">Contact Us</Link>
         </nav>
 
-        <button className="hidden md:block bg-white text-black font-semibold px-5 py-2 rounded-full hover:bg-gray-200 transition">
+        <Link
+          href="/payment"
+          className="hidden md:block bg-white text-black font-semibold px-5 py-2 rounded-full hover:bg-gray-200 transition"
+        >
           Join the Beta
-        </button>
+        </Link>
 
         {/* Mobile menu toggle */}
         <div className="md:hidden text-white">☰</div>
