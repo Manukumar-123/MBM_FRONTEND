@@ -7,89 +7,27 @@ import gsap from "gsap";
 type Profile = {
   id: number;
   name: string;
-  image: string;
 };
 
 const profiles: Profile[] = [
-  { id: 1, name: "John Doe", image: "https://picsum.photos/id/237/200/300" },
+  {
+    id: 1,
+    name: "Author / Writer / Publisher",
+  },
   {
     id: 2,
-    name: "Jane Smith",
-    image: "https://picsum.photos/200/300?grayscale",
+    name: "Performance Art Creatives",
   },
   {
     id: 3,
-    name: "Michael Brown",
-    image: "https://picsum.photos/200/300/?blur=2",
+    name: "Music, Recording & Production",
   },
-  { id: 4, name: "Lisa Johnson", image: "https://picsum.photos/200/300/?blur" },
+  { id: 4, name: "Television, Film & News Media" },
 
-  { id: 5, name: "John Doe 2", image: "https://picsum.photos/id/237/200/300" },
+  { id: 5, name: "Print, Internet, Streaming & Publishing" },
   {
     id: 6,
-    name: "Jane Smith 2",
-    image: "https://picsum.photos/200/300?grayscale",
-  },
-  {
-    id: 7,
-    name: "Michael Brown 2",
-    image: "https://picsum.photos/200/300/?blur=2",
-  },
-  {
-    id: 8,
-    name: "Lisa Johnson 2",
-    image: "https://picsum.photos/200/300/?blur",
-  },
-
-  { id: 9, name: "John Doe 3", image: "https://picsum.photos/id/237/200/300" },
-  {
-    id: 10,
-    name: "Jane Smith 3",
-    image: "https://picsum.photos/200/300?grayscale",
-  },
-  {
-    id: 11,
-    name: "Michael Brown 3",
-    image: "https://picsum.photos/200/300/?blur=2",
-  },
-  {
-    id: 12,
-    name: "Lisa Johnson 3",
-    image: "https://picsum.photos/200/300/?blur",
-  },
-
-  { id: 13, name: "John Doe 4", image: "https://picsum.photos/id/237/200/300" },
-  {
-    id: 14,
-    name: "Jane Smith 4",
-    image: "https://picsum.photos/200/300?grayscale",
-  },
-  {
-    id: 15,
-    name: "Michael Brown 4",
-    image: "https://picsum.photos/200/300/?blur=2",
-  },
-  {
-    id: 16,
-    name: "Lisa Johnson 4",
-    image: "https://picsum.photos/200/300/?blur",
-  },
-
-  { id: 17, name: "John Doe 5", image: "https://picsum.photos/id/237/200/300" },
-  {
-    id: 18,
-    name: "Jane Smith 5",
-    image: "https://picsum.photos/200/300?grayscale",
-  },
-  {
-    id: 19,
-    name: "Michael Brown 5",
-    image: "https://picsum.photos/200/300/?blur=2",
-  },
-  {
-    id: 20,
-    name: "Lisa Johnson 5",
-    image: "https://picsum.photos/200/300/?blur",
+    name: "	Visual Art Creatives",
   },
 ];
 
@@ -178,11 +116,6 @@ export default function Header() {
                   key={profile.id}
                   className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 cursor-pointer"
                 >
-                  <img
-                    src={profile.image}
-                    alt={profile.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
                   <span className="text-white">{profile.name}</span>
                 </div>
               ))}
