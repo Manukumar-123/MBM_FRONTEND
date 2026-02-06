@@ -32,7 +32,7 @@ const Creator: React.FC = () => {
             trigger: leftRef.current,
             start: "top 80%",
           },
-        }
+        },
       );
     }
 
@@ -52,7 +52,7 @@ const Creator: React.FC = () => {
             trigger: swiperRef.current,
             start: "top 80%",
           },
-        }
+        },
       );
     }
   }, []);
@@ -61,10 +61,17 @@ const Creator: React.FC = () => {
     <section className="relative w-full  overflow-hidden min-h-screen text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
       {/* Left Content */}
       <div ref={leftRef} className="lg:px-40 px-4">
-        <h2 className="text-sm md:text-sml font-bold leading-7 tracking-widest ">
-          Whether you are a new or established <br /> music creator, we provide
-          the tools <br /> to engage with fans, earn from your <br /> music, and
-          grow a sustainable career.
+        <h1 className="text-4xl font-bold mb-2">
+          The Greatest Challenge for Creatives
+        </h1>
+        <h2 className="text-sm md:text-md font-bold leading-7 tracking-widest ">
+          It’s not content creation. Creating is literally what we as Creatives
+          do. No, our biggest <br /> challenge is in Sharing Work and the Time
+          and Cost of Sharing Work – specifically, <br /> sharing work with
+          ideal audiences, creating a following (a unique brand) and becoming
+          successful or profitable.
+          <br /> <br />
+          Meet that challenge for only $49.99/month on this site
         </h2>
         <button className="px-6 mt-4 py-3 bg-white text-black font-semibold rounded-full shadow-md hover:scale-105 transition">
           Join the Beta

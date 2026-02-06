@@ -70,7 +70,7 @@ const ScrollAnimation: React.FC = () => {
                 trigger: HeadingRef.current,
                 start: "top 80%",
               },
-            }
+            },
           );
         }
 
@@ -91,7 +91,7 @@ const ScrollAnimation: React.FC = () => {
             duration: 3,
             ease: "power2.inOut",
           },
-          "-=0.2"
+          "-=0.2",
         );
 
         // Step 3: expand inside content
@@ -110,7 +110,7 @@ const ScrollAnimation: React.FC = () => {
             padding: "2rem",
             duration: 1,
           },
-          "-=0.6"
+          "-=0.6",
         );
 
         // Step 4: animate cards in
@@ -126,7 +126,7 @@ const ScrollAnimation: React.FC = () => {
             stagger: 0.2,
             ease: "back.out()",
           },
-          "<"
+          "<",
         );
 
         // Drift effect while scrolling
@@ -141,7 +141,7 @@ const ScrollAnimation: React.FC = () => {
         return () => {
           tl.kill();
         };
-      }
+      },
     );
 
     return () => {
@@ -196,13 +196,14 @@ const ScrollAnimation: React.FC = () => {
             text-left px-6 py-8 bg-white text-black 
             overflow-y-auto md:overflow-y-hidden md:overflow-y-auto"
           >
-            <div className="max-w-5xl w-full mx-auto">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mt-6 md:mt-24">
-                Experience Creativity <br /> Beyond the Screen
+            <div className="max-w-5xl w-full mx-auto ">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mt-6 md:mt-24 text-center">
+                Creatives
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 mt-4">
-                M_B_M goes beyond digital engagement — we bring creators and
-                fans together in real life.
+              <p className="text-md sm:text-base text-gray-600 mt-4 text-center">
+                Embrace the Future and Enhanced Technologies Market Who You Are
+                <br />
+                and What You Do For Only $49.99/Month
               </p>
 
               {/* Cards */}
@@ -255,7 +256,7 @@ const ScrollAnimation: React.FC = () => {
                       </div>
                     </div>
                     <div className="w-full h-full flex items-center justify-center uppercase">
-                      Creator Tools
+                      What Do You Do?
                     </div>
                   </div>
                 </div>
@@ -308,7 +309,7 @@ const ScrollAnimation: React.FC = () => {
                       </div>
                     </div>
                     <div className="w-full h-full flex items-center justify-center uppercase">
-                      Creator Tools
+                      Who is Your Audience?
                     </div>
                   </div>
                 </div>

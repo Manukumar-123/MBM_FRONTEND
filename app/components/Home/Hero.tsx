@@ -21,7 +21,7 @@ export default function Hero() {
           duration: 1,
           stagger: 0.2, // animate children one by one
           ease: "power3.out",
-        }
+        },
       );
     }
   }, []);
@@ -39,11 +39,11 @@ export default function Hero() {
         className="relative lg:mt-40 mt-10 z-10 flex flex-col items-center justify-center h-full text-center text-white"
       >
         <h1 className="md:text-5xl text-lg font-bold lg:mt-10 mt-0">
-          Built for Creators. Powered <br /> by MeBookMeta
+          For Creatives
         </h1>
         <p className="md:mt-6 mt-2 md:text-lg text-xs text-gray-300 px-8">
-          A Direct-to MeBookMeta Creatives Platform for <br /> Discovery,{" "}
-          Community, and Culture.
+          Share Your Work Build Your Following/Brand <br /> Collaborate, Explore
+          Content, In Every <br /> Form, Everywhere
         </p>
         <button className="md:mt-10 mt-4 px-6 py-3 border border-white rounded-full hover:bg-white hover:text-black transition">
           Join the Beta

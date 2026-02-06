@@ -68,7 +68,7 @@ export default function Header() {
     }
 
     const results = profiles.filter((p) =>
-      p.name.toLowerCase().includes(query.toLowerCase())
+      p.name.toLowerCase().includes(query.toLowerCase()),
     );
     setFilteredProfiles(results);
 
@@ -82,7 +82,7 @@ export default function Header() {
           stagger: 0.1,
           duration: 0.5,
           ease: "power3.out",
-        }
+        },
       );
     }
   }, [query]);
@@ -95,7 +95,7 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6 relative">
-        <div className="text-white font-bold text-2xl">M_B_META</div>
+        <div className="text-white font-bold text-2xl">MeBookMeta</div>
 
         {/* Search bar */}
         <div className="relative w-64 hidden md:block">
