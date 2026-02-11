@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #0d0d0d;
   --foreground: #171717;
 }
 
@@ -50,7 +50,8 @@ body {
 
 .Name {
   color: white;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+  font-family:
+    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   padding: 15px;
   font-size: 20px;
@@ -64,7 +65,9 @@ body {
   padding: 14px;
   margin-top: 15px;
   color: white;
-  box-shadow: 3px 3px 15px rgb(0, 0, 0), -3px -3px 15px rgb(58, 58, 58);
+  box-shadow:
+    3px 3px 15px rgb(0, 0, 0),
+    -3px -3px 15px rgb(58, 58, 58);
 }
 
 .card a {
