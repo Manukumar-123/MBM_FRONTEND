@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import s from "./upload.module.css";
-import { submitBook, saveDraft } from "./api";
+import { submitBook, saveDraft } from "../../../api/api";
 import { INITIAL_FORM_STATE } from "./constants";
 
 // ── Layout Components ──
@@ -132,7 +132,7 @@ export default function UploadPage() {
     if (!form.description.trim()) errs.push("Description is required");
     if (!form.author.trim()) errs.push("Author name is required");
     if (!form.category) errs.push("Category is required");
-    if (!files.frontCover) errs.push("Front cover image is required");
+    // if (!files.frontCover) errs.push("Front cover image is required");
     if (!files.manuscript) errs.push("Manuscript PDF is required");
     if (!form.rightsConfirmed) errs.push("You must confirm publishing rights");
     if (!form.termsAccepted) errs.push("You must accept the terms of service");

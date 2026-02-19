@@ -15,9 +15,7 @@ export default function CoverMediaSection({ previews, onFileChange }) {
     >
       {/* Book Covers */}
       <div className={s.fieldGroup}>
-        <label className={s.label}>
-          Book Covers <span className={s.req}>*</span>
-        </label>
+        <label className={s.label}>Book Covers</label>
         <div className={s.coverGrid}>
           <FileUploadZone
             id="frontCover"
