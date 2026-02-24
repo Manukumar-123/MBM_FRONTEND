@@ -196,7 +196,7 @@ export default function UploadPage() {
 
       {/* Navigation */}
 
-      <div className={s.pageWrapper}>
+      <div className={`${s.pageWrapper} `}>
         {/* Hero */}
         <HeroSection />
 

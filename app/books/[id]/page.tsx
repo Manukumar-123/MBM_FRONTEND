@@ -140,7 +140,7 @@ const BookDetailPage: FC<Props> = () => {
       <div className="fixed top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-200px] right-[-200px] w-[500px] h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-[1100px] mx-auto px-6 py-10">
+      <div className="max-w-[1100px] mx-auto px-6 py-10 mt-20">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6 text-sm">
           <span

@@ -17,7 +17,6 @@ import {
   IBook,
 } from "../../../api/api";
 import { CATEGORIES } from "./constants";
-import Navbar from "./Navbar";
 import StatusBadge from "./StatusBadge";
 import DeleteConfirmModal from "./deleteConfirmModel";
 
@@ -116,14 +115,12 @@ const BookListPage: FC = () => {
   return (
     <>
       {/* Ambient orbs */}
-      <div className="fixed top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+      <div className="fixed  top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-200px] right-[-200px] w-[500px] h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
-
-      <Navbar />
 
       <div className="max-w-[1100px] mx-auto px-6 py-10">
         {/* ── Header ── */}
-        <div className="flex items-start justify-between mb-8 gap-5 flex-wrap">
+        <div className="flex mt-20 items-start justify-between mb-8 gap-5 flex-wrap">
           <div>
             <h1 className="font-serif text-4xl font-semibold text-ink tracking-tight">
               Your Works
@@ -134,7 +131,7 @@ const BookListPage: FC = () => {
             </p>
           </div>
           <button
-            onClick={() => router.push("/upload")}
+            onClick={() => router.push("/work")}
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4" />

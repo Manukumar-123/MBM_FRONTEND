@@ -398,7 +398,7 @@ const EditBookPage: FC = () => {
         </div>
 
         {/* Hero */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 mt-20">
           <div className="inline-block font-mono text-[0.68rem] tracking-[0.2em] text-gold bg-gold-glow px-4 py-1.5 rounded-full border border-gold/20 mb-4">
             EDITING
           </div>
