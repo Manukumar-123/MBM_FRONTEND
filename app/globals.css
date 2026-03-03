@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+/* =========================================
+   ALWAYS DARK THEME
+========================================= */
 :root {
-  --background: #0d0d0d;
-  --foreground: #171717;
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @theme inline {
@@ -12,28 +15,21 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* From Uiverse.io by aadium */
+/* Card */
 .card {
   width: 100%;
   border-radius: 2em;
   padding: 10px;
   background-color: #191919;
-  /* box-shadow: 5px 5px 30px rgb(4, 4, 4), -5px -5px 30px rgb(57, 57, 57); */
 }
 
+/* Profile */
 .profileimage {
   background-color: transparent;
   border: none;
@@ -49,10 +45,7 @@ body {
 }
 
 .Name {
-  color: white;
-  font-family:
-    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  color: var(--foreground);
   padding: 15px;
   font-size: 20px;
   margin-top: 10px;
@@ -64,7 +57,7 @@ body {
   width: 90%;
   padding: 14px;
   margin-top: 15px;
-  color: white;
+  color: var(--foreground);
   box-shadow:
     3px 3px 15px rgb(0, 0, 0),
     -3px -3px 15px rgb(58, 58, 58);
@@ -72,21 +65,18 @@ body {
 
 .card a {
   transition: 0.4s;
-  color: white;
+  color: var(--foreground);
 }
 
 #github:hover {
   color: #c9510c;
 }
-
 #instagram:hover {
   color: #d62976;
 }
-
 #facebook:hover {
   color: #3b5998;
 }
-
 #twitter:hover {
   color: #00acee;
 }

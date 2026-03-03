@@ -128,7 +128,7 @@ export default function UploadPage() {
   // ─── Validation ───
   const validate = () => {
     const errs = [];
-    if (!form.title.trim()) errs.push("Book title is required");
+    if (!form.title.trim()) errs.push("Work title is required");
     if (!form.description.trim()) errs.push("Description is required");
     if (!form.author.trim()) errs.push("Author name is required");
     if (!form.category) errs.push("Category is required");

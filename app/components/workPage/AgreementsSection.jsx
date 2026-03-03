@@ -39,7 +39,7 @@ export default function AgreementsSection({ form, updateField }) {
           onChange={(e) => updateField("termsAccepted", e.target.checked)}
         />
         <label htmlFor="termsAccepted" className={s.agreementText}>
-          I agree to mebookmeta&apos;s <a href="/terms">Terms of Service</a>,{" "}
+          I agree to MeBookMeta&apos;s <a href="/terms">Terms of Service</a>,{" "}
           <a href="/publisher-agreement">Publisher Agreement</a>, and{" "}
           <a href="/content-guidelines">Content Guidelines</a>. My submission
           will be reviewed before publication. <span className={s.req}>*</span>

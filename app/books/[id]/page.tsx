@@ -100,7 +100,7 @@ const BookDetailPage: FC<Props> = () => {
     setDeleting(true);
     try {
       await deleteBook(bookId);
-      router.push("/books");
+      router.push("/work");
     } catch {
       alert("Failed to delete book");
       setDeleting(false);
@@ -113,7 +113,7 @@ const BookDetailPage: FC<Props> = () => {
       <>
         <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-4 text-ink-dim">
           <div className="w-10 h-10 border-3 border-line border-t-gold rounded-full animate-spin-slow" />
-          <p>Loading book details…</p>
+          <p>Loading work details…</p>
         </div>
       </>
     );
@@ -125,10 +125,10 @@ const BookDetailPage: FC<Props> = () => {
         <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
           <p className="text-lg text-ink">{error || "Book not found"}</p>
           <button
-            onClick={() => router.push("/books")}
+            onClick={() => router.push("/workList")}
             className="px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold"
           >
-            ← Back to Books
+            ← Back to Works
           </button>
         </div>
       </>
@@ -145,7 +145,7 @@ const BookDetailPage: FC<Props> = () => {
         <div className="flex items-center gap-2 mb-6 text-sm">
           <span
             className="text-ink-dim cursor-pointer hover:text-gold transition-colors"
-            onClick={() => router.push("/books")}
+            onClick={() => router.push("/workList")}
           >
             Your Works
           </span>
@@ -156,7 +156,7 @@ const BookDetailPage: FC<Props> = () => {
         {/* Action bar */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
           <button
-            onClick={() => router.push("/books")}
+            onClick={() => router.push("/work")}
             className="px-6 py-3 bg-elevated border border-line rounded-sm text-ink font-body text-sm font-medium hover:bg-surface transition-all"
           >
             ← Back
@@ -166,7 +166,7 @@ const BookDetailPage: FC<Props> = () => {
               onClick={() => router.push(`/books/${bookId}/edit`)}
               className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
             >
-              <Pencil className="w-4 h-4" /> Edit Book
+              <Pencil className="w-4 h-4" /> Edit Work
             </button>
             <button
               onClick={() => setDeleteModal(true)}

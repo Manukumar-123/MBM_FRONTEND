@@ -198,7 +198,7 @@ const BookListPage: FC = () => {
         ) : books.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
             <BookOpen className="w-12 h-12 text-ink-muted" strokeWidth={1.5} />
-            <p className="text-lg text-ink">No books found</p>
+            <p className="text-lg text-ink">No works found</p>
             <span className="text-sm text-ink-dim">
               Try adjusting your filters or upload a new work.
             </span>

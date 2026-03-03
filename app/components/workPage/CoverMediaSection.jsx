@@ -10,7 +10,7 @@ export default function CoverMediaSection({ previews, onFileChange }) {
       icon="🎨"
       iconColor="blue"
       title="Cover Art & Media"
-      description="The face of your book — make it count"
+      description="The face of your work — make it count"
       delay="0.2s"
     >
       {/* Book Covers */}
@@ -50,7 +50,7 @@ export default function CoverMediaSection({ previews, onFileChange }) {
         <FileUploadZone
           id="qrCode"
           icon="📱"
-          title="Upload QR Code"
+          title="Upload QR Sales Code"
           subtitle="Link to store, preview, or landing page"
           specs={["PNG, SVG", "Max 2MB"]}
           accept="image/*"
@@ -60,7 +60,7 @@ export default function CoverMediaSection({ previews, onFileChange }) {
           style={{ maxWidth: 360 }}
         />
         <div className={s.hint}>
-          Displayed on your book&apos;s listing for instant mobile access
+          Displayed on your work&apos;s listing for instant mobile access
         </div>
       </div>
     </SectionWrapper>

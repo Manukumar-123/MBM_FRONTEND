@@ -9,18 +9,18 @@ export default function BookDetailsSection({ form, updateField }) {
       number="01"
       icon="📖"
       iconColor="gold"
-      title="Book Details"
+      title="work Details"
       description="The essentials — title, author, and description"
       delay="0.1s"
     >
       {/* Title */}
       <div className={s.fieldGroup}>
         <label className={s.label}>
-          Book Title <span className={s.req}>*</span>
+          Work Title <span className={s.req}>*</span>
         </label>
         <input
           className={s.input}
-          placeholder="Enter the title of your book"
+          placeholder="Enter the title of your work"
           value={form.title}
           onChange={(e) => updateField("title", e.target.value)}
         />
@@ -33,7 +33,7 @@ export default function BookDetailsSection({ form, updateField }) {
         </label>
         <input
           className={s.input}
-          placeholder="A tagline or subtitle for your book"
+          placeholder="A tagline or subtitle for your work"
           value={form.subtitle}
           onChange={(e) => updateField("subtitle", e.target.value)}
         />
@@ -46,7 +46,7 @@ export default function BookDetailsSection({ form, updateField }) {
         </label>
         <textarea
           className={s.textarea}
-          placeholder="Write a compelling description that draws readers in. What is your book about? Why should someone read it?"
+          placeholder="Write a compelling description that draws readers in. What is your work about? Why should someone read it?"
           maxLength={2000}
           value={form.description}
           onChange={(e) => updateField("description", e.target.value)}
@@ -62,7 +62,7 @@ export default function BookDetailsSection({ form, updateField }) {
           </label>
           <input
             className={s.input}
-            placeholder="As it appears on the book"
+            placeholder="As it appears on the cover"
             value={form.author}
             onChange={(e) => updateField("author", e.target.value)}
           />

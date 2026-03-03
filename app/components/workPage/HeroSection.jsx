@@ -7,14 +7,14 @@ export default function HeroSection() {
       <div className={s.hero + " mt-20"}>
         <div className={s.heroBadge}>
           <span className={s.dot} />
-          Creator Studio
+          Creative Studio
         </div>
         <h1 className={s.heroTitle}>
-          Publish Your <em className={s.heroAccent}>Masterpiece</em>
+          Share Your Published <em className={s.heroAccent}>Work Samples</em>
         </h1>
         <p className={s.heroSubtitle}>
-          Every great story deserves to be told. Fill in the details below and
-          let the world discover your work.
+          Connect with your audience deserves to be told. Fill in the details
+          below and let the universe discover your work.
         </p>
       </div>
       <div className={s.divider} />
