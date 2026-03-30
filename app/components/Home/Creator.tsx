@@ -73,7 +73,7 @@ const Creator: React.FC = () => {
                   });
                 },
               },
-              `-=${offset}`
+              `-=${offset}`,
             );
           };
 
@@ -89,7 +89,7 @@ const Creator: React.FC = () => {
               duration: 1.2,
               ease: "power2.inOut",
             },
-            "+=0.5"
+            "+=0.5",
           );
         } else {
           // Mobile: simple scale + fade
@@ -106,7 +106,7 @@ const Creator: React.FC = () => {
                 end: "bottom top",
                 scrub: true,
               },
-            }
+            },
           );
 
           // Headings fade-up + blur for mobile
@@ -125,13 +125,13 @@ const Creator: React.FC = () => {
                   trigger: el,
                   start: "top 80%",
                 },
-              }
+              },
             );
           });
         }
 
         return () => ScrollTrigger.killAll();
-      }
+      },
     );
 
     return () => mm.revert();

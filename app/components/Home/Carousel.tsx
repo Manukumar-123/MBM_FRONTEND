@@ -38,7 +38,7 @@ export default function SemiCircularCarousel() {
     if (!containerRef.current || !pathRef.current) return;
 
     const items = gsap.utils.toArray<HTMLElement>(
-      containerRef.current.querySelectorAll(".orbit-item")
+      containerRef.current.querySelectorAll(".orbit-item"),
     );
 
     gsap.killTweensOf(items);

@@ -12,6 +12,7 @@ import {
 import StatusBadge from "./../../components/workPage/StatusBadge";
 import DeleteConfirmModal from "../../components/workPage/deleteConfirmModel";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 const COPYRIGHT_LABELS: Record<string, string> = {
   standard: "All Rights Reserved",
@@ -231,7 +232,6 @@ const BookDetailPage: FC<Props> = () => {
                 </span>
               )}
             </div>
-
             <h1 className="font-serif text-4xl font-semibold text-ink leading-[1.15] tracking-tight">
               {book.title}
             </h1>
@@ -249,7 +249,6 @@ const BookDetailPage: FC<Props> = () => {
                 </span>
               )}
             </p>
-
             {/* Price row */}
             <div className="flex items-center gap-3 mt-5 flex-wrap">
               <span className="font-serif text-2xl font-bold text-gold">
@@ -264,7 +263,6 @@ const BookDetailPage: FC<Props> = () => {
                 </span>
               )}
             </div>
-
             {/* Description */}
             <div className="mt-7 pt-6 border-t border-line">
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
@@ -274,7 +272,6 @@ const BookDetailPage: FC<Props> = () => {
                 {book.description}
               </p>
             </div>
-
             {/* Genre tags */}
             {book.genreTags && book.genreTags.length > 0 && (
               <div className="mt-7 pt-6 border-t border-line">
@@ -293,7 +290,6 @@ const BookDetailPage: FC<Props> = () => {
                 </div>
               </div>
             )}
-
             {/* Custom tags */}
             {book.customTags && book.customTags.length > 0 && (
               <div className="mt-7 pt-6 border-t border-line">
@@ -312,7 +308,6 @@ const BookDetailPage: FC<Props> = () => {
                 </div>
               </div>
             )}
-
             {/* Metadata */}
             <div className="mt-7 pt-6 border-t border-line">
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
@@ -335,7 +330,6 @@ const BookDetailPage: FC<Props> = () => {
                 <MetaItem label="Uploaded" value={fmtDate(book.createdAt)} />
               </div>
             </div>
-
             {/* Copyright */}
             <div className="mt-7 pt-6 border-t border-line">
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
@@ -349,8 +343,7 @@ const BookDetailPage: FC<Props> = () => {
                 <MetaItem label="Year" value={book.copyrightYear} />
                 <MetaItem label="Holder" value={book.copyrightHolder} />
               </div>
-            </div>
-
+            </div>{" "}
             {/* Distribution */}
             <div className="mt-7 pt-6 border-t border-line">
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
@@ -363,7 +356,6 @@ const BookDetailPage: FC<Props> = () => {
                 <Toggle label="Pre-order" active={book.preOrderEnabled} />
               </div>
             </div>
-
             {/* Stats */}
             <div className="mt-7 pt-6 border-t border-line">
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
@@ -386,9 +378,15 @@ const BookDetailPage: FC<Props> = () => {
                     </span>
                   </div>
                 ))}
+                <Link
+                  href={`/book/${bookId}`}
+                  className=" border border-gold p-5 text-center rounded-sm pt-8"
+                  type="button"
+                >
+                  View Work
+                </Link>
               </div>
             </div>
-
             {/* Rejection reason */}
             {book.status === "rejected" && book.rejectionReason && (
               <div className="mt-7 pt-6 border-t border-line">
