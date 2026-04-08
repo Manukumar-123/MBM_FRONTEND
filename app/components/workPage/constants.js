@@ -20,21 +20,12 @@ export const GENRES = [
 
 // ─── BOOK CATEGORIES ───
 export const CATEGORIES = [
-  "Fiction",
-  "Non-Fiction",
-  "Academic / Textbook",
-  "Children's Books",
-  "Young Adult",
-  "Poetry",
-  "Comics / Graphic Novels",
-  "Reference / Encyclopedia",
-  "Religious / Spiritual",
-  "Cookbook / Food",
-  "Self-Help / Personal Development",
-  "Business / Finance",
-  "Biography / Memoir",
-  "Travel",
-  "Other",
+  "Authors and Writers",
+  "Performance Art Creatives",
+  "Music, Recording & Production",
+  "Television, Film & News Media",
+  "Print, Internet, Streaming & Publishing",
+  "Visual Art Creatives",
 ];
 
 // ─── LANGUAGES ───

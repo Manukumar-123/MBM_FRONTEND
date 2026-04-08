@@ -13,6 +13,7 @@ import {
   Calendar,
   X,
 } from "lucide-react";
+import Link from "next/link";
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("posts");
@@ -203,7 +204,7 @@ export default function ProfilePage() {
                   </div>
                   <div className="text-sm mb-3">No Work Samples Yet</div>
                   <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded text-white text-sm transition">
-                    Add Work Sample
+                    <Link href="/work">Add Work Sample</Link>
                   </button>
                 </div>
               </div>
