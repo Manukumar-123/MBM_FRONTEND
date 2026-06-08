@@ -17,18 +17,15 @@ const profileCard = () => {
           <p>John Doe</p>
         </div>
         <div className="flex space-x-8 my-2 justify-center">
-          <div className="flex flex-col items-center justify-center text-white">
-            <p>210 K</p>
+          <div className="flex flex-col items-center justify-center text-gray-900 dark:text-white">
             <p className="text-sm text-gray-400">Followers</p>
           </div>
 
-          <div className="flex flex-col items-center justify-center text-white">
-            <p>12 M</p>
+          <div className="flex flex-col items-center justify-center text-gray-900 dark:text-white">
             <p className="text-sm text-gray-400">Likes</p>
           </div>
 
-          <div className="flex flex-col items-center justify-center text-white">
-            <p>25</p>
+          <div className="flex flex-col items-center justify-center text-gray-900 dark:text-white">
             <p className="text-sm text-gray-400">Works</p>
           </div>
         </div>

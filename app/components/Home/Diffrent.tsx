@@ -72,12 +72,12 @@ const Diffrent: React.FC = () => {
   if (!mounted) return null; // ✅ SSR-safe: render only on client
 
   return (
-    <div className="bg-black py-20">
+    <div className="bg-gray-50 dark:bg-black py-20">
       <div className="text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           What makes us <br /> different?
         </h1>
-        <p className="text-white text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-gray-700 dark:text-white text-sm md:text-base max-w-2xl mx-auto">
           Other social media apps treat music <br /> as just another piece of
           content, M_B_M treats <br /> it as an experience.
         </p>
@@ -141,8 +141,10 @@ const Diffrent: React.FC = () => {
 
         {/* Central static circle */}
         <div className="absolute inset-0 flex items-center justify-center -z-20">
-          <div className="w-[120px] h-[120px] rounded-full bg-white flex items-center justify-center border-2 border-gray-300">
-            <h1 className="text-2xl font-bold text-black">M_B_M</h1>
+          <div className="w-[120px] h-[120px] rounded-full bg-gray-900 dark:bg-white flex items-center justify-center border-2 border-gray-300">
+            <h1 className="text-2xl font-bold text-white dark:text-black">
+              M_B_M
+            </h1>
           </div>
         </div>
       </div>

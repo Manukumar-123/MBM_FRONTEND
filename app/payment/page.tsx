@@ -117,7 +117,7 @@ export default function PremiumPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black relative">
+    <div className="dark min-h-screen bg-black relative text-white">
       <div className="relative z-10 max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center py-16 mb-20">
@@ -141,9 +141,7 @@ export default function PremiumPage() {
         >
           {/* Features Showcase */}
           <div>
-            <h2 className="text-4xl font-black text-white mb-10">
-              Premium Features
-            </h2>
+            <h2 className="text-4xl font-black text-white mb-10"></h2>
             <div className="space-y-4">
               {features.map((feature, idx) => (
                 <div

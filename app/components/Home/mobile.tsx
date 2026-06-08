@@ -150,7 +150,7 @@ const ScrollAnimation: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-gradient-to-br from-black via-[#1a0f0f] to-[#2d1b00] overflow-hidden">
+    <section className="relative w-full min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-black dark:via-[#1a0f0f] dark:to-[#2d1b00] overflow-hidden">
       {/* Dotted halftone overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)] pointer-events-none"></div>
 
@@ -160,7 +160,7 @@ const ScrollAnimation: React.FC = () => {
       >
         <h1
           ref={HeadingRef}
-          className="mx-auto my-20 text-5xl font-bold text-white text-center relative z-10"
+          className="mx-auto my-20 text-5xl font-bold text-gray-900 dark:text-white text-center relative z-10"
         >
           The Global Media <br /> Marketplace!
         </h1>
@@ -170,7 +170,7 @@ const ScrollAnimation: React.FC = () => {
           ref={mobileRef}
           className="group relative w-[280px] sm:w-[340px] md:w-[300px] h-[600px] sm:h-[700px] md:h-[700px] 
           rounded-2xl shadow-2xl overflow-hidden z-30 flex items-center justify-center 
-          bg-gray-900 will-change-transform mx-auto"
+          bg-gray-800 will-change-transform mx-auto"
         >
           {/* Video playing inside iPhone */}
           <video

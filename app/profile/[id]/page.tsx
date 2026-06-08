@@ -29,14 +29,14 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white">
       {/* Top Navigation Bar */}
-      <div className="bg-gray-900 border-b border-gray-800 sticky top-0 z-50">
+      <div className="bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="text-2xl font-bold">MeBookMeta</div>
           </div>
-          <button className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded text-sm transition">
+          <button className="bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 px-4 py-2 rounded text-sm transition">
             Go Back
           </button>
         </div>
@@ -57,10 +57,10 @@ export default function ProfilePage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Profile Card */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-900 rounded-2xl p-6 shadow-xl border border-gray-800 sticky top-20">
+            <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-6 shadow-xl border border-gray-200 dark:border-gray-800 sticky top-20">
               {/* Profile Picture */}
               <div className="flex justify-center -mt-20 mb-4">
-                <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-gray-700 bg-gray-800">
+                <div className="w-40 h-40 rounded-full overflow-hidden border-2 border-gray-300 dark:border-gray-700 bg-gray-200 dark:bg-gray-800">
                   <img
                     src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop"
                     alt="Profile"
@@ -82,24 +82,33 @@ export default function ProfilePage() {
 
               {/* Action Buttons */}
               <div className="space-y-2 mb-6">
-                <button className="w-full bg-[#cccccc] text-black hover:bg-gray-700  font-semibold py-2 rounded transition">
+                <button className="w-full bg-gray-200 dark:bg-[#cccccc] text-gray-900 dark:text-black hover:bg-gray-300 dark:hover:bg-gray-200 font-semibold py-2 rounded transition">
                   Message
                 </button>
-                <button className="w-full bg-[#cccccc] text-black hover:bg-gray-700  font-semibold py-2 rounded transition">
+                <button className="w-full bg-gray-200 dark:bg-[#cccccc] text-gray-900 dark:text-black hover:bg-gray-300 dark:hover:bg-gray-200 font-semibold py-2 rounded transition">
                   Follow
                 </button>
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-4 mb-6 pb-6 border-b border-gray-800 text-center text-gray-400 text-sm">
-                <div className="p-2 hover:bg-gray-800 rounded transition">
-                  <div className="font-bold text-white">4</div>Following
+              <div className="grid grid-cols-3 gap-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-800 text-center text-gray-500 dark:text-gray-400 text-sm">
+                <div className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition">
+                  <div className="font-bold text-gray-900 dark:text-white">
+                    4
+                  </div>
+                  Following
                 </div>
-                <div className="p-2 hover:bg-gray-800 rounded transition">
-                  <div className="font-bold text-white">5</div>Followers
+                <div className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition">
+                  <div className="font-bold text-gray-900 dark:text-white">
+                    5
+                  </div>
+                  Followers
                 </div>
-                <div className="p-2 hover:bg-gray-800 rounded transition">
-                  <div className="font-bold text-white">5</div>Likes
+                <div className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition">
+                  <div className="font-bold text-gray-900 dark:text-white">
+                    5
+                  </div>
+                  Likes
                 </div>
               </div>
 
@@ -131,11 +140,11 @@ export default function ProfilePage() {
               {/* QR Code */}
               <button
                 onClick={() => setShowQRModal(true)}
-                className="w-full mt-6 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded p-2 transition"
+                className="w-full mt-6 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded p-2 transition"
               >
                 <div className="flex flex-col items-center">
-                  <div className="w-32 h-32 bg-gray-800 rounded flex items-center justify-center mb-2">
-                    <QrCode className="w-16 h-16 text-white" />
+                  <div className="w-32 h-32 bg-gray-200 dark:bg-gray-800 rounded flex items-center justify-center mb-2">
+                    <QrCode className="w-16 h-16 text-gray-600 dark:text-white" />
                   </div>
                   <div className="text-xs text-gray-400 text-center">
                     Scan QR Code to discover my Profile
@@ -148,15 +157,15 @@ export default function ProfilePage() {
           {/* Right Column - Content Area */}
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <div className="flex gap-2 mb-6 border-b border-gray-800">
+            <div className="flex gap-2 mb-6 border-b border-gray-200 dark:border-gray-800">
               {["posts", "work"].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`flex-1 py-2 text-sm font-semibold rounded transition ${
                     activeTab === tab
-                      ? "bg-gray-800 text-white"
-                      : "text-gray-400 hover:text-white hover:bg-gray-800"
+                      ? "bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
                   }`}
                 >
                   {tab === "posts" ? "Posts" : "Work Sample"}
@@ -170,7 +179,7 @@ export default function ProfilePage() {
                 {[1, 2, 3, 4, 5, 6].map((item) => (
                   <div
                     key={item}
-                    className="relative aspect-square rounded overflow-hidden cursor-pointer bg-gray-900 border border-gray-800 hover:border-gray-600 transition"
+                    className="relative aspect-square rounded overflow-hidden cursor-pointer bg-gray-200 dark:bg-gray-900 border border-gray-300 dark:border-gray-800 hover:border-gray-500 dark:hover:border-gray-600 transition"
                   >
                     <img
                       src={`https://images.unsplash.com/${
@@ -197,13 +206,13 @@ export default function ProfilePage() {
             )}
 
             {activeTab === "work" && (
-              <div className="bg-gray-900 rounded-2xl p-6 border border-gray-800 text-center text-gray-400">
+              <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-6 border border-gray-200 dark:border-gray-800 text-center text-gray-500 dark:text-gray-400">
                 <div className="max-w-md mx-auto">
-                  <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <Grid className="w-10 h-10 text-white" />
+                  <div className="w-20 h-20 bg-gray-200 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Grid className="w-10 h-10 text-gray-600 dark:text-white" />
                   </div>
                   <div className="text-sm mb-3">No Work Samples Yet</div>
-                  <button className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded text-white text-sm transition">
+                  <button className="px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 rounded text-gray-900 dark:text-white text-sm transition">
                     <Link href="/work">Add Work Sample</Link>
                   </button>
                 </div>
@@ -220,20 +229,22 @@ export default function ProfilePage() {
           onClick={() => setShowQRModal(false)}
         >
           <div
-            className="bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-800"
+            className="bg-white dark:bg-gray-900 rounded-2xl p-6 w-full max-w-md border border-gray-200 dark:border-gray-800"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between items-center mb-4">
-              <div className="font-bold text-white">Profile QR Code</div>
+              <div className="font-bold text-gray-900 dark:text-white">
+                Profile QR Code
+              </div>
               <button
                 onClick={() => setShowQRModal(false)}
-                className="text-gray-400 hover:text-white"
+                className="text-gray-400 hover:text-gray-900 dark:hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="bg-gray-800 p-4 rounded mb-2 flex items-center justify-center">
-              <QrCode className="w-24 h-24 text-white" />
+            <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded mb-2 flex items-center justify-center">
+              <QrCode className="w-24 h-24 text-gray-700 dark:text-white" />
             </div>
             <div className="text-xs text-gray-400 text-center">
               Scan this QR code to discover my profile

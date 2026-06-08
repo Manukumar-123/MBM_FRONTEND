@@ -49,14 +49,14 @@ const Testimonial = () => {
             trigger: swiperRef.current,
             start: "top 80%",
           },
-        }
+        },
       );
     }
   }, []);
 
   return (
-    <div className="bg-black py-16">
-      <h1 className="text-3xl md:text-5xl font-bold text-white text-center mb-20">
+    <div className="bg-gray-50 dark:bg-black py-16">
+      <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-20">
         What Our Users Say
       </h1>
 

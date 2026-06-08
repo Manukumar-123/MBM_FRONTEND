@@ -35,7 +35,7 @@ const Page = () => {
   if (!bookSize.width || !bookSize.height) return null;
 
   return (
-    <div className="flex justify-center pt-16 items-center min-h-screen bg-black overflow-hidden">
+    <div className="flex justify-center pt-16 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden">
       <HTMLFlipBook
         width={bookSize.width}
         height={bookSize.height}

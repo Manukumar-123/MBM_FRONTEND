@@ -8,6 +8,7 @@ import AnimatedBackground from "./components/AnimatedBackground";
 import "./globals.css";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; // ✅ add this
+import { ThemeProvider } from "./components/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -16,29 +17,31 @@ export default function RootLayout({
 }) {
   const queryClient = new QueryClient(); // ✅ add this
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
-        <Toaster
-          reverseOrder={false}
-          position="top-right"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-          }}
-        />
-        <QueryClientProvider client={queryClient}>
-          {" "}
-          {/* ✅ wrap with QueryClientProvider */}
-          <AnimatedBackground />
-          <div className="relative z-10">
-            <Header />
-            <main>{children}</main>
-            <Footer />
-          </div>
-        </QueryClientProvider>
+        <ThemeProvider>
+          <Toaster
+            reverseOrder={false}
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: "#333",
+                color: "#fff",
+              },
+            }}
+          />
+          <QueryClientProvider client={queryClient}>
+            {" "}
+            {/* ✅ wrap with QueryClientProvider */}
+            <AnimatedBackground />
+            <div className="relative z-10">
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </div>
+          </QueryClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

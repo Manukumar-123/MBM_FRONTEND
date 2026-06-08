@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import gsap from "gsap";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 
 type Profile = {
   id: number;
@@ -37,6 +39,10 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   // Scroll animation
   useEffect(() => {
@@ -90,12 +96,14 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed z-1000 w-full top-0 z-50 transition-all backdrop-blur-md bg-black/30 ${
-        isScrolled ? "bg-black/70 shadow-lg " : ""
+      className={`fixed z-1000 w-full top-0 z-50 transition-all backdrop-blur-md bg-white/80 dark:bg-black/30 ${
+        isScrolled ? "bg-white/95 dark:bg-black/70 shadow-lg " : ""
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6 relative">
-        <div className="text-white font-bold text-2xl">MeBookMeta</div>
+        <div className="text-gray-900 dark:text-white font-bold text-2xl">
+          MeBookMeta
+        </div>
 
         {/* Search bar */}
         <div className="relative w-64 hidden md:block">
@@ -104,26 +112,28 @@ export default function Header() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="John Doe"
-            className="w-full px-4 py-2 rounded-full border-2 border-[#323232] text-white focus:outline-none"
+            className="w-full px-4 py-2 rounded-full border-2 border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white bg-white/50 dark:bg-transparent placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
           />
           {filteredProfiles.length > 0 && (
             <div
               ref={resultRef}
-              className="absolute mt-2 w-full bg-black border-2 text-white border-[#323232] rounded-2xl shadow-lg p-2 z-50"
+              className="absolute mt-2 w-full bg-white dark:bg-black border-2 text-gray-900 dark:text-white border-gray-200 dark:border-[#323232] rounded-2xl shadow-lg p-2 z-50"
             >
               {filteredProfiles.map((profile) => (
                 <div
                   key={profile.id}
-                  className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 cursor-pointer"
+                  className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
                 >
-                  <span className="text-white">{profile.name}</span>
+                  <span className="text-gray-900 dark:text-white">
+                    {profile.name}
+                  </span>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        <nav className="hidden md:flex gap-6 text-white font-medium">
+        <nav className="hidden md:flex gap-6 text-gray-900 dark:text-white font-medium">
           <Link href="/">For creators</Link>
           <Link href="/">For fans</Link>
           <Link href="/">Partners</Link>
@@ -138,8 +148,19 @@ export default function Header() {
           Join the Beta
         </Link>
 
+        {/* Theme toggle */}
+        {mounted && (
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="p-2 rounded-full border border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 transition"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+        )}
+
         {/* Mobile menu toggle */}
-        <div className="md:hidden text-white">☰</div>
+        <div className="md:hidden text-gray-900 dark:text-white">☰</div>
       </div>
     </header>
   );

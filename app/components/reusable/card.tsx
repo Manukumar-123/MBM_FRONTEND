@@ -58,7 +58,7 @@ const Creator: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full  overflow-hidden min-h-screen text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
+    <section className="relative w-full overflow-hidden min-h-screen text-gray-900 dark:text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
       {/* Left Content */}
       <div ref={leftRef} className="lg:px-40 px-4">
         <h1 className="text-4xl font-bold mb-2">

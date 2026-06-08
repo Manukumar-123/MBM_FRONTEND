@@ -138,7 +138,7 @@ const Creator: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-black overflow-hidden">
+    <section className="relative w-full min-h-screen bg-gray-900 dark:bg-black overflow-hidden">
       {/* Video pinned / animated */}
       <div
         ref={videoWrapperRef}

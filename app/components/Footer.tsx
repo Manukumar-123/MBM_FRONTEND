@@ -18,7 +18,7 @@ const Footer: React.FC = () => {
           stagger: 0.15,
           duration: 0.8,
           ease: "power3.out",
-        }
+        },
       );
     }
   }, []);
@@ -26,20 +26,28 @@ const Footer: React.FC = () => {
   return (
     <footer
       ref={footerRef}
-      className="bg-gradient-to-r from-black via-black to-black text-gray-300 pt-12 pb-6 px-6"
+      className="bg-gray-100 dark:bg-black text-gray-600 dark:text-gray-300 pt-12 pb-6 px-6"
     >
       <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
         {/* Company */}
         <div>
-          <h4 className="text-white font-semibold mb-3">Company</h4>
+          <h4 className="text-gray-900 dark:text-white font-semibold mb-3">
+            Company
+          </h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 About
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Contact us
               </a>
             </li>
@@ -48,15 +56,23 @@ const Footer: React.FC = () => {
 
         {/* Product */}
         <div>
-          <h4 className="text-white font-semibold mb-3">Product</h4>
+          <h4 className="text-gray-900 dark:text-white font-semibold mb-3">
+            Product
+          </h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 For creators
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 For fans
               </a>
             </li>
@@ -65,10 +81,15 @@ const Footer: React.FC = () => {
 
         {/* Partners */}
         <div>
-          <h4 className="text-white font-semibold mb-3">Partners</h4>
+          <h4 className="text-gray-900 dark:text-white font-semibold mb-3">
+            Partners
+          </h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Sponsors
               </a>
             </li>
@@ -77,30 +98,47 @@ const Footer: React.FC = () => {
 
         {/* Legal */}
         <div>
-          <h4 className="text-white font-semibold mb-3">Legal</h4>
+          <h4 className="text-gray-900 dark:text-white font-semibold mb-3">
+            Legal
+          </h4>
           <ul className="space-y-2">
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Privacy Policy
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Terms of Use – All Users
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Terms of Use – Creators
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 Copyright Infringement
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-white transition">
+              <a
+                href="#"
+                className="hover:text-gray-900 dark:hover:text-white transition"
+              >
                 DMCA Notice
               </a>
             </li>
@@ -112,28 +150,31 @@ const Footer: React.FC = () => {
       <div className="mt-10 flex justify-center gap-6">
         <a
           href="https://instagram.com"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 transition text-xl"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition text-xl text-gray-700 dark:text-white"
         >
           <FaInstagram />
         </a>
         <a
           href="https://tiktok.com"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 transition text-xl"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition text-xl text-gray-700 dark:text-white"
         >
           <FaTiktok />
         </a>
         <a
           href="https://linkedin.com"
-          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-800 hover:bg-gray-700 transition text-xl"
+          className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 transition text-xl text-gray-700 dark:text-white"
         >
           <FaLinkedin />
         </a>
       </div>
 
       {/* Bottom bar */}
-      <div className="mt-8 border-t border-gray-700 pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+      <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 dark:text-gray-400">
         <p>© Copyright {new Date().getFullYear()}. All rights reserved</p>
-        <a href="#" className="hover:text-white transition">
+        <a
+          href="#"
+          className="hover:text-gray-900 dark:hover:text-white transition"
+        >
           Website Accessibility Statement
         </a>
       </div>

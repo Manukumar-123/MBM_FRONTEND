@@ -68,7 +68,7 @@ export default function Step2({
 
   const handleOTPChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const value = e.target.value.replace(/\D/g, "");
     if (value.length > 1) return;
@@ -85,7 +85,7 @@ export default function Step2({
 
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
       const prevInput = document.getElementById(`otp-${index - 1}`);
@@ -118,12 +118,12 @@ export default function Step2({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#191414] to-black flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="mb-8 text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+          className="mb-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -132,21 +132,21 @@ export default function Step2({
         </button>
 
         {/* Progress Bar */}
-        <div className="w-full h-1 bg-gray-700 rounded-full mb-12">
+        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
           <div className="h-full w-2/3 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-white mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Verify your {type === "email" ? "email" : "phone"}
         </h1>
-        <p className="text-gray-400 mb-8">
+        <p className="text-gray-500 dark:text-gray-400 mb-8">
           We sent a 4-digit code to {emailOrPhone}
         </p>
 
         {/* OTP Input Fields */}
         <div className="mb-8">
-          <label className="block text-white font-semibold mb-4 text-sm">
+          <label className="block text-gray-900 dark:text-white font-semibold mb-4 text-sm">
             Verification Code
           </label>
           <div className="flex gap-3 justify-center">
@@ -160,7 +160,7 @@ export default function Step2({
                 onChange={(e) => handleOTPChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onKeyPress={handleKeyPress}
-                className="w-14 h-14 bg-gray-800 border-2 border-gray-600 rounded-lg text-white text-2xl font-bold text-center focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+                className="w-14 h-14 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-2xl font-bold text-center focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
                 placeholder="-"
               />
             ))}
@@ -180,7 +180,7 @@ export default function Step2({
               Resend code
             </button>
           ) : (
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-500 dark:text-gray-400 text-sm">
               Resend code in{" "}
               <span className="text-green-500 font-semibold">
                 {resendTimer}s
@@ -201,7 +201,7 @@ export default function Step2({
         </button>
 
         {/* Help Text */}
-        <p className="text-center text-gray-400 text-sm mt-6">
+        <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-6">
           Didn’t receive the code?{" "}
           <a
             href="#"

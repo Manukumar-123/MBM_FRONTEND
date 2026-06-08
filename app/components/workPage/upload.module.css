@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(12, 11, 15, 0.8);
+  background: var(--bg-overlay);
   backdrop-filter: blur(24px) saturate(1.4);
   border-bottom: 1px solid var(--border);
 }
@@ -559,7 +559,7 @@
   text-transform: uppercase;
   padding: 5px 12px;
   border-radius: 6px;
-  background: rgba(12, 11, 15, 0.85);
+  background: var(--bg-overlay);
   backdrop-filter: blur(8px);
   color: var(--gold);
   border: 1px solid rgba(201, 169, 110, 0.2);
@@ -1023,7 +1023,7 @@
 .progressOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(12, 11, 15, 0.85);
+  background: var(--bg-overlay);
   backdrop-filter: blur(12px);
   z-index: 1000;
   display: flex;
@@ -1062,7 +1062,7 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(12, 11, 15, 0.8);
+  background: var(--bg-overlay);
   backdrop-filter: blur(12px);
   z-index: 1000;
   display: flex;

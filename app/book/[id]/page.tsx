@@ -135,14 +135,14 @@ const Book = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-black text-white">
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-white">
         Loading Book...
       </div>
     );
   }
 
   return (
-    <div className="flex justify-center pt-16 items-center min-h-screen bg-black overflow-hidden">
+    <div className="flex justify-center pt-16 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden">
       <HTMLFlipBook
         width={bookSize.width}
         height={bookSize.height}

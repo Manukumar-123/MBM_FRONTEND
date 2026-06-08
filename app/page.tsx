@@ -9,7 +9,7 @@ import FlipC from "./components/Home/FlipCard";
 const HomePage: React.FC = () => {
   return (
     <>
-      <div className="text-center text-white md:h-screen h-[80vh]">
+      <div className="text-center text-gray-900 dark:text-white md:h-screen h-[80vh]">
         <Hero />
       </div>
       <ScrollAnimation />

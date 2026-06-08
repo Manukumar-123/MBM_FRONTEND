@@ -41,7 +41,10 @@ export default function Hero() {
         <h1 className="md:text-5xl text-lg font-bold lg:mt-10 mt-0">
           For Creatives
         </h1>
-        <p className="md:mt-6 mt-2 md:text-lg text-xs text-gray-300 px-8">
+        <p
+          className="md:mt-6 mt-2 md:text-lg text-xs px-8 text-white font-medium"
+          style={{ textShadow: "0 1px 8px rgba(0,0,0,0.85)" }}
+        >
           Share Your Work Build Your Following/Brand <br /> Collaborate, Explore
           Content, In Every <br /> Form, Everywhere
         </p>

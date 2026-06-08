@@ -93,7 +93,7 @@ export default function ExclusivePage() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen flex items-center justify-center bg-black">
+    <div className="w-full min-h-screen flex items-center justify-center bg-gray-50 dark:bg-black">
       <div ref={containerRef} className="w-[80%] max-w-4xl relative">
         <Swiper
           effect={"cards"}

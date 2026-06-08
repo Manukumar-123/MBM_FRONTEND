@@ -63,10 +63,10 @@ const AuthorCard: React.FC<AuthorCardProps> = ({ author, index }) => {
       {/* Card container */}
       <div
         onClick={() => handleAuthorClick(author.name)}
-        className="relative bg-[#0b0b0b] rounded-2xl sm:rounded-3xl overflow-hidden border border-neutral-800 hover:border-neutral-600 transition-all duration-300 shadow-md hover:shadow-lg"
+        className="relative bg-gray-100 dark:bg-[#0b0b0b] rounded-2xl sm:rounded-3xl overflow-hidden border border-gray-200 dark:border-neutral-800 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-300 shadow-md hover:shadow-lg"
       >
         {/* Header area */}
-        <div className="relative h-24 sm:h-28 bg-gradient-to-r from-neutral-900 via-black to-neutral-900">
+        <div className="relative h-24 sm:h-28 bg-gradient-to-r from-gray-200 dark:from-neutral-900 via-gray-300 dark:via-black to-gray-200 dark:to-neutral-900">
           <div className="absolute top-2 right-2 sm:top-3 sm:right-3 bg-black/40 backdrop-blur-md px-2 py-1 sm:px-3 rounded-full border border-white/10">
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 text-yellow-500" />
@@ -80,43 +80,51 @@ const AuthorCard: React.FC<AuthorCardProps> = ({ author, index }) => {
         {/* Avatar */}
         <div className="relative px-4 sm:px-6 -mt-10 sm:-mt-12 pb-4">
           <div className="relative inline-block">
-            <div className="relative bg-neutral-900 rounded-full p-1.5">
+            <div className="relative bg-gray-200 dark:bg-neutral-900 rounded-full p-1.5">
               <img
                 src={author.avatar}
                 alt={author.name}
-                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-neutral-800"
+                className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-2 border-gray-300 dark:border-neutral-800"
               />
             </div>
-            <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-neutral-900"></div>
+            <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-gray-200 dark:border-neutral-900"></div>
           </div>
         </div>
 
         {/* Author info */}
         <div className="px-4 sm:px-6 pb-5">
-          <h3 className="text-lg sm:text-xl font-bold text-white mb-1 group-hover:text-gray-200 transition-all">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-all">
             {author.name}
           </h3>
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs text-gray-400">{author.role}</span>
-            <span className="text-gray-600">•</span>
-            <span className="text-xs text-gray-500 bg-gray-800/60 px-2 py-0.5 rounded-full">
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {author.role}
+            </span>
+            <span className="text-gray-400 dark:text-gray-600">•</span>
+            <span className="text-xs text-gray-500 bg-gray-200/80 dark:bg-gray-800/60 px-2 py-0.5 rounded-full">
               {author.stage}
             </span>
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center gap-4 mb-4 border-b border-neutral-800 pb-3">
+          <div className="flex items-center gap-4 mb-4 border-b border-gray-200 dark:border-neutral-800 pb-3">
             <div className="flex items-center gap-1">
               <Eye className="w-4 h-4 text-gray-400" />
-              <span className="text-sm text-gray-200">{author.views}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-200">
+                {author.views}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <Heart className="w-4 h-4 text-gray-400" />
-              <span className="text-sm text-gray-200">{author.likes}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-200">
+                {author.likes}
+              </span>
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle className="w-4 h-4 text-gray-400" />
-              <span className="text-sm text-gray-200">{author.comments}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-200">
+                {author.comments}
+              </span>
             </div>
           </div>
 
@@ -146,10 +154,10 @@ const AuthorCard: React.FC<AuthorCardProps> = ({ author, index }) => {
             ].map((stat, idx) => (
               <div
                 key={idx}
-                className="bg-neutral-900 border border-neutral-800 rounded-xl p-3 hover:border-neutral-600 transition-all duration-300"
+                className="bg-gray-200 dark:bg-neutral-900 border border-gray-300 dark:border-neutral-800 rounded-xl p-3 hover:border-gray-400 dark:hover:border-neutral-600 transition-all duration-300"
               >
                 {stat.icon}
-                <p className="text-xl font-bold text-white mt-1">
+                <p className="text-xl font-bold text-gray-900 dark:text-white mt-1">
                   {stat.value}
                 </p>
                 <p className="text-xs text-gray-500">{stat.label}</p>
@@ -162,7 +170,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({ author, index }) => {
             <button className="py-2 rounded-lg bg-white text-black font-semibold text-sm hover:bg-gray-300 transition-all">
               Follow
             </button>
-            <button className="py-2 rounded-lg border border-neutral-700 text-gray-300 hover:border-gray-500 transition-all">
+            <button className="py-2 rounded-lg border border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 transition-all">
               View
             </button>
           </div>
@@ -223,9 +231,9 @@ const AuthorsGrid: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-black text-white p-6 md:p-10">
+    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white p-6 md:p-10">
       <div className="relative max-w-6xl mx-auto text-center mb-10">
-        <h1 className="text-4xl md:text-6xl font-black mb-3 text-white mt-20">
+        <h1 className="text-4xl md:text-6xl font-black mb-3 text-gray-900 dark:text-white mt-20">
           Featured Authors
         </h1>
         <p className="text-gray-400 text-base md:text-lg">

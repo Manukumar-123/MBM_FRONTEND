@@ -90,7 +90,7 @@ const FlipC: React.FC = () => {
             });
           });
         }
-      }
+      },
     );
 
     return () => {
@@ -100,7 +100,7 @@ const FlipC: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-black">
+    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-gray-100 dark:bg-black">
       <div ref={leftCardRef}>
         <FlipCard
           videoUrl="/ally.mkv"

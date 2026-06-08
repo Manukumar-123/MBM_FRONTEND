@@ -1,11 +1,62 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode in Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* =========================================
-   ALWAYS DARK THEME
+   THEME VARIABLES
 ========================================= */
 :root {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card-bg: #f1f1f1;
+  --border-color: #e0e0e0;
+}
+
+.dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --card-bg: #191919;
+  --border-color: #323232;
+}
+
+/* =========================================
+   WORK PAGE / CSS MODULE VARIABLES
+   (upload.module.css uses these via :root;
+    override them with higher-specificity
+    selectors so theme switching works)
+========================================= */
+
+/* Light mode — :root:not(.dark) beats module's :root */
+:root:not(.dark) {
+  --bg-deep: #f5f4f1;
+  --bg-card: #ffffff;
+  --bg-elevated: #eeecea;
+  --bg-hover: #e5e3df;
+  --text: #1a1814;
+  --text-dim: #4a4640;
+  --text-muted: #7a7570;
+  --border: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.16);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --bg-overlay: rgba(245, 244, 241, 0.85);
+}
+
+/* Dark mode — html.dark beats module's :root */
+html.dark {
+  --bg-deep: #0c0b0f;
+  --bg-card: #14131a;
+  --bg-elevated: #1b1a22;
+  --bg-hover: #1f1e28;
+  --text: #eae7e2;
+  --text-dim: #b8b4ae;
+  --text-muted: #8a857d;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-light: rgba(255, 255, 255, 0.14);
+  --shadow-card: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-card-hover: 0 18px 42px rgba(0, 0, 0, 0.55);
+  --bg-overlay: rgba(12, 11, 15, 0.85);
 }
 
 @theme inline {
@@ -13,12 +64,31 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Work/Edit page Tailwind tokens */
+  --color-ink: var(--text);
+  --color-ink-dim: var(--text-dim);
+  --color-ink-muted: var(--text-muted);
+  --color-gold: #c9a96e;
+  --color-gold-dim: #b9975b;
+  --color-gold-bright: #e4c98a;
+  --color-gold-glow: rgba(201, 169, 110, 0.2);
+  --color-deep: var(--bg-deep);
+  --color-surface: var(--bg-card);
+  --color-elevated: var(--bg-elevated);
+  --color-line: var(--border);
+  --color-line-light: var(--border-light);
+  --color-danger: #c45a4a;
+  --color-info: #5a7aad;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* Card */
@@ -26,7 +96,7 @@ body {
   width: 100%;
   border-radius: 2em;
   padding: 10px;
-  background-color: #191919;
+  background-color: var(--card-bg);
 }
 
 /* Profile */
@@ -52,7 +122,7 @@ body {
 }
 
 .socialbar {
-  background-color: #191919;
+  background-color: var(--card-bg);
   border-radius: 3em;
   width: 90%;
   padding: 14px;
