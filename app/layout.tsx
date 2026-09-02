@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 // app/layout.tsx
 import Footer from "./components/Footer";
@@ -16,6 +17,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const queryClient = new QueryClient(); // ✅ add this
+  const pathname = usePathname();
+  const isAdmin = pathname?.startsWith("/admin");
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
@@ -34,11 +37,11 @@ export default function RootLayout({
           <QueryClientProvider client={queryClient}>
             {" "}
             {/* ✅ wrap with QueryClientProvider */}
-            <AnimatedBackground />
+            {!isAdmin && <AnimatedBackground />}
             <div className="relative z-10">
-              <Header />
+              {!isAdmin && <Header />}
               <main>{children}</main>
-              <Footer />
+              {!isAdmin && <Footer />}
             </div>
           </QueryClientProvider>
         </ThemeProvider>
@@ -46,3 +49,4 @@ export default function RootLayout({
     </html>
   );
 }
+

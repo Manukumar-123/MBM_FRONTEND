@@ -9,4 +9,16 @@ export const Endpoint = {
   getBookById: (id: string) => `/api/books/${id}`,
   deleteBook: (id: string) => `/api/books/${id}`,
   updateBook: (id: string) => `/api/books/${id}`,
+  creators: "/api/users/creators",
+  getAuthorById: (id: string) => `/api/users/${id}`,
+
+  // Admin panel
+  adminLogin: "api/admin/auth/login",
+  getCategories: "api/categories",
+  createCategory: "api/categories",
+  deleteCategory: (id: string) => `/api/categories/${id}`,
+  getSubcategories: "api/subcategories",
+  createSubcategories: "api/subcategories",
+  deleteSubcategory: (id: string) => `/api/subcategories/${id}`,
 };
+

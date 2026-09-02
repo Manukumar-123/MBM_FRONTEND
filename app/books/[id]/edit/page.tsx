@@ -292,7 +292,7 @@ const EditBookPage: FC = () => {
     if (!form.title?.trim()) errs.push("Book title is required");
     if (!form.description?.trim()) errs.push("Description is required");
     if (!form.author?.trim()) errs.push("Author name is required");
-    if (!form.category) errs.push("Category is required");
+    // if (!form.category) errs.push("Category is required");
     if (!files.frontCover && !originalBook?.frontCover)
       errs.push("Front cover image is required");
     if (!files.manuscript && !originalBook?.manuscript)

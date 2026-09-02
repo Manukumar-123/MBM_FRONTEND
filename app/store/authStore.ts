@@ -7,6 +7,7 @@ interface UserDetails {
   name?: string;
   dob?: string;
   gender?: string;
+  role?: "user" | "author" | "writer";
   step?: number;
 }
 

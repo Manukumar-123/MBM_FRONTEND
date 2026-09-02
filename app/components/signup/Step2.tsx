@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
-import { verifyOtp } from "@/api/api";
+import { verifyOtp, type IVerifyOtpResponse } from "@/api/api";
 import { isValidOTP } from "../../utils/signupValidation";
 import { AxiosError } from "axios";
 import { Spinner } from "../sppiner";
 
 interface Step2Props {
-  onNext: (identifier: string) => void;
+  onNext: (identifier: string, response: IVerifyOtpResponse) => void;
   onBack: () => void;
   emailOrPhone: string;
   type: "email" | "phone";
@@ -53,7 +53,7 @@ export default function Step2({
     onSuccess: (res) => {
       if (res?.success) {
         toast.success("OTP verified successfully!");
-        onNext(emailOrPhone);
+        onNext(emailOrPhone, res);
       } else {
         toast.error(res?.message || "Invalid OTP");
       }
@@ -133,7 +133,7 @@ export default function Step2({
 
         {/* Progress Bar */}
         <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
-          <div className="h-full w-2/3 bg-green-500 rounded-full transition-all duration-300"></div>
+          <div className="h-full w-1/2 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
         {/* Title */}

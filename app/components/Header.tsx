@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useTheme } from "next-themes";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, User as UserIcon, LogOut } from "lucide-react";
+import useAuthStore from "../store/authStore";
 
 type Profile = {
   id: number;
@@ -36,13 +38,45 @@ const profiles: Profile[] = [
 export default function Header() {
   const headerRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
+  const avatarRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
+  const [avatarOpen, setAvatarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  const { user, accessToken, clearAccessToken, clearUser } = useAuthStore();
 
   useEffect(() => setMounted(true), []);
+
+  // Close the account dropdown when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
+        setAvatarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const getInitials = (name?: string) => {
+    if (!name) return "U";
+    return name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((w) => w[0]?.toUpperCase())
+      .join("");
+  };
+
+  const handleLogout = () => {
+    clearAccessToken();
+    clearUser();
+    setAvatarOpen(false);
+    router.replace("/login");
+  };
 
   // Scroll animation
   useEffect(() => {
@@ -101,9 +135,9 @@ export default function Header() {
       }`}
     >
       <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6 relative">
-        <div className="text-gray-900 dark:text-white font-bold text-2xl">
+        <Link href="/" className="text-gray-900 dark:text-white font-bold text-2xl">
           MeBookMeta
-        </div>
+        </Link>
 
         {/* Search bar */}
         <div className="relative w-64 hidden md:block">
@@ -157,6 +191,48 @@ export default function Header() {
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
+        )}
+
+        {/* Account avatar */}
+        {accessToken && user && (
+          <div className="relative" ref={avatarRef}>
+            <button
+              onClick={() => setAvatarOpen((prev) => !prev)}
+              className="w-9 h-9 md:w-10 md:h-10 cursor-pointer rounded-full flex items-center justify-center bg-green-500 text-white font-semibold text-sm border-2 border-white/50 dark:border-black/50 hover:opacity-90 transition"
+              aria-label="Account menu"
+              aria-expanded={avatarOpen}
+            >
+              {getInitials(user.name)}
+            </button>
+
+            {avatarOpen && (
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black border border-gray-200 dark:border-[#323232] rounded-xl shadow-lg py-2 z-50">
+                <div className="px-4 py-2 border-b border-gray-100 dark:border-[#222]">
+                  <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                    {user.name || "Unnamed User"}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                    {user.identifier}
+                  </p>
+                </div>
+                <Link
+                  href={`/profile/${user._id}`}
+                  onClick={() => setAvatarOpen(false)}
+                  className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+                >
+                  <UserIcon size={16} />
+                  Profile
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition"
+                >
+                  <LogOut size={16} />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Mobile menu toggle */}

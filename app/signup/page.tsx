@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Step1 from "../components/signup/Step1";
 import Step2 from "../components/signup/Step2";
 import Step3, { UserDetailsData } from "../components/signup/Step3";
+import Step4 from "../components/signup/Step4";
 import useAuthStore from "../store/authStore";
 
 interface SignUpState {
@@ -95,7 +96,13 @@ export default function SignUp() {
           onNext={handleStep3Next}
           onBack={handleBack}
           initialData={signUpData.userDetails || undefined}
+        />
+      )}
+      {currentStep === 4 && signUpData.userDetails && (
+        <Step4
+          onBack={handleBack}
           identifier={signUpData.emailOrPhone}
+          userDetails={signUpData.userDetails}
         />
       )}
     </>

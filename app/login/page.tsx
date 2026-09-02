@@ -6,6 +6,7 @@ import Step1 from "../components/signup/Step1";
 import Step2 from "../components/signup/Step2";
 import useAuthStore from "../store/authStore";
 import { toast } from "react-hot-toast";
+import type { IVerifyOtpResponse } from "@/api/api";
 
 type Step = 1 | 2;
 
@@ -17,7 +18,7 @@ interface LoginState {
 
 export default function Login() {
   const [currentStep, setCurrentStep] = useState<Step>(1);
-  const { accessToken, user } = useAuthStore();
+  const { accessToken, user, setAccessToken, setUser } = useAuthStore();
   const router = useRouter();
 
   const [loginData, setLoginData] = useState<LoginState>({
@@ -43,13 +44,24 @@ export default function Login() {
     setCurrentStep(2);
   };
 
-  // ✅ Step 2: Get OTP
-  const handleStep2Next = (otp: string) => {
+  // ✅ Step 2: Verify OTP and store the returned session
+  const handleStep2Next = (identifier: string, response: IVerifyOtpResponse) => {
     setLoginData((prev) => ({
       ...prev,
-      otp,
+      emailOrPhone: identifier,
     }));
-    router.replace("/");
+
+    if (response?.data?.token && response?.data?.user) {
+      const { token, user: loggedInUser } = response.data;
+      setAccessToken(token);
+      setUser(loggedInUser);
+      toast.success("Welcome back!");
+      router.replace("/");
+    } else {
+      // OTP verified but profile was never completed — finish registration instead
+      toast.error("Please complete your profile to continue");
+      router.replace("/signup");
+    }
   };
 
   const handleBack = () => {

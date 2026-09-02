@@ -76,16 +76,80 @@ export interface IBookListParams {
   order?: string;
 }
 
+export interface IPublicAuthor {
+  _id: string;
+  name?: string;
+  role?: string;
+  gender?: string;
+  createdAt: string;
+  bookCount: number;
+}
+
+export interface IAuthorProfile {
+  user: IPublicAuthor;
+  books: IBook[];
+  bookCount: number;
+}
+
+
+export interface ICreator {
+  _id: string;
+  name?: string;
+  role?: string;
+  gender?: string;
+  createdAt: string;
+  bookCount: number;
+}
+
+export interface ICreatorPagination {
+  page: number;
+  limit: number;
+  total: number;
+  pages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface ICreatorListResponse {
+  success: boolean;
+  message: string;
+  data: ICreator[];
+  pagination: ICreatorPagination;
+}
+
 /* =====================================================
    AUTHENTICATION APIs
 ===================================================== */
+
+export interface IVerifyOtpUser {
+  _id: string;
+  identifier: string;
+  name?: string;
+  dob?: string;
+  gender?: string;
+  role?: "user" | "author" | "writer";
+  step: number;
+}
+
+export interface IVerifyOtpResponse {
+  success: boolean;
+  message: string;
+  step: number;
+  data?: {
+    token: string;
+    user: IVerifyOtpUser;
+  };
+}
 
 export const register = async (payload: unknown) => {
   const { data } = await axiosInstance.post(Endpoint.register, payload);
   return data;
 };
 
-export const verifyOtp = async (identifier: string, otp: string) => {
+export const verifyOtp = async (
+  identifier: string,
+  otp: string,
+): Promise<IVerifyOtpResponse> => {
   const { data } = await axiosInstance.post(Endpoint.VerifyOtp, {
     identifier,
     otp,
@@ -165,6 +229,30 @@ export const updateBook = async (
   return data;
 };
 
+
+/* =====================================================
+   CREATOR APIs
+===================================================== */
+
+export const getCreators = async (params?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: string;
+}): Promise<ICreatorListResponse> => {
+  const { data } = await axiosInstance.get("api/users/creators", {
+    params,
+  });
+
+  return data;
+};
+
+export const getAuthorById = async (
+  id: string,
+): Promise<{ success: boolean; message: string; data: IAuthorProfile }> => {
+  const { data } = await axiosInstance.get(Endpoint.getAuthorById(id));
+  return data;
+};
 /* =====================================================
    FILE URL HELPER
 ===================================================== */

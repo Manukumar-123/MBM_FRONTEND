@@ -2,18 +2,11 @@
 
 import React, { useState } from "react";
 import { isValidName, isValidDateOfBirth } from "../../utils/signupValidation";
-import { useMutation } from "@tanstack/react-query";
-import { completeProfile } from "@/api/api";
-import toast from "react-hot-toast";
-import { AxiosError } from "axios";
-import { Spinner } from "../sppiner";
-import useAuthStore from "@/app/store/authStore";
 
 interface Step3Props {
   onNext: (data: UserDetailsData) => void;
   onBack: () => void;
   initialData?: UserDetailsData;
-  identifier: string; // ✅ from Step 1 (email or phone)
 }
 
 export interface UserDetailsData {
@@ -51,30 +44,11 @@ export default function Step3({
   onNext,
   onBack,
   initialData,
-  identifier,
 }: Step3Props) {
   const [formData, setFormData] = useState<UserDetailsData>(
     initialData || { name: "", year: "", month: "", day: "", gender: "" },
   );
   const [errors, setErrors] = useState<Partial<UserDetailsData>>({});
-  const { setUser, setAccessToken } = useAuthStore();
-
-  // ✅ Mutation for completing the profile
-  const mutation = useMutation({
-    mutationFn: async (data: unknown) => await completeProfile(data),
-    onSuccess: (res) => {
-      toast.success(res?.message || "Profile completed successfully!");
-      onNext(formData);
-      setUser(res?.data?.user);
-      setAccessToken(res?.data?.token);
-    },
-    onError: (err: unknown) => {
-      const message =
-        (err as AxiosError<{ message?: string }>)?.response?.data?.message ||
-        "Something went wrong!";
-      toast.error(message);
-    },
-  });
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -102,13 +76,7 @@ export default function Step3({
 
   const validateAndProceed = () => {
     if (!validateForm()) return;
-    const payload = {
-      identifier,
-      name: formData.name,
-      dob: `${formData.year}-${formData.month}-${formData.day}`,
-      gender: formData.gender,
-    };
-    mutation.mutate(payload);
+    onNext(formData);
   };
 
   const currentYear = new Date().getFullYear();
@@ -129,7 +97,7 @@ export default function Step3({
         </button>
 
         <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
-          <div className="h-full w-full bg-green-500 rounded-full transition-all duration-300"></div>
+          <div className="h-full w-3/4 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
@@ -260,16 +228,13 @@ export default function Step3({
         {/* --- Button --- */}
         <button
           onClick={validateAndProceed}
-          disabled={mutation.isPending}
-          className={`w-full  ${
-            mutation.isPending ? "bg-gray-400" : "bg-green-500"
-          }  text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg`}
+          className="w-full bg-green-500 text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg"
         >
-          {mutation.isPending ? <Spinner /> : "Create Account"}
+          Next
         </button>
 
         <p className="text-gray-400 text-xs text-center">
-          By clicking Create Account, you agree to our{" "}
+          By continuing, you agree to our{" "}
           <a href="#" className="text-green-500 hover:underline">
             Terms
           </a>{" "}

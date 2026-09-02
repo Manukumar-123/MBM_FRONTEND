@@ -21,7 +21,7 @@ export default function CategorySection({
       {/* Primary Category */}
       <div className={s.fieldGroup}>
         <label className={s.label}>
-          Primary Category <span className={s.req}>*</span>
+          Primary Category 
         </label>
         <select
           className={s.select}

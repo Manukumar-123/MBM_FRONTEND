@@ -92,7 +92,7 @@ export default function Step1({ onNext, initialValue = "" }: Step1Props) {
 
         {/* Progress Bar */}
         <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
-          <div className="h-full w-1/3 bg-green-500 rounded-full transition-all duration-300"></div>
+          <div className="h-full w-1/4 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
         {/* Input Section */}
