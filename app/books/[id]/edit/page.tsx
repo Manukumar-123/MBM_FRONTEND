@@ -204,6 +204,10 @@ const EditBookPage: FC = () => {
     });
   }, []);
 
+  const pruneInvalidGenres = useCallback((validNames: string[]) => {
+    setGenreTags((prev) => prev.filter((g) => validNames.includes(g)));
+  }, []);
+
   const handleFileChange = useCallback(
     (field: string, e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -422,6 +426,7 @@ const EditBookPage: FC = () => {
             updateField={updateField}
             genreTags={genreTags}
             onToggleGenre={toggleGenre}
+            onTagOptionsLoaded={pruneInvalidGenres}
           />
 
           <CoverMediaSection

@@ -6,11 +6,12 @@ import useAdminAuthStore from "../store/adminAuthStore";
 
 export default function AdminIndexPage() {
   const router = useRouter();
-  const { adminToken } = useAdminAuthStore();
+  const { adminToken, hasHydrated } = useAdminAuthStore();
 
   useEffect(() => {
-    router.replace(adminToken ? "/admin/category" : "/admin/login");
-  }, [adminToken, router]);
+    if (!hasHydrated) return;
+    router.replace(adminToken ? "/admin/dashboard" : "/admin/login");
+  }, [adminToken, hasHydrated, router]);
 
   return null;
 }

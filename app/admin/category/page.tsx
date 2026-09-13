@@ -36,8 +36,8 @@ export default function CategoryPage() {
     },
     onError: (error) => {
       toast.error(
-        (error as AxiosError<{ message?: string }>)?.response?.data
-          ?.message || "Failed to add category",
+        (error as AxiosError<{ message?: string }>)?.response?.data?.message ||
+          "Failed to add category",
       );
     },
   });
@@ -52,8 +52,8 @@ export default function CategoryPage() {
     },
     onError: (error) => {
       toast.error(
-        (error as AxiosError<{ message?: string }>)?.response?.data
-          ?.message || "Failed to delete category",
+        (error as AxiosError<{ message?: string }>)?.response?.data?.message ||
+          "Failed to delete category",
       );
     },
   });
@@ -68,66 +68,63 @@ export default function CategoryPage() {
   };
 
   const handleDelete = (id: string, catName: string) => {
-    if (
-      window.confirm(
-        `Delete category "${catName}"? This will also delete its subcategories.`,
-      )
-    ) {
+    if (window.confirm(`Delete category "${catName}"? This will also delete its subcategories.`)) {
       removeCategory(id);
     }
   };
 
   return (
-    <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-        Categories
-      </h1>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Add or remove book categories
-      </p>
-
-      <form onSubmit={handleSubmit} className="flex gap-3 mb-8">
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Fiction"
-          className="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-[#323232] bg-transparent text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500/50"
-        />
-        <button
-          type="submit"
-          disabled={isAdding}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold transition-colors disabled:opacity-60"
-        >
-          <Plus size={18} />
-          Add
-        </button>
-      </form>
+    <div>
+      <div className="flex items-end justify-between mb-6">
+        <div>
+          <div className="text-[13px] text-[#8a8a98] mb-1">Content</div>
+          <h1 className="font-serif text-[28px] leading-none text-white">Categories & tags</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="New category"
+            className="px-3.5 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13px] text-white placeholder-[#5f5f6e] outline-none focus:border-cyan-400/40 w-44"
+          />
+          <button
+            type="submit"
+            disabled={isAdding}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-[13px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
+          >
+            <Plus size={15} />
+            {isAdding ? "Adding…" : "Add"}
+          </button>
+        </form>
+      </div>
 
       {isLoading ? (
-        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+        <p className="text-[#8a8a98] text-sm">Loading…</p>
       ) : categories.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">No categories yet.</p>
+        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-12 text-center">
+          <div className="text-[13.5px] text-[#8a8a98]">
+            No categories yet — add your first one above.
+          </div>
+        </div>
       ) : (
-        <ul className="space-y-2">
+        <div className="grid md:grid-cols-2 gap-4">
           {categories.map((cat) => (
-            <li
+            <div
               key={cat._id}
-              className="flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 dark:border-[#2a2a2a] bg-white dark:bg-[#111]"
+              className="rounded-2xl border border-white/[0.07] bg-[#111116] p-5 flex items-center justify-between"
             >
-              <span className="text-gray-900 dark:text-white font-medium">
-                {cat.name}
-              </span>
+              <span className="text-[14.5px] text-white font-medium">{cat.name}</span>
               <button
                 onClick={() => handleDelete(cat._id, cat.name)}
-                className="text-red-500 hover:text-red-600 transition-colors"
+                className="text-[#6f6f7e] hover:text-rose-400 transition-colors"
                 aria-label={`Delete ${cat.name}`}
               >
-                <Trash2 size={18} />
+                <Trash2 size={16} />
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

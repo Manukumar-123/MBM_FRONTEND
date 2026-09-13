@@ -1,33 +1,3 @@
-// ─── GENRE TAGS ───
-export const GENRES = [
-  "Mystery",
-  "Thriller",
-  "Romance",
-  "Science Fiction",
-  "Fantasy",
-  "Horror",
-  "Historical",
-  "Literary Fiction",
-  "Drama",
-  "Adventure",
-  "Philosophy",
-  "Technology",
-  "Health & Wellness",
-  "True Crime",
-  "Humor",
-  "Political",
-];
-
-// ─── BOOK CATEGORIES ───
-export const CATEGORIES = [
-  "Authors and Writers",
-  "Performance Art Creatives",
-  "Music, Recording & Production",
-  "Television, Film & News Media",
-  "Print, Internet, Streaming & Publishing",
-  "Visual Art Creatives",
-];
-
 // ─── LANGUAGES ───
 export const LANGUAGES = [
   { value: "en", label: "English" },

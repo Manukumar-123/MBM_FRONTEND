@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
+import { Mail, Lock } from "lucide-react";
 import { adminLogin } from "@/api/adminApi";
 import useAdminAuthStore from "../../store/adminAuthStore";
 import { Spinner } from "../../components/sppiner";
@@ -28,8 +29,8 @@ export default function AdminLoginPage() {
     },
     onError: (error) => {
       const message =
-        (error as AxiosError<{ message?: string }>)?.response?.data
-          ?.message || "Invalid email or password";
+        (error as AxiosError<{ message?: string }>)?.response?.data?.message ||
+        "Invalid email or password";
       toast.error(message);
     },
   });
@@ -44,48 +45,58 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black px-4">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white dark:bg-[#111] border border-gray-200 dark:border-[#2a2a2a] rounded-2xl p-8 shadow-lg"
-      >
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-          Admin Login
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-          Sign in to manage categories &amp; subcategories
-        </p>
+    <div className="min-h-screen bg-[#08080b] flex items-center justify-center px-4 py-16 relative overflow-hidden">
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-cyan-500/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-violet-500/10 blur-[100px]" />
 
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Email
-        </label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@mebookmeta.com"
-          className="w-full mb-4 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-[#323232] bg-transparent text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500/50"
-        />
+      <div className="w-full max-w-sm relative">
+        <div className="flex items-center gap-2 mb-8 justify-center">
+          <div className="w-8 h-8 rounded-md bg-gradient-to-br from-cyan-400 to-violet-500" />
+          <span className="text-white font-medium text-[16px]">MeBookMeta</span>
+        </div>
 
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Password
-        </label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="••••••••"
-          className="w-full mb-6 px-4 py-2.5 rounded-lg border border-gray-300 dark:border-[#323232] bg-transparent text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500/50"
-        />
-
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+        <form
+          onSubmit={handleSubmit}
+          className="rounded-2xl border border-white/[0.08] bg-[#111116] p-8"
         >
-          {isPending ? <Spinner /> : "Login"}
-        </button>
-      </form>
+          <h1 className="font-serif text-[24px] text-white mb-1">Admin sign in</h1>
+          <p className="text-[13px] text-[#8a8a98] mb-6">
+            Manage creators, works, and the platform.
+          </p>
+
+          <label className="block text-[12.5px] text-[#9a9aa8] mb-1.5">Email</label>
+          <div className="flex items-center gap-2 mb-4 px-3.5 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] focus-within:border-cyan-400/40">
+            <Mail size={15} className="text-[#5f5f6e]" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@mebookmeta.com"
+              className="bg-transparent outline-none text-[13.5px] text-white placeholder-[#5f5f6e] w-full"
+            />
+          </div>
+
+          <label className="block text-[12.5px] text-[#9a9aa8] mb-1.5">Password</label>
+          <div className="flex items-center gap-2 mb-6 px-3.5 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] focus-within:border-cyan-400/40">
+            <Lock size={15} className="text-[#5f5f6e]" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="••••••••"
+              className="bg-transparent outline-none text-[13.5px] text-white placeholder-[#5f5f6e] w-full"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full py-2.5 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            {isPending ? <Spinner /> : "Sign in"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

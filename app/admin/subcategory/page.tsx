@@ -45,8 +45,8 @@ export default function SubcategoryPage() {
     },
     onError: (error) => {
       toast.error(
-        (error as AxiosError<{ message?: string }>)?.response?.data
-          ?.message || "Failed to add subcategories",
+        (error as AxiosError<{ message?: string }>)?.response?.data?.message ||
+          "Failed to add subcategories",
       );
     },
   });
@@ -77,26 +77,25 @@ export default function SubcategoryPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-        Subcategories
-      </h1>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-        Select a category, then type a name and press Enter to add it as a tag
-      </p>
+      <div className="mb-6">
+        <div className="text-[13px] text-[#8a8a98] mb-1">Content</div>
+        <h1 className="font-serif text-[28px] leading-none text-white mb-1">Subcategories</h1>
+        <p className="text-[13px] text-[#8a8a98] mt-2">
+          Select a category, then type a name and press Enter to add it as a tag
+        </p>
+      </div>
 
-      <form onSubmit={handleSubmit} className="mb-8 space-y-4">
+      <form onSubmit={handleSubmit} className="mb-8 space-y-4 rounded-2xl border border-white/[0.07] bg-[#111116] p-5">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Category
-          </label>
+          <label className="block text-[12.5px] text-[#9a9aa8] mb-1.5">Category</label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-[#323232] bg-white dark:bg-transparent text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-green-500/50"
+            className="w-full px-3.5 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13.5px] text-white outline-none focus:border-cyan-400/40"
           >
-            <option value="">Select a category</option>
+            <option value="" className="bg-[#111116]">Select a category</option>
             {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
+              <option key={cat._id} value={cat._id} className="bg-[#111116]">
                 {cat.name}
               </option>
             ))}
@@ -104,9 +103,7 @@ export default function SubcategoryPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Subcategories
-          </label>
+          <label className="block text-[12.5px] text-[#9a9aa8] mb-1.5">Subcategories</label>
           <TagInput
             tags={tags}
             onChange={setTags}
@@ -118,47 +115,43 @@ export default function SubcategoryPage() {
         <button
           type="submit"
           disabled={isPending}
-          className="px-5 py-2.5 rounded-lg bg-green-500 hover:bg-green-600 text-white font-semibold transition-colors disabled:opacity-60"
+          className="px-5 py-2.5 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
         >
-          {isPending ? "Saving..." : "Save Subcategories"}
+          {isPending ? "Saving…" : "Save subcategories"}
         </button>
       </form>
 
-      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+      <h2 className="text-[15px] font-medium text-white mb-3">
         {categoryId ? "Subcategories in this category" : "All subcategories"}
       </h2>
 
       {isLoading ? (
-        <p className="text-gray-500 dark:text-gray-400">Loading...</p>
+        <p className="text-[#8a8a98] text-sm">Loading…</p>
       ) : subcategories.length === 0 ? (
-        <p className="text-gray-500 dark:text-gray-400">
-          No subcategories yet.
-        </p>
+        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-8 text-center">
+          <div className="text-[13.5px] text-[#8a8a98]">No subcategories yet.</div>
+        </div>
       ) : (
-        <ul className="space-y-2">
+        <div className="flex flex-wrap gap-2">
           {subcategories.map((sub) => (
-            <li
+            <span
               key={sub._id}
-              className="flex items-center justify-between px-4 py-3 rounded-lg border border-gray-200 dark:border-[#2a2a2a] bg-white dark:bg-[#111]"
+              className="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full text-[13px] bg-[#111116] border border-white/[0.08] text-white"
             >
-              <span className="text-gray-900 dark:text-white font-medium">
-                {sub.name}
-                {typeof sub.category === "object" && (
-                  <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
-                    ({sub.category.name})
-                  </span>
-                )}
-              </span>
+              {sub.name}
+              {typeof sub.category === "object" && (
+                <span className="text-[11px] text-[#6f6f7e]">({sub.category.name})</span>
+              )}
               <button
                 onClick={() => removeSubcategory(sub._id)}
-                className="text-red-500 hover:text-red-600 transition-colors"
+                className="text-[#6f6f7e] hover:text-rose-400 transition-colors"
                 aria-label={`Delete ${sub.name}`}
               >
-                <Trash2 size={18} />
+                <Trash2 size={13} />
               </button>
-            </li>
+            </span>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

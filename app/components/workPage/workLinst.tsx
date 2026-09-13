@@ -12,11 +12,11 @@ import { Plus, Search, Eye, Pencil, Trash2, BookOpen } from "lucide-react";
 import {
   getBooks,
   deleteBook,
+  getCategories,
   getFileUrl,
   IPagination,
   IBook,
 } from "../../../api/api";
-import { CATEGORIES } from "./constants";
 import StatusBadge from "./StatusBadge";
 import DeleteConfirmModal from "./deleteConfirmModel";
 
@@ -51,6 +51,7 @@ const BookListPage: FC = () => {
   const [books, setBooks] = useState<IBook[]>([]);
   const [pagination, setPagination] = useState<Partial<IPagination>>({});
   const [loading, setLoading] = useState(true);
+  const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
 
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -91,6 +92,18 @@ const BookListPage: FC = () => {
   useEffect(() => {
     setPage(1);
   }, [search, status, category, sortBy]);
+
+  // Admin-managed categories, replacing the old hardcoded list.
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getCategories();
+        setCategoryOptions((res.data ?? []).map((c) => c.name));
+      } catch {
+        setCategoryOptions([]);
+      }
+    })();
+  }, []);
 
   // Search debounce
   useEffect(() => {
@@ -170,7 +183,7 @@ const BookListPage: FC = () => {
             className="py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer min-w-[150px]"
           >
             <option value="">All Categories</option>
-            {CATEGORIES.map((c: string) => (
+            {categoryOptions.map((c: string) => (
               <option key={c} value={c}>
                 {c}
               </option>

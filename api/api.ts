@@ -69,6 +69,7 @@ export interface IBookListParams {
   category?: string;
   search?: string;
   author?: string;
+  mine?: boolean;
   language?: string;
   minPrice?: number;
   maxPrice?: number;
@@ -85,10 +86,25 @@ export interface IPublicAuthor {
   bookCount: number;
 }
 
+export interface ICreativeVideo {
+  _id: string;
+  userId?: string;
+  section: "pitch_alley" | "ask_universe";
+  title: string;
+  description?: string;
+  videoUrl: string;
+  videoSize?: number;
+  views: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IAuthorProfile {
   user: IPublicAuthor;
   books: IBook[];
   bookCount: number;
+  pitchVideos?: ICreativeVideo[];
+  universeVideos?: ICreativeVideo[];
 }
 
 
@@ -253,6 +269,100 @@ export const getAuthorById = async (
   const { data } = await axiosInstance.get(Endpoint.getAuthorById(id));
   return data;
 };
+
+/* =====================================================
+   CREATIVE VIDEO APIs (Pitch Alley / Ask the Universe)
+===================================================== */
+
+export const uploadCreativeVideo = async (
+  formData: FormData,
+  onProgress?: (progress: number) => void,
+): Promise<{ success: boolean; message: string; data: ICreativeVideo }> => {
+  const { data } = await axiosInstance.post(
+    Endpoint.uploadCreativeVideo,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+      timeout: 0, // large video uploads can take a while — don't time out
+      onUploadProgress: (e) => {
+        if (onProgress && e.total) {
+          onProgress(Math.round((e.loaded * 100) / e.total));
+        }
+      },
+    },
+  );
+  return data;
+};
+
+export const getMyCreativeVideos = async (
+  section?: "pitch_alley" | "ask_universe",
+): Promise<{ success: boolean; message: string; data: ICreativeVideo[] }> => {
+  const { data } = await axiosInstance.get(Endpoint.getMyCreativeVideos, {
+    params: section ? { section } : undefined,
+  });
+  return data;
+};
+
+export const updateCreativeVideo = async (
+  id: string,
+  payload: { title?: string; description?: string },
+): Promise<{ success: boolean; message: string; data: ICreativeVideo }> => {
+  const { data } = await axiosInstance.put(
+    Endpoint.updateCreativeVideo(id),
+    payload,
+  );
+  return data;
+};
+
+export const deleteCreativeVideo = async (
+  id: string,
+): Promise<{ success: boolean; message: string }> => {
+  const { data } = await axiosInstance.delete(Endpoint.deleteCreativeVideo(id));
+  return data;
+};
+
+export const viewCreativeVideo = async (
+  id: string,
+): Promise<{ success: boolean; message: string; data: { views: number } }> => {
+  const { data } = await axiosInstance.post(Endpoint.viewCreativeVideo(id));
+  return data;
+};
+
+/* =====================================================
+   CATEGORY / SUBCATEGORY (TAG) APIs — public read, used for work tags
+===================================================== */
+
+export interface ICategoryOption {
+  _id: string;
+  name: string;
+  slug: string;
+}
+
+export const getCategories = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: ICategoryOption[];
+}> => {
+  const { data } = await axiosInstance.get(Endpoint.getCategories);
+  return data;
+};
+
+export interface ISubcategoryTag {
+  _id: string;
+  name: string;
+  slug: string;
+  category: { _id: string; name: string; slug: string } | string;
+}
+
+export const getSubcategories = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: ISubcategoryTag[];
+}> => {
+  const { data } = await axiosInstance.get(Endpoint.getSubcategories);
+  return data;
+};
+
 /* =====================================================
    FILE URL HELPER
 ===================================================== */

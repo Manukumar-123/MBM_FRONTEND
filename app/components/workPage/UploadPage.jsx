@@ -59,6 +59,10 @@ export default function UploadPage() {
     });
   }, []);
 
+  const pruneInvalidGenres = useCallback((validNames) => {
+    setGenreTags((prev) => prev.filter((g) => validNames.includes(g)));
+  }, []);
+
   const handleFileChange = useCallback((field, e) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -131,7 +135,6 @@ export default function UploadPage() {
     if (!form.title.trim()) errs.push("Work title is required");
     if (!form.description.trim()) errs.push("Description is required");
     if (!form.author.trim()) errs.push("Author name is required");
-    if (!form.category) errs.push("Category is required");
     // if (!files.frontCover) errs.push("Front cover image is required");
     if (!files.manuscript) errs.push("Manuscript PDF is required");
     if (!form.rightsConfirmed) errs.push("You must confirm publishing rights");
@@ -217,6 +220,7 @@ export default function UploadPage() {
             updateField={updateField}
             genreTags={genreTags}
             onToggleGenre={toggleGenre}
+            onTagOptionsLoaded={pruneInvalidGenres}
           />
 
           {/* Section 3 — Cover Art & Media */}

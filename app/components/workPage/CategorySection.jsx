@@ -1,49 +1,90 @@
 "use client";
+import { useEffect, useState } from "react";
 import s from "./upload.module.css";
 import SectionWrapper from "./SectionWrapper";
-import { CATEGORIES, GENRES, AUDIENCES } from "./constants";
+import { AUDIENCES } from "./constants";
+import useAuthStore from "@/app/store/authStore";
+import { getSubcategories } from "../../../api/api";
 
 export default function CategorySection({
   form,
   updateField,
   genreTags,
   onToggleGenre,
+  onTagOptionsLoaded,
 }) {
+  const role = useAuthStore((state) => state.user?.role);
+  const isAuthor = role === "author";
+  const isWriter = role === "writer";
+  const tagLabel = isAuthor ? "Author Tags" : isWriter ? "Writer Tags" : "Other Tags";
+
+  const [tagOptions, setTagOptions] = useState([]);
+  const [loadingTags, setLoadingTags] = useState(true);
+
+  // Tags come from the admin-managed subcategories, matched to the "Author"/"Auther"/"Writer" category for those roles.
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      setLoadingTags(true);
+      try {
+        const res = await getSubcategories();
+        const all = res?.data || [];
+        const filtered = all.filter((sub) => {
+          const categoryName = (
+            typeof sub.category === "string" ? "" : sub.category?.name || ""
+          ).toLowerCase();
+          const isAuthorCategory =
+            categoryName === "author" || categoryName === "auther";
+
+          if (isAuthor) return isAuthorCategory;
+          if (isWriter) return categoryName === "writer";
+          return !isAuthorCategory && categoryName !== "writer";
+        });
+
+        const names = filtered.map((sub) => sub.name);
+        if (!cancelled) {
+          setTagOptions(names);
+          // Drop any previously-saved tags that no longer exist (e.g. from before the tag source changed).
+          onTagOptionsLoaded?.(names);
+        }
+      } catch {
+        if (!cancelled) setTagOptions([]);
+      } finally {
+        if (!cancelled) setLoadingTags(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthor, isWriter, onTagOptionsLoaded]);
+
+  // Category was already chosen at signup (via role) — derive it silently instead of asking again.
+  useEffect(() => {
+    updateField("category", isAuthor ? "Author" : isWriter ? "Writer" : "Other Creators");
+  }, [isAuthor, isWriter, updateField]);
+
   return (
     <SectionWrapper
       number="02"
       icon="🏷️"
       iconColor="green"
-      title="Category & Genre"
+      title="Tags"
       description="Help readers discover your work"
       delay="0.15s"
     >
-      {/* Primary Category */}
+      {/* Genre / Role Tags */}
       <div className={s.fieldGroup}>
         <label className={s.label}>
-          Primary Category 
-        </label>
-        <select
-          className={s.select}
-          value={form.category}
-          onChange={(e) => updateField("category", e.target.value)}
-        >
-          <option value="">Select a category</option>
-          {CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {/* Genre Tags */}
-      <div className={s.fieldGroup}>
-        <label className={s.label}>
-          Genre Tags <span className={s.opt}>(up to 5)</span>
+          {tagLabel} <span className={s.opt}>(up to 5)</span>
         </label>
         <div className={s.tagSelector}>
-          {GENRES.map((genre) => (
+          {loadingTags && <div className={s.hint}>Loading tags…</div>}
+          {!loadingTags && tagOptions.length === 0 && (
+            <div className={s.hint}>No tags available yet.</div>
+          )}
+          {tagOptions.map((genre) => (
             <button
               type="button"
               key={genre}

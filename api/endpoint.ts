@@ -12,6 +12,13 @@ export const Endpoint = {
   creators: "/api/users/creators",
   getAuthorById: (id: string) => `/api/users/${id}`,
 
+  // Creative videos (Pitch Alley / Ask the Universe)
+  uploadCreativeVideo: "api/creative-videos",
+  getMyCreativeVideos: "api/creative-videos/mine",
+  updateCreativeVideo: (id: string) => `/api/creative-videos/${id}`,
+  deleteCreativeVideo: (id: string) => `/api/creative-videos/${id}`,
+  viewCreativeVideo: (id: string) => `/api/creative-videos/${id}/view`,
+
   // Admin panel
   adminLogin: "api/admin/auth/login",
   getCategories: "api/categories",

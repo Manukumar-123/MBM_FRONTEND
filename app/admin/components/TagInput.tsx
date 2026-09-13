@@ -10,12 +10,7 @@ interface TagInputProps {
   disabled?: boolean;
 }
 
-export default function TagInput({
-  tags,
-  onChange,
-  placeholder,
-  disabled,
-}: TagInputProps) {
+export default function TagInput({ tags, onChange, placeholder, disabled }: TagInputProps) {
   const [value, setValue] = useState("");
 
   const addTag = () => {
@@ -44,23 +39,23 @@ export default function TagInput({
 
   return (
     <div
-      className={`flex flex-wrap items-center gap-2 w-full min-h-[46px] px-3 py-2 rounded-lg border border-gray-300 dark:border-[#323232] bg-white dark:bg-transparent focus-within:ring-2 focus-within:ring-green-500/50 ${
+      className={`flex flex-wrap items-center gap-2 w-full min-h-[46px] px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] focus-within:border-cyan-400/40 ${
         disabled ? "opacity-60 pointer-events-none" : ""
       }`}
     >
       {tags.map((tag, i) => (
         <span
           key={`${tag}-${i}`}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-500/10 text-green-700 dark:text-green-400 text-sm font-medium"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-cyan-400/10 text-cyan-300 text-[12.5px] font-medium border border-cyan-400/20"
         >
           {tag}
           <button
             type="button"
             onClick={() => removeTag(i)}
-            className="hover:text-red-500"
+            className="hover:text-rose-400"
             aria-label={`Remove ${tag}`}
           >
-            <X size={14} />
+            <X size={13} />
           </button>
         </span>
       ))}
@@ -72,7 +67,7 @@ export default function TagInput({
         onBlur={addTag}
         placeholder={tags.length === 0 ? placeholder : ""}
         disabled={disabled}
-        className="flex-1 min-w-[120px] bg-transparent outline-none text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm py-1"
+        className="flex-1 min-w-[120px] bg-transparent outline-none text-white placeholder-[#5f5f6e] text-[13px] py-1"
       />
     </div>
   );
