@@ -12,7 +12,8 @@ import {
   type ICreativeVideo,
 } from "../../../api/api";
 
-const MAX_VIDEO_BYTES = 500 * 1024 * 1024; // 500MB
+const MAX_VIDEO_BYTES = 100 * 1024 * 1024; // 100MB accepted, server compresses down to 25MB
+const MAX_VIDEO_DURATION_SECONDS = 60; // 1 minute
 const ALLOWED_TYPES = [
   "video/mp4",
   "video/quicktime",
@@ -20,6 +21,23 @@ const ALLOWED_TYPES = [
   "video/x-matroska",
   "video/x-msvideo",
 ];
+
+function getVideoDuration(file: File): Promise<number> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const video = document.createElement("video");
+    video.preload = "metadata";
+    video.onloadedmetadata = () => {
+      URL.revokeObjectURL(url);
+      resolve(video.duration);
+    };
+    video.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Could not read video metadata."));
+    };
+    video.src = url;
+  });
+}
 
 interface Props {
   section: "pitch_alley" | "ask_universe";
@@ -67,7 +85,7 @@ export default function CreativeVideoUploader({
     fetchVideos();
   }, [fetchVideos]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selected = e.target.files?.[0] ?? null;
     setFileError(null);
 
@@ -84,8 +102,23 @@ export default function CreativeVideoUploader({
 
     if (selected.size > MAX_VIDEO_BYTES) {
       setFileError(
-        `File is ${formatBytes(selected.size)} — the limit is 500 MB.`,
+        `File is ${formatBytes(selected.size)} — the limit is 100 MB.`,
       );
+      setFile(null);
+      return;
+    }
+
+    try {
+      const duration = await getVideoDuration(selected);
+      if (duration > MAX_VIDEO_DURATION_SECONDS) {
+        setFileError(
+          `Video is ${Math.ceil(duration)}s long — only videos up to 1 minute are accepted.`,
+        );
+        setFile(null);
+        return;
+      }
+    } catch {
+      setFileError("Could not verify video length. Please try a different file.");
       setFile(null);
       return;
     }
@@ -102,7 +135,7 @@ export default function CreativeVideoUploader({
       return;
     }
     if (!file) {
-      setSubmitError("Choose a video file to upload (max 500 MB).");
+      setSubmitError("Choose a video file to upload (max 100 MB, up to 1 minute).");
       return;
     }
 
@@ -191,7 +224,7 @@ export default function CreativeVideoUploader({
           <label className="flex items-center gap-3 bg-white/[0.04] border border-dashed border-white/15 rounded-lg px-3.5 py-3 text-sm cursor-pointer hover:border-cyan-400/40 transition">
             <UploadCloud className="w-4 h-4 text-cyan-300 flex-shrink-0" />
             <span className="flex-1 truncate text-gray-300">
-              {file ? file.name : "Choose a video file — up to 500 MB"}
+              {file ? file.name : "Choose a video file — max 100 MB, up to 1 minute"}
             </span>
             <input
               type="file"

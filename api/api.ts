@@ -42,6 +42,7 @@ export interface IBook {
   approvedAt?: string | null;
   viewCount?: number;
   downloadCount?: number;
+  likedBy?: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -84,6 +85,9 @@ export interface IPublicAuthor {
   gender?: string;
   createdAt: string;
   bookCount: number;
+  views?: number;
+  likes?: number;
+  comments?: number;
 }
 
 export interface ICreativeVideo {
@@ -115,6 +119,9 @@ export interface ICreator {
   gender?: string;
   createdAt: string;
   bookCount: number;
+  views?: number;
+  likes?: number;
+  comments?: number;
 }
 
 export interface ICreatorPagination {
@@ -241,6 +248,47 @@ export const updateBook = async (
         onProgress(Math.round((e.loaded * 100) / e.total));
       }
     },
+  });
+  return data;
+};
+
+/* =====================================================
+   BOOK LIKES & COMMENTS
+===================================================== */
+
+export interface IComment {
+  _id: string;
+  bookId: string;
+  userId: string;
+  userName?: string;
+  text: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const toggleBookLike = async (
+  bookId: string,
+): Promise<{ success: boolean; message: string; data: { liked: boolean; likeCount: number } }> => {
+  const { data } = await axiosInstance.post(`api/books/${bookId}/like`);
+  return data;
+};
+
+export const getBookComments = async (
+  bookId: string,
+  params?: { page?: number; limit?: number },
+): Promise<{ success: boolean; data: IComment[]; pagination: IPagination }> => {
+  const { data } = await axiosInstance.get(`api/books/${bookId}/comments`, {
+    params,
+  });
+  return data;
+};
+
+export const addBookComment = async (
+  bookId: string,
+  text: string,
+): Promise<{ success: boolean; message: string; data: IComment }> => {
+  const { data } = await axiosInstance.post(`api/books/${bookId}/comments`, {
+    text,
   });
   return data;
 };

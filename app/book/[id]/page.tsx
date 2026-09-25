@@ -1,10 +1,12 @@
 "use client";
 
-import { getBookById } from "@/api/api";
+import { getBookById, toggleBookLike, getBookComments, addBookComment, type IComment } from "@/api/api";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
+import { Heart, MessageCircle, Send, X } from "lucide-react";
+import useAuthStore from "../../store/authStore";
 
 const HTMLFlipBook = dynamic(
   () => import("react-pageflip").then((mod) => mod.default),
@@ -15,6 +17,7 @@ const HTMLFlipBook = dynamic(
 
 const Book = () => {
   const { id } = useParams();
+  const { accessToken, user } = useAuthStore();
 
   const [book, setBook] = useState<any>(null);
   const [pdf, setPdf] = useState<any>(null);
@@ -22,6 +25,15 @@ const Book = () => {
   const [loading, setLoading] = useState(true);
   const [pdfLoading, setPdfLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeBusy, setLikeBusy] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<IComment[]>([]);
+  const [commentsLoading, setCommentsLoading] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [commentSubmitting, setCommentSubmitting] = useState(false);
 
   const [bookSize, setBookSize] = useState({
     width: 0,
@@ -58,6 +70,10 @@ const Book = () => {
         }
 
         setBook(bookData);
+        setLikeCount(bookData.likedBy?.length ?? 0);
+        setLiked(
+          Boolean(user?._id && bookData.likedBy?.includes(user._id)),
+        );
 
         if (bookData.manuscript) {
           const pdfUrl =
@@ -82,6 +98,66 @@ const Book = () => {
 
     fetchBook();
   }, [id]);
+
+  /**
+   * Like / unlike the book (requires login).
+   */
+  const handleToggleLike = async () => {
+    if (!id || likeBusy) return;
+    if (!accessToken) {
+      setError("Please log in to like this book.");
+      return;
+    }
+
+    setLikeBusy(true);
+    try {
+      const res = await toggleBookLike(id as string);
+      setLiked(res.data.liked);
+      setLikeCount(res.data.likeCount);
+    } catch (err) {
+      console.error("Like failed:", err);
+    } finally {
+      setLikeBusy(false);
+    }
+  };
+
+  /**
+   * Open the comments panel, loading comments on first open.
+   */
+  const handleOpenComments = async () => {
+    setShowComments(true);
+    if (!id || comments.length > 0) return;
+
+    setCommentsLoading(true);
+    try {
+      const res = await getBookComments(id as string);
+      setComments(res.data ?? []);
+    } catch (err) {
+      console.error("Failed to load comments:", err);
+    } finally {
+      setCommentsLoading(false);
+    }
+  };
+
+  const handleAddComment = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!id || !commentText.trim() || commentSubmitting) return;
+    if (!accessToken) {
+      setError("Please log in to comment.");
+      return;
+    }
+
+    setCommentSubmitting(true);
+    try {
+      const res = await addBookComment(id as string, commentText.trim());
+      setComments((prev) => [res.data, ...prev]);
+      setCommentText("");
+    } catch (err) {
+      console.error("Failed to add comment:", err);
+    } finally {
+      setCommentSubmitting(false);
+    }
+  };
 
   /**
    * Load PDF only.
@@ -398,6 +474,87 @@ const Book = () => {
 
   return (
     <div className="flex justify-center pt-16 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden">
+
+      {/* Like / comments floating bar */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+        {showComments && (
+          <div className="w-80 max-h-96 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-neutral-800">
+              <span className="font-semibold text-sm text-gray-900 dark:text-white">
+                Comments
+              </span>
+              <button
+                onClick={() => setShowComments(false)}
+                className="text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                aria-label="Close comments"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+              {commentsLoading ? (
+                <p className="text-sm text-gray-400">Loading…</p>
+              ) : comments.length === 0 ? (
+                <p className="text-sm text-gray-400">No comments yet.</p>
+              ) : (
+                comments.map((c) => (
+                  <div key={c._id} className="text-sm">
+                    <span className="font-semibold text-gray-900 dark:text-white">
+                      {c.userName || "Anonymous"}
+                    </span>
+                    <p className="text-gray-600 dark:text-gray-300">{c.text}</p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <form
+              onSubmit={handleAddComment}
+              className="flex items-center gap-2 px-3 py-2 border-t border-gray-200 dark:border-neutral-800"
+            >
+              <input
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                placeholder="Add a comment…"
+                maxLength={1000}
+                className="flex-1 text-sm bg-gray-100 dark:bg-neutral-800 rounded-full px-3 py-2 outline-none text-gray-900 dark:text-white"
+              />
+              <button
+                type="submit"
+                disabled={commentSubmitting || !commentText.trim()}
+                className="p-2 rounded-full bg-black text-white dark:bg-white dark:text-black disabled:opacity-40"
+                aria-label="Send comment"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </form>
+          </div>
+        )}
+
+        <div className="flex items-center gap-2 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-full shadow-xl px-2 py-2">
+          <button
+            onClick={handleToggleLike}
+            disabled={likeBusy}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            aria-label="Like this book"
+          >
+            <Heart
+              className={`w-4 h-4 ${liked ? "fill-red-500 text-red-500" : "text-gray-500"}`}
+            />
+            <span className="text-sm text-gray-700 dark:text-gray-200">{likeCount}</span>
+          </button>
+
+          <button
+            onClick={handleOpenComments}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            aria-label="View comments"
+          >
+            <MessageCircle className="w-4 h-4 text-gray-500" />
+            <span className="text-sm text-gray-700 dark:text-gray-200">{comments.length}</span>
+          </button>
+        </div>
+      </div>
 
       <HTMLFlipBook
         width={bookSize.width}

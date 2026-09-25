@@ -23,81 +23,93 @@ export default function SemiCircularCarousel() {
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
 
-  // ✅ Screen size watcher
-  useEffect(() => {
-    const checkScreen = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    checkScreen();
-    window.addEventListener("resize", checkScreen);
-    return () => window.removeEventListener("resize", checkScreen);
-  }, []);
-
-  // ✅ GSAP animation
+  // ✅ GSAP animation — recomputed on every resize so the orbit radius/path
+  // always matches the current viewport instead of only at mount time.
   useEffect(() => {
     if (!containerRef.current || !pathRef.current) return;
 
-    const items = gsap.utils.toArray<HTMLElement>(
-      containerRef.current.querySelectorAll(".orbit-item"),
-    );
+    let resizeTimeout: ReturnType<typeof setTimeout>;
 
-    gsap.killTweensOf(items);
-    gsap.set(items, { clearProps: "all" });
+    const setupOrbit = () => {
+      if (!containerRef.current || !pathRef.current) return;
 
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-    const radius = Math.min(width, height) * 0.35;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const mobile = width < 640;
+      setIsMobile(mobile);
 
-    const startX = width * 0.1;
-    const endX = width * 0.9;
-    const centerY = height / 2 + radius * 0.5;
+      const items = gsap.utils.toArray<HTMLElement>(
+        containerRef.current.querySelectorAll(".orbit-item"),
+      );
 
-    const pathD = `M ${startX},${centerY} A ${radius} ${radius} 0 0 1 ${endX},${centerY}`;
-    pathRef.current?.setAttribute("d", pathD);
+      gsap.killTweensOf(items);
+      gsap.set(items, { clearProps: "all" });
 
-    if (!isMobile) {
-      const count = items.length;
-      const gap = 1 / count;
-      items.forEach((item, i) => {
-        gsap.to(item, {
-          motionPath: {
-            path: pathRef.current!,
-            align: pathRef.current!,
-            alignOrigin: [0.5, 0.5],
-            start: i * gap,
-            end: 1 + i * gap,
-            autoRotate: true,
-          },
-          duration: 30,
-          repeat: -1,
-          ease: "linear",
-        });
-      });
-    } else {
-      items.forEach((item) => {
-        gsap.set(item, { opacity: 0, xPercent: 100, rotateY: -90 });
-      });
+      const radius = Math.min(width, height) * 0.35;
+      const startX = width * 0.1;
+      const endX = width * 0.9;
+      const centerY = height / 2 + radius * 0.5;
 
-      const tl = gsap.timeline({ repeat: -1 });
-      items.forEach((item) => {
-        tl.to(item, {
-          opacity: 1,
-          xPercent: 0,
-          rotateY: 0,
-          duration: 0.8,
-          ease: "power2.out",
-        })
-          .to(item, { opacity: 1, duration: 1.5 })
-          .to(item, {
-            opacity: 0,
-            xPercent: -100,
-            rotateY: 90,
-            duration: 0.8,
-            ease: "power2.in",
+      const pathD = `M ${startX},${centerY} A ${radius} ${radius} 0 0 1 ${endX},${centerY}`;
+      pathRef.current.setAttribute("d", pathD);
+
+      if (!mobile) {
+        const count = items.length;
+        const gap = 1 / count;
+        items.forEach((item, i) => {
+          gsap.to(item, {
+            motionPath: {
+              path: pathRef.current!,
+              align: pathRef.current!,
+              alignOrigin: [0.5, 0.5],
+              start: i * gap,
+              end: 1 + i * gap,
+              autoRotate: true,
+            },
+            duration: 30,
+            repeat: -1,
+            ease: "linear",
           });
-      });
-    }
-  }, [isMobile]);
+        });
+      } else {
+        items.forEach((item) => {
+          gsap.set(item, { opacity: 0, xPercent: 100, rotateY: -90 });
+        });
+
+        const tl = gsap.timeline({ repeat: -1 });
+        items.forEach((item) => {
+          tl.to(item, {
+            opacity: 1,
+            xPercent: 0,
+            rotateY: 0,
+            duration: 0.8,
+            ease: "power2.out",
+          })
+            .to(item, { opacity: 1, duration: 1.5 })
+            .to(item, {
+              opacity: 0,
+              xPercent: -100,
+              rotateY: 90,
+              duration: 0.8,
+              ease: "power2.in",
+            });
+        });
+      }
+    };
+
+    setupOrbit();
+
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(setupOrbit, 150);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(resizeTimeout);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className="relative w-full md:h-screen h-[80vh] overflow-hidden">

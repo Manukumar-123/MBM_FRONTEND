@@ -314,9 +314,9 @@ const AuthorsGrid: React.FC = () => {
             reading: 0,
             finished: 0,
             followers: 0,
-            views: 0,
-            likes: 0,
-            comments: 0,
+            views: creator.views ?? 0,
+            likes: creator.likes ?? 0,
+            comments: creator.comments ?? 0,
           })
         );
 
