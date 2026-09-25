@@ -55,7 +55,7 @@ const Testimonial = () => {
   }, []);
 
   return (
-    <div className="bg-gray-50 dark:bg-black py-16">
+    <div className="bg-white dark:bg-black py-16">
       <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-20">
         What Our Users Say
       </h1>
@@ -75,7 +75,7 @@ const Testimonial = () => {
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className="flex flex-col p-8 h-68 rounded-2xl bg-white">
+              <div className="flex flex-col p-8 h-68 rounded-2xl bg-white shadow-xl">
                 <div className="flex">
                   <div className=" flex gap-4">
                     <Image

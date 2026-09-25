@@ -38,17 +38,16 @@ export default function Hero() {
         ref={contentRef}
         className="relative lg:mt-40 mt-10 z-10 flex flex-col items-center justify-center h-full text-center text-white"
       >
-        <h1 className="md:text-5xl text-lg font-bold lg:mt-10 mt-0">
+        <h1 className="md:text-5xl text-lg font-bold lg:mt-10 mt-0 dark:text-white text-black">
           For Creatives
         </h1>
         <p
-          className="md:mt-6 mt-2 md:text-lg text-xs px-8 text-white font-medium"
-          style={{ textShadow: "0 1px 8px rgba(0,0,0,0.85)" }}
+          className="md:mt-6 mt-2 md:text-lg text-xs px-8  dark:text-white text-black font-medium"
         >
           Share Your Work Build Your Following/Brand <br /> Collaborate, Explore
           Content, In Every <br /> Form, Everywhere
         </p>
-        <button className="md:mt-10 mt-4 px-6 py-3 border border-white rounded-full hover:bg-white hover:text-black transition">
+        <button className="md:mt-10 mt-4 px-6 py-3  border bg-white text-black rounded-full hover:bg-white hover:text-black transition">
           Join the Beta
         </button>
       </div>

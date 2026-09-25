@@ -87,17 +87,28 @@ export default function Header() {
 
     window.addEventListener("scroll", handleScroll);
 
-    // GSAP entrance animation
+    // GSAP entrance animation (fromTo keeps the header visible by default even
+    // if this tween gets interrupted, instead of getting stuck at opacity 0)
+    let tween: gsap.core.Tween | undefined;
     if (headerRef.current) {
-      gsap.from(headerRef.current, {
-        y: -100,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-      });
+      tween = gsap.fromTo(
+        headerRef.current,
+        { y: -100, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          overwrite: "auto",
+          clearProps: "opacity,transform",
+        },
+      );
     }
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      tween?.kill();
+    };
   }, []);
 
   // Search filtering
@@ -130,7 +141,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className={`fixed z-1000 w-full top-0 z-50 transition-all backdrop-blur-md bg-white/80 dark:bg-black/30 ${
+      className={`fixed w-full top-0 z-50 transition-all backdrop-blur-md bg-white/80 dark:bg-black/30 ${
         isScrolled ? "bg-white/95 dark:bg-black/70 shadow-lg " : ""
       }`}
     >

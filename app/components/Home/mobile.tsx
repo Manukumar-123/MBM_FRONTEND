@@ -150,7 +150,7 @@ const ScrollAnimation: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-black dark:via-[#1a0f0f] dark:to-[#2d1b00] overflow-hidden">
+    <section className="relative w-full min-h-screen bg-white dark:bg-gradient-to-br dark:from-black dark:via-[#1a0f0f] dark:to-[#2d1b00] overflow-hidden">
       {/* Dotted halftone overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)] pointer-events-none"></div>
 

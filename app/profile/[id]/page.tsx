@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   BadgeCheck,
   BookOpen,
@@ -496,7 +496,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-[#050507] text-white">
       {/* Top Navigation Bar */}
-      <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+      {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
             href="/"
@@ -528,7 +528,7 @@ export default function ProfilePage() {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Cover */}
       <div className="relative h-56 overflow-hidden bg-gradient-to-r from-cyan-950 via-[#0a0a12] to-violet-950">
@@ -831,12 +831,14 @@ export default function ProfilePage() {
 /* ---------------------------------------------------------------------- */
 
 function PublicProfileView({ id }: { id: string }) {
+  const searchParams = useSearchParams();
   const [profile, setProfile] = useState<IAuthorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [activeTab, setActiveTab] = useState<"works" | "pitchAlley" | "askUniverse">(
-    "works",
-  );
+  const [activeTab, setActiveTab] = useState<"works" | "pitchAlley" | "askUniverse">(() => {
+    const tab = searchParams.get("tab");
+    return tab === "pitchAlley" || tab === "askUniverse" ? tab : "works";
+  });
   // TODO: replace with a real follow-state call once the API supports it.
   const [isFollowing, setIsFollowing] = useState(false);
   const [showQr, setShowQr] = useState(false);

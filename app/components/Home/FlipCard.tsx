@@ -1,7 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import FlipCard from "../reusable/JoinBeta";
+import { getFileUrl, getLatestCreativeVideo, type ICreativeVideo } from "../../../api/api";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,6 +12,13 @@ gsap.registerPlugin(ScrollTrigger);
 const FlipC: React.FC = () => {
   const leftCardRef = useRef<HTMLDivElement | null>(null);
   const rightCardRef = useRef<HTMLDivElement | null>(null);
+  const [pitchVideo, setPitchVideo] = useState<ICreativeVideo | null>(null);
+  const [universeVideo, setUniverseVideo] = useState<ICreativeVideo | null>(null);
+
+  useEffect(() => {
+    getLatestCreativeVideo("pitch_alley").then((res) => setPitchVideo(res.data)).catch(() => {});
+    getLatestCreativeVideo("ask_universe").then((res) => setUniverseVideo(res.data)).catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!leftCardRef.current || !rightCardRef.current) return;
@@ -100,19 +109,14 @@ const FlipC: React.FC = () => {
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-gray-100 dark:bg-black">
+    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-white dark:bg-black py-16">
       <div ref={leftCardRef}>
         <FlipCard
-          videoUrl="/ally.mkv"
-          Title="MEBOOKMETA PITCH ALLEY PREVIEW"
+          videoUrl={getFileUrl(pitchVideo?.videoUrl) || "/ally.mkv"}
+          Title={pitchVideo?.title || "MEBOOKMETA PITCH ALLEY PREVIEW"}
           Back={
             <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              <button
-                onClick={() => alert("coming soon")}
-                className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full"
-              >
-                Visit Profile
-              </button>
+              {pitchVideo?.userId && <Link href={`/profile/${pitchVideo.userId}?tab=pitchAlley`} className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full">View Profile</Link>}
             </div>
           }
         />
@@ -120,16 +124,11 @@ const FlipC: React.FC = () => {
 
       <div ref={rightCardRef}>
         <FlipCard
-          videoUrl="/charly.mkv"
-          Title="MEBOOKMETA ASK THE UNIVERSE PREVIEW"
+          videoUrl={getFileUrl(universeVideo?.videoUrl) || "/charly.mkv"}
+          Title={universeVideo?.title || "MEBOOKMETA ASK THE UNIVERSE PREVIEW"}
           Back={
             <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              <button
-                onClick={() => alert("coming soon")}
-                className="mt-4 px-4 py-2 bg-white text-black rounded-full"
-              >
-                Visit Profile
-              </button>
+              {universeVideo?.userId && <Link href={`/profile/${universeVideo.userId}?tab=askUniverse`} className="mt-4 px-4 py-2 bg-white text-black rounded-full">View Profile</Link>}
             </div>
           }
         />

@@ -13,6 +13,7 @@ import StatusBadge from "./../../components/workPage/StatusBadge";
 import DeleteConfirmModal from "../../components/workPage/deleteConfirmModel";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import useAuthStore from "../../store/authStore";
 
 const COPYRIGHT_LABELS: Record<string, string> = {
   standard: "All Rights Reserved",
@@ -71,11 +72,15 @@ const BookDetailPage: FC<Props> = () => {
   const router = useRouter();
   const params = useParams();
   const bookId = params.id as string;
+  const { user } = useAuthStore();
   const [book, setBook] = useState<IBook | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+
+  // Only the book's owner can edit/delete it
+  const isOwner = !!book?.userId && book.userId === user?._id;
 
   useEffect(() => {
     if (!bookId) return;
@@ -162,20 +167,22 @@ const BookDetailPage: FC<Props> = () => {
           >
             ← Back
           </button>
-          <div className="flex gap-3">
-            <button
-              onClick={() => router.push(`/books/${bookId}/edit`)}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
-            >
-              <Pencil className="w-4 h-4" /> Edit Work
-            </button>
-            <button
-              onClick={() => setDeleteModal(true)}
-              className="px-6 py-3 bg-danger/15 border border-danger/30 rounded-sm text-danger font-body text-sm font-semibold hover:bg-danger/25 transition-all"
-            >
-              Delete
-            </button>
-          </div>
+          {isOwner && (
+            <div className="flex gap-3">
+              <button
+                onClick={() => router.push(`/books/${bookId}/edit`)}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
+              >
+                <Pencil className="w-4 h-4" /> Edit Work
+              </button>
+              <button
+                onClick={() => setDeleteModal(true)}
+                className="px-6 py-3 bg-danger/15 border border-danger/30 rounded-sm text-danger font-body text-sm font-semibold hover:bg-danger/25 transition-all"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
 
         {/* ── Main grid ── */}

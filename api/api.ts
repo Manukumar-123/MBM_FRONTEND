@@ -3,6 +3,7 @@ import axiosInstance from "./intercepter";
 
 export interface IBook {
   _id: string;
+  userId?: string;
   title: string;
   slug: string;
   subtitle?: string;
@@ -347,6 +348,15 @@ export const getMyCreativeVideos = async (
 ): Promise<{ success: boolean; message: string; data: ICreativeVideo[] }> => {
   const { data } = await axiosInstance.get(Endpoint.getMyCreativeVideos, {
     params: section ? { section } : undefined,
+  });
+  return data;
+};
+
+export const getLatestCreativeVideo = async (
+  section: "pitch_alley" | "ask_universe",
+): Promise<{ success: boolean; message: string; data: ICreativeVideo | null }> => {
+  const { data } = await axiosInstance.get(Endpoint.getLatestCreativeVideo, {
+    params: { section },
   });
   return data;
 };

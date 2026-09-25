@@ -154,7 +154,7 @@ export default function SemiCircularCarousel() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute z-1000 bottom-0 left-0 w-full h-40 bg-gradient-to-t from-black/100 to-transparent pointer-events-none" />
+      <div className="absolute z-1000 bottom-0 left-0 w-full h-40 bg-gradient-to-t dark:from-black/100 from-white to-transparent pointer-events-none" />
     </div>
   );
 }

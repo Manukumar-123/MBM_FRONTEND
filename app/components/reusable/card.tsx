@@ -5,16 +5,43 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCards } from "swiper/modules";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { getBooks, getFileUrl, IBook } from "../../../api/api";
 
 import "swiper/css";
 import "swiper/css/effect-cards";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const FALLBACK_COVER = "https://flowbite.com/docs/images/people/profile-picture-1.jpg";
+
+
 const Creator: React.FC = () => {
   const leftRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [works, setWorks] = useState<IBook[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // Fetch the latest 4 works (any status) — one request, no filtering
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await getBooks({
+          limit: "4",
+          sortBy: "createdAt",
+          order: "desc",
+        });
+        setWorks(res?.data ?? []);
+      } catch {
+        setWorks([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   useEffect(() => {
     // Animate text when it comes into view
@@ -55,13 +82,13 @@ const Creator: React.FC = () => {
         },
       );
     }
-  }, []);
+  }, [works]);
 
   return (
     <section className="relative w-full overflow-hidden min-h-screen text-gray-900 dark:text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
       {/* Left Content */}
-      <div ref={leftRef} className="lg:px-40 px-4">
-        <h1 className="text-4xl font-bold mb-2">
+      <div ref={leftRef} className="lg:px-40 px-4 dark:text-white text-white">
+        <h1 className="text-4xl font-bold mb-2 ">
           The Greatest Challenge for Creatives
         </h1>
         <h2 className="text-sm md:text-md font-bold leading-7 tracking-widest ">
@@ -83,6 +110,13 @@ const Creator: React.FC = () => {
         ref={swiperRef}
         className="md:w-1/2 mt-10 md:mt-0 flex flex-col items-center"
       >
+        {loading ? (
+          <div className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px] rounded-3xl bg-white/10 animate-pulse" />
+        ) : works.length === 0 ? (
+          <div className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px] rounded-3xl bg-white/10 flex items-center justify-center text-white/60 text-sm text-center px-6">
+            No work to show yet
+          </div>
+        ) : (
         <Swiper
           effect="cards"
           grabCursor={true}
@@ -90,69 +124,76 @@ const Creator: React.FC = () => {
           modules={[EffectCards]}
           className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px]"
         >
-          <SwiperSlide>
-            <div className="relative bg-gradient-to-b from-orange-400 to-red-500 rounded-3xl shadow-xl text-white p-6 h-full flex flex-col justify-between">
-              <div className="space-y-4">
-                <div className="bg-white/20 rounded-xl p-3">🎵 New track</div>
-                <div className="flex items-center space-x-3 bg-black/50 p-2 rounded-xl">
-                  <img
-                    src="https://randomuser.me/api/portraits/women/44.jpg"
-                    alt="profile"
-                    className="w-10 h-10 rounded-full"
-                  />
-                  <span className="font-semibold">Baker Grace ✅</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <img
-                    src="https://picsum.photos/200/300"
-                    className="rounded-xl object-cover"
-                  />
-                  <div className="bg-purple-600 text-sm flex items-center justify-center rounded-xl">
-                    Event
+          {works.map((work) => (
+            <SwiperSlide key={work._id}>
+              <div
+                onClick={() => router.push(`/books/${work._id}`)}
+                className="relative rounded-3xl shadow-xl text-white h-full overflow-hidden cursor-pointer"
+              >
+                <Image
+                  src={getFileUrl(work.frontCover) ?? FALLBACK_COVER}
+                  alt={work.title}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
+
+                <div className="relative z-10 flex flex-col justify-between h-full p-6">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="bg-white/20 backdrop-blur-sm text-xs font-semibold px-3 py-1 rounded-full">
+                      {work.category}
+                    </span>
+                    {work.status === "pending_review" && (
+                      <span className="bg-yellow-400/90 text-black text-xs font-semibold px-3 py-1 rounded-full">
+                        Pending Review
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <h3 className="text-2xl font-bold">{work.title}</h3>
+                      <p className="text-sm text-white/80">by {work.author}</p>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        // Don't let this bubble up to the card's image click handler
+                        e.stopPropagation();
+                        router.push(
+                          work.userId ? `/profile/${work.userId}` : `/books/${work._id}`,
+                        );
+                      }}
+                      className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full hover:scale-105 transition"
+                    >
+                      View Profile
+                    </button>
                   </div>
                 </div>
               </div>
-              <div>
-                <h3 className="text-2xl font-bold">Promote & Engage</h3>
-                <p className="text-sm">
-                  Showcase your music, content, and live events while building
-                  your ideal fanbase.
-                </p>
-              </div>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <div className="relative bg-gradient-to-b from-blue-500 to-indigo-600 rounded-3xl shadow-xl text-white p-6 h-full flex flex-col justify-between">
-              <h3 className="text-2xl font-bold">Slide 2</h3>
-              <p className="text-sm">
-                Another example card showcasing different content.
-              </p>
-            </div>
-          </SwiperSlide>
-
-          <SwiperSlide>
-            <div className="relative bg-gradient-to-b from-green-500 to-emerald-600 rounded-3xl shadow-xl text-white p-6 h-full flex flex-col justify-between">
-              <h3 className="text-2xl font-bold">Slide 3</h3>
-              <p className="text-sm">Final example of stacked cards.</p>
-            </div>
-          </SwiperSlide>
+            </SwiperSlide>
+          ))}
         </Swiper>
+        )}
 
         {/* Custom Navigation Dots */}
-        <div className="flex mt-6 space-x-3">
-          {[0, 1, 2].map((idx) => (
-            <div
-              key={idx}
-              className={`w-8 h-2 rounded-full transition-all ${
-                activeIndex === idx ? "bg-white" : "bg-white/30"
-              }`}
-            ></div>
-          ))}
-        </div>
+        {works.length > 0 && (
+          <div className="flex mt-6 space-x-3">
+            {works.map((work, idx) => (
+              <div
+                key={work._id}
+                className={`w-8 h-2 rounded-full transition-all ${
+                  activeIndex === idx ? "bg-white" : "bg-white/30"
+                }`}
+              ></div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
 export default Creator;
+
+
