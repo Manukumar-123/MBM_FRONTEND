@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import s from "./upload.module.css";
 import { submitBook, saveDraft } from "../../../api/api";
 import { INITIAL_FORM_STATE } from "./constants";
+import useAuthStore from "../../store/authStore";
 
 // ── Layout Components ──
 import HeroSection from "./HeroSection";
@@ -23,6 +25,8 @@ import PricingSection from "./PricingSection";
 import AgreementsSection from "./AgreementsSection";
 
 export default function UploadPage() {
+  const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   // ─── Form State ───
   const [form, setForm] = useState(INITIAL_FORM_STATE);
   const [genreTags, setGenreTags] = useState([]);
@@ -188,7 +192,7 @@ export default function UploadPage() {
   // ─── Close Success ───
   const handleSuccessClose = () => {
     setShowSuccess(false);
-    window.location.href = "/";
+    router.push(user?._id ? `/profile/${user._id}` : "/login");
   };
 
   return (

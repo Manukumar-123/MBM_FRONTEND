@@ -141,6 +141,17 @@ export interface ICreatorListResponse {
   pagination: ICreatorPagination;
 }
 
+export interface IGlobalSearchResults {
+  creators: Array<{ _id: string; name?: string; role?: string }>;
+  books: Array<{ _id: string; title: string; author: string; frontCover?: string }>;
+  videos: Array<{ _id: string; title: string; userId: string; section: string }>;
+}
+
+export const searchGlobally = async (q: string): Promise<IGlobalSearchResults> => {
+  const { data } = await axiosInstance.get("api/search", { params: { q } });
+  return data.data;
+};
+
 /* =====================================================
    AUTHENTICATION APIs
 ===================================================== */

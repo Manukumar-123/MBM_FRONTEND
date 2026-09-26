@@ -5,43 +5,19 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useTheme } from "next-themes";
-import { Sun, Moon, User as UserIcon, LogOut } from "lucide-react";
+import { Sun, Moon, User as UserIcon, LogOut, Search } from "lucide-react";
 import useAuthStore from "../store/authStore";
-
-type Profile = {
-  id: number;
-  name: string;
-};
-
-const profiles: Profile[] = [
-  {
-    id: 1,
-    name: "Author / Writer / Publisher",
-  },
-  {
-    id: 2,
-    name: "Performance Art Creatives",
-  },
-  {
-    id: 3,
-    name: "Music, Recording & Production",
-  },
-  { id: 4, name: "Television, Film & News Media" },
-
-  { id: 5, name: "Print, Internet, Streaming & Publishing" },
-  {
-    id: 6,
-    name: "	Visual Art Creatives",
-  },
-];
+import { searchGlobally, IGlobalSearchResults } from "@/api/api";
 
 export default function Header() {
   const headerRef = useRef<HTMLDivElement>(null);
-  const resultRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [query, setQuery] = useState("");
-  const [filteredProfiles, setFilteredProfiles] = useState<Profile[]>([]);
+  const [searchResults, setSearchResults] = useState<IGlobalSearchResults>({ creators: [], books: [], videos: [] });
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -49,6 +25,37 @@ export default function Header() {
   const { user, accessToken, clearAccessToken, clearUser } = useAuthStore();
 
   useEffect(() => setMounted(true), []);
+
+  useEffect(() => {
+    const term = query.trim();
+    if (term.length < 2) {
+      setSearchResults({ creators: [], books: [], videos: [] });
+      setSearchLoading(false);
+      return;
+    }
+    setSearchResults({ creators: [], books: [], videos: [] });
+    setSearchLoading(true);
+    let active = true;
+    const timer = window.setTimeout(async () => {
+      try {
+        const results = await searchGlobally(term);
+        if (active) setSearchResults(results);
+      } catch {
+        if (active) setSearchResults({ creators: [], books: [], videos: [] });
+      } finally {
+        if (active) setSearchLoading(false);
+      }
+    }, 250);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [query]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Close the account dropdown when clicking outside of it
   useEffect(() => {
@@ -111,32 +118,7 @@ export default function Header() {
     };
   }, []);
 
-  // Search filtering
-  useEffect(() => {
-    if (query.trim() === "") {
-      setFilteredProfiles([]);
-      return;
-    }
-
-    const results = profiles.filter((p) =>
-      p.name.toLowerCase().includes(query.toLowerCase()),
-    );
-    setFilteredProfiles(results);
-
-    if (results.length > 0 && resultRef.current) {
-      gsap.fromTo(
-        resultRef.current.children,
-        { y: 20, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.5,
-          ease: "power3.out",
-        },
-      );
-    }
-  }, [query]);
+  const hasSearchResults = searchResults.creators.length + searchResults.books.length + searchResults.videos.length > 0;
 
   return (
     <header
@@ -151,29 +133,25 @@ export default function Header() {
         </Link>
 
         {/* Search bar */}
-        <div className="relative w-64 hidden md:block">
+        <div className="relative w-64 hidden md:block" ref={searchRef}>
+          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="John Doe"
-            className="w-full px-4 py-2 rounded-full border-2 border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white bg-white/50 dark:bg-transparent placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
+            onChange={(e) => { setQuery(e.target.value); setSearchOpen(true); }}
+            onFocus={() => setSearchOpen(true)}
+            onKeyDown={(e) => { if (e.key === "Escape") setSearchOpen(false); }}
+            placeholder="Search creators and works"
+            aria-label="Search creators and works"
+            className="w-full pl-10 pr-4 py-2 rounded-full border-2 border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white bg-white/50 dark:bg-transparent placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
           />
-          {filteredProfiles.length > 0 && (
-            <div
-              ref={resultRef}
-              className="absolute mt-2 w-full bg-white dark:bg-black border-2 text-gray-900 dark:text-white border-gray-200 dark:border-[#323232] rounded-2xl shadow-lg p-2 z-50"
-            >
-              {filteredProfiles.map((profile) => (
-                <div
-                  key={profile.id}
-                  className="flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer"
-                >
-                  <span className="text-gray-900 dark:text-white">
-                    {profile.name}
-                  </span>
-                </div>
-              ))}
+          {searchOpen && query.trim().length >= 2 && (
+            <div className="absolute mt-2 w-80 right-0 max-h-[70vh] overflow-y-auto bg-white dark:bg-black border text-gray-900 dark:text-white border-gray-200 dark:border-[#323232] rounded-2xl shadow-lg p-2 z-50">
+              {searchLoading && <p className="p-3 text-sm text-gray-500">Searching…</p>}
+              {!searchLoading && !hasSearchResults && <p className="p-3 text-sm text-gray-500">No matching creators or content.</p>}
+              {searchResults.creators.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Creators</p>{searchResults.creators.map((creator) => <button key={creator._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${creator._id}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{creator.name || "Creator"}</span><span className="text-xs text-gray-500 capitalize">{creator.role || "Creator"}</span></button>)}</section>}
+              {searchResults.books.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Works</p>{searchResults.books.map((book) => <button key={book._id} onClick={() => { setSearchOpen(false); router.push(`/books/${book._id}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{book.title}</span><span className="text-xs text-gray-500">by {book.author}</span></button>)}</section>}
+              {searchResults.videos.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Videos</p>{searchResults.videos.map((video) => <button key={video._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${video.userId}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{video.title}</span><span className="text-xs text-gray-500">Creator video</span></button>)}</section>}
             </div>
           )}
         </div>

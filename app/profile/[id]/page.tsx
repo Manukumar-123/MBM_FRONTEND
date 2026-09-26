@@ -892,7 +892,7 @@ function PublicProfileView({ id }: { id: string }) {
 
   return (
     <div className="min-h-screen bg-[#050507] text-white">
-      <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+      {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
             href="/"
@@ -901,7 +901,7 @@ function PublicProfileView({ id }: { id: string }) {
             MeBookMeta
           </Link>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative h-56 overflow-hidden bg-gradient-to-r from-cyan-950 via-[#0a0a12] to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />

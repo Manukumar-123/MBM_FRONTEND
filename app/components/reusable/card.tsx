@@ -7,7 +7,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { getBooks, getFileUrl, IBook } from "../../../api/api";
+import { getBooks, getCreators, getFileUrl, IBook } from "../../../api/api";
 
 import "swiper/css";
 import "swiper/css/effect-cards";
@@ -24,6 +24,24 @@ const Creator: React.FC = () => {
   const [works, setWorks] = useState<IBook[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+
+  const openCreatorProfile = async (work: IBook) => {
+    if (work.userId) {
+      router.push(`/profile/${work.userId}`);
+      return;
+    }
+
+    // Older works may not have an owner ID; resolve the author to their creator profile.
+    try {
+      const response = await getCreators({ search: work.author, page: 1, limit: 10 });
+      const author = response.data?.find(
+        (creator) => creator.name?.trim().toLocaleLowerCase() === work.author?.trim().toLocaleLowerCase(),
+      );
+      if (author) router.push(`/profile/${author._id}`);
+    } catch (error) {
+      console.error("Failed to find creator profile", error);
+    }
+  };
 
   // Fetch the latest 4 works (any status) — one request, no filtering
   useEffect(() => {
@@ -160,9 +178,7 @@ const Creator: React.FC = () => {
                       onClick={(e) => {
                         // Don't let this bubble up to the card's image click handler
                         e.stopPropagation();
-                        router.push(
-                          work.userId ? `/profile/${work.userId}` : `/books/${work._id}`,
-                        );
+                        void openCreatorProfile(work);
                       }}
                       className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full hover:scale-105 transition"
                     >
