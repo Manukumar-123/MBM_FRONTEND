@@ -131,7 +131,7 @@ const BookDetailPage: FC<Props> = () => {
         <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
           <p className="text-lg text-ink">{error || "Book not found"}</p>
           <button
-            onClick={() => router.push("/workList")}
+            onClick={() => history.back()}
             className="px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold"
           >
             ← Back to Works
@@ -162,7 +162,7 @@ const BookDetailPage: FC<Props> = () => {
         {/* Action bar */}
         <div className="flex items-center justify-between mb-8 flex-wrap gap-3">
           <button
-            onClick={() => router.push("/work")}
+            onClick={() => history.back()}
             className="px-6 py-3 bg-elevated border border-line rounded-sm text-ink font-body text-sm font-medium hover:bg-surface transition-all"
           >
             ← Back

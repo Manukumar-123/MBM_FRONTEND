@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 // app/layout.tsx
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import BackButton from "./components/BackButton";
 import AnimatedBackground from "./components/AnimatedBackground";
 import "./globals.css";
 
@@ -18,7 +19,10 @@ export default function RootLayout({
 }) {
   const queryClient = new QueryClient(); // ✅ add this
   const pathname = usePathname();
-  const isAdmin = pathname?.startsWith("/admin");
+  const route = pathname?.replace(/\/+$/, "") || "";
+  const isAdmin = route.startsWith("/admin");
+  const isAuthPage = route === "/login" || route === "/signup";
+  const hideSiteChrome = !pathname || isAdmin || isAuthPage;
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
@@ -28,20 +32,18 @@ export default function RootLayout({
             position="top-right"
             toastOptions={{
               duration: 3000,
-              style: {
-                background: "#333",
-                color: "#fff",
-              },
+              className: "!bg-white !text-slate-900 border border-slate-200 shadow-xl dark:!bg-[#14131a] dark:!text-white dark:border-white/10",
             }}
           />
           <QueryClientProvider client={queryClient}>
             {" "}
             {/* ✅ wrap with QueryClientProvider */}
-            {!isAdmin && <AnimatedBackground />}
+            {!hideSiteChrome && <AnimatedBackground />}
             <div className="relative z-10">
-              {!isAdmin && <Header />}
+              {!hideSiteChrome && <Header />}
+              {!isAdmin && pathname && <BackButton />}
               <main>{children}</main>
-              {!isAdmin && <Footer />}
+              {!hideSiteChrome && <Footer />}
             </div>
           </QueryClientProvider>
         </ThemeProvider>

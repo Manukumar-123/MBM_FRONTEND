@@ -84,7 +84,7 @@ export default function Step3({
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
+    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <button
           onClick={onBack}

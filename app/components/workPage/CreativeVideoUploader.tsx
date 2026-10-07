@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Loader2, Trash2, UploadCloud, Video as VideoIcon } from "lucide-react";
+import { Loader2, Trash2, UploadCloud, Video as VideoIcon } from "lucide-react";
 
 import {
   deleteCreativeVideo,
@@ -179,51 +178,41 @@ export default function CreativeVideoUploader({
   };
 
   return (
-    <div className="min-h-screen bg-[#050507] text-white">
-      <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Link
-            href="/profile"
-            className="p-2 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </Link>
-          <span className="font-semibold">{heading}</span>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050507] dark:text-white">
 
-      <div className="max-w-5xl mx-auto px-4 py-8">
+
+      <div className="max-w-5xl mx-auto px-4 py-8 mt-20">
         <h1 className="text-2xl font-bold mb-1">{heading}</h1>
-        <p className="text-sm text-gray-500 mb-8">{description}</p>
+        <p className="text-sm text-slate-600 dark:text-gray-500 mb-8">{description}</p>
 
         {videos.length > 0 && (
-          <div className="text-xs text-amber-300/90 bg-amber-400/10 border border-amber-400/20 rounded-lg px-3.5 py-2.5 mb-4">
+          <div className="text-xs text-amber-800 dark:text-amber-300/90 bg-amber-100 dark:bg-amber-400/10 border border-amber-300 dark:border-amber-400/20 rounded-lg px-3.5 py-2.5 mb-4">
             You can only have one video here — uploading a new one will replace your current video.
           </div>
         )}
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 mb-8 flex flex-col gap-3"
+          className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl p-5 mb-8 flex flex-col gap-3"
         >
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder={titlePlaceholder}
             maxLength={150}
-            className="bg-white/[0.04] border border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-gray-600"
+            className="bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 dark:placeholder:text-gray-600"
           />
           <textarea
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             placeholder="Add a short description (optional)"
             maxLength={1000}
-            className="bg-white/[0.04] border border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-gray-600 min-h-[70px]"
+            className="bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 dark:placeholder:text-gray-600 min-h-[70px]"
           />
 
-          <label className="flex items-center gap-3 bg-white/[0.04] border border-dashed border-white/15 rounded-lg px-3.5 py-3 text-sm cursor-pointer hover:border-cyan-400/40 transition">
+          <label className="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] border border-dashed border-slate-300 dark:border-white/15 rounded-lg px-3.5 py-3 text-sm cursor-pointer hover:border-cyan-400/40 transition">
             <UploadCloud className="w-4 h-4 text-cyan-300 flex-shrink-0" />
-            <span className="flex-1 truncate text-gray-300">
+            <span className="flex-1 truncate text-slate-700 dark:text-gray-300">
               {file ? file.name : "Choose a video file — max 100 MB, up to 1 minute"}
             </span>
             <input
@@ -234,7 +223,7 @@ export default function CreativeVideoUploader({
             />
           </label>
           {file && (
-            <div className="text-xs text-gray-500 -mt-1">
+            <div className="text-xs text-slate-500 dark:text-gray-500 -mt-1">
               {formatBytes(file.size)} selected
             </div>
           )}
@@ -269,16 +258,16 @@ export default function CreativeVideoUploader({
           </button>
         </form>
 
-        <h2 className="text-sm font-semibold text-gray-400 mb-3">Your video</h2>
+        <h2 className="text-sm font-semibold text-slate-600 dark:text-gray-400 mb-3">Your video</h2>
 
         {loading ? (
-          <div className="flex items-center justify-center py-16 text-gray-500 gap-2">
+          <div className="flex items-center justify-center py-16 text-slate-500 dark:text-gray-500 gap-2">
             <Loader2 className="w-5 h-5 animate-spin" />
             Loading…
           </div>
         ) : videos.length === 0 ? (
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-10 text-center text-gray-500">
-            <VideoIcon className="w-8 h-8 mx-auto mb-3 text-gray-600" />
+          <div className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl p-10 text-center text-slate-500 dark:text-gray-500">
+            <VideoIcon className="w-8 h-8 mx-auto mb-3 text-slate-400 dark:text-gray-600" />
             No videos uploaded yet.
           </div>
         ) : (
@@ -286,7 +275,7 @@ export default function CreativeVideoUploader({
             {videos.map((v) => (
               <div
                 key={v._id}
-                className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden"
+                className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden"
               >
                 <video
                   src={getFileUrl(v.videoUrl) ?? undefined}
@@ -296,7 +285,7 @@ export default function CreativeVideoUploader({
                 <div className="p-3 flex items-start gap-2">
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-semibold truncate">{v.title}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">
+                    <div className="text-xs text-slate-500 dark:text-gray-500 mt-0.5">
                       {v.views} views · {formatBytes(v.videoSize)}
                     </div>
                   </div>

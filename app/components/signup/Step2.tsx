@@ -118,7 +118,7 @@ export default function Step2({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4">
+    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Back Button */}
         <button

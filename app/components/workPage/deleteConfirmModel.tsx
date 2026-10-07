@@ -5,6 +5,7 @@ import { Trash2 } from "lucide-react";
 
 interface DeleteConfirmModalProps {
   bookTitle: string;
+  itemType?: string;
   onConfirm: () => void;
   onCancel: () => void;
   deleting: boolean;
@@ -12,6 +13,7 @@ interface DeleteConfirmModalProps {
 
 const DeleteConfirmModal: FC<DeleteConfirmModalProps> = ({
   bookTitle,
+  itemType = "Book",
   onConfirm,
   onCancel,
   deleting,
@@ -21,7 +23,7 @@ const DeleteConfirmModal: FC<DeleteConfirmModalProps> = ({
     onClick={onCancel}
   >
     <div
-      className="bg-card border border-line rounded-card p-10 max-w-[440px] w-full text-center shadow-[0_20px_60px_rgba(0,0,0,0.5)] animate-fade-in"
+      className="w-full max-w-[440px] rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-900 shadow-[0_20px_60px_rgba(0,0,0,0.35)] animate-fade-in dark:border-white/10 dark:bg-[#14131a] dark:text-white sm:p-10"
       onClick={(e) => e.stopPropagation()}
     >
       {/* Icon */}
@@ -29,13 +31,12 @@ const DeleteConfirmModal: FC<DeleteConfirmModalProps> = ({
         <Trash2 className="w-8 h-8 text-danger" />
       </div>
 
-      <h3 className="font-serif text-2xl font-semibold text-ink mb-3">
-        Delete Book
+      <h3 className="font-serif text-2xl font-semibold text-slate-900 dark:text-white mb-3">
+        Delete {itemType}
       </h3>
-      <p className="text-sm text-ink-dim leading-relaxed mb-7">
-        Are you sure you want to delete{" "}
-        <strong className="text-gold">{bookTitle}</strong>? This action cannot
-        be undone. All files and data will be permanently removed.
+      <p className="text-sm text-slate-600 dark:text-gray-300 leading-relaxed mb-7">
+        Are you sure you want to delete{" "}<strong className="text-amber-700 dark:text-amber-300">{bookTitle}</strong>? This action cannot
+        be undone.{itemType === "Book" ? " All files and data will be permanently removed." : ""}
       </p>
 
       <div className="flex gap-3 justify-center">
@@ -43,7 +44,7 @@ const DeleteConfirmModal: FC<DeleteConfirmModalProps> = ({
           type="button"
           disabled={deleting}
           onClick={onCancel}
-          className="px-6 py-3 bg-elevated border border-line rounded-sm text-ink font-body text-sm font-medium hover:bg-surface hover:border-line-light transition-all disabled:opacity-50"
+          className="px-6 py-3 rounded-lg border border-slate-300 bg-slate-100 text-slate-800 text-sm font-medium hover:bg-slate-200 dark:border-white/10 dark:bg-white/[0.06] dark:text-gray-200 dark:hover:bg-white/10 transition-all disabled:opacity-50"
         >
           Cancel
         </button>

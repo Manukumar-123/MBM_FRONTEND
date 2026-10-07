@@ -59,10 +59,9 @@ const ScrollAnimation: React.FC = () => {
         if (HeadingRef.current) {
           gsap.fromTo(
             HeadingRef.current,
-            { opacity: 0, filter: "blur(10px)", y: 50 },
+            { opacity: 0, y: 50 },
             {
               opacity: 1,
-              filter: "blur(0px)",
               y: 0,
               duration: 1.2,
               ease: "power2.out",
@@ -105,8 +104,6 @@ const ScrollAnimation: React.FC = () => {
             x: 0,
             y: 0,
             borderRadius: 0,
-            backgroundColor: "#ffffff",
-            color: "#111111",
             padding: "2rem",
             duration: 1,
           },
@@ -120,7 +117,6 @@ const ScrollAnimation: React.FC = () => {
           {
             yPercent: 20,
             autoAlpha: 0,
-            rotate: -40,
             scale: 0.9,
             duration: 1,
             stagger: 0.2,
@@ -150,9 +146,9 @@ const ScrollAnimation: React.FC = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen bg-white dark:bg-gradient-to-br dark:from-black dark:via-[#1a0f0f] dark:to-[#2d1b00] overflow-hidden">
+    <section className="relative w-full min-h-screen bg-[var(--mobile-panel-background)] overflow-hidden">
       {/* Dotted halftone overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.15),transparent_70%)] pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_12%_18%,rgba(139,92,246,0.14),transparent_38%),radial-gradient(ellipse_at_88%_78%,rgba(6,182,212,0.12),transparent_42%)] pointer-events-none"></div>
 
       <div
         ref={containerRef}
@@ -193,14 +189,18 @@ const ScrollAnimation: React.FC = () => {
           <div
             ref={contentInsideRef}
             className="absolute inset-0 w-full h-full flex flex-col items-start justify-start 
-            text-left px-6 py-8 bg-white text-black 
+            text-left px-6 py-8
             overflow-y-auto md:overflow-y-hidden md:overflow-y-auto"
+            style={{
+              background: "var(--mobile-panel-background)",
+              color: "var(--foreground)",
+            }}
           >
             <div className="max-w-5xl w-full mx-auto ">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mt-6 md:mt-24 text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--foreground)] mt-6 md:mt-24 text-center">
                 Creatives
               </h2>
-              <p className="text-md sm:text-base text-gray-600 mt-4 text-center">
+              <p className="text-md sm:text-base text-[var(--text-dim)] mt-4 text-center">
                 Embrace the Future and Enhanced Technologies Market Who You Are
                 <br />
                 and What You Do For Only $49.99/Month

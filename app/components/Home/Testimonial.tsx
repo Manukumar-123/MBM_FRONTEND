@@ -55,12 +55,16 @@ const Testimonial = () => {
   }, []);
 
   return (
-    <div className="bg-white dark:bg-black py-16">
-      <h1 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-20">
+    <div className="relative isolate overflow-hidden bg-white dark:bg-black py-16">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_10%_18%,rgba(251,146,60,0.14),transparent_38%),radial-gradient(ellipse_at_90%_78%,rgba(139,92,246,0.15),transparent_42%)]"
+      />
+      <h1 className="relative z-10 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-20">
         What Our Users Say
       </h1>
 
-      <div ref={swiperRef} className=" md:w-100 w-10/12 mx-auto relative">
+      <div ref={swiperRef} className="relative z-10 md:w-100 w-10/12 mx-auto">
         <Swiper
           effect={"cards"}
           grabCursor={true}

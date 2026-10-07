@@ -72,8 +72,12 @@ const Diffrent: React.FC = () => {
   if (!mounted) return null; // ✅ SSR-safe: render only on client
 
   return (
-    <div className="bg-white dark:bg-black py-20">
-      <div className="text-center">
+    <div className="relative isolate overflow-hidden bg-white dark:bg-black py-20">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_8%_12%,rgba(244,114,182,0.14),transparent_36%),radial-gradient(ellipse_at_90%_70%,rgba(34,211,238,0.14),transparent_42%)]"
+      />
+      <div className="relative z-10 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           What makes us <br /> different?
         </h1>
@@ -85,7 +89,7 @@ const Diffrent: React.FC = () => {
 
       <div
         ref={containerRef}
-        className="relative md:h-[500px] md:w-[500px] h-70 w-70 mx-auto mt-20"
+        className="relative z-10 md:h-[500px] md:w-[500px] h-70 w-70 mx-auto mt-20"
       >
         {/* Rotating outer ring */}
         <div

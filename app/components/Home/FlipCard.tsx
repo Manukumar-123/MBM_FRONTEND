@@ -41,60 +41,35 @@ const FlipC: React.FC = () => {
           gsap.from(leftCardRef.current, {
             x: -200,
             autoAlpha: 0,
-            filter: "blur(10px)",
             duration: 1.5,
             ease: "power2.out",
             scrollTrigger: {
               trigger: leftCardRef.current,
               start: "top 80%",
             },
-            onUpdate: function () {
-              const progress = this.progress();
-              if (leftCardRef.current) {
-                leftCardRef.current.style.filter = `blur(${
-                  10 * (1 - progress)
-                }px)`;
-              }
-            },
           });
 
           gsap.from(rightCardRef.current, {
             x: 200,
             autoAlpha: 0,
-            filter: "blur(10px)",
             duration: 1.5,
             ease: "power2.out",
             scrollTrigger: {
               trigger: rightCardRef.current,
               start: "top 80%",
             },
-            onUpdate: function () {
-              const progress = this.progress();
-              if (rightCardRef.current) {
-                rightCardRef.current.style.filter = `blur(${
-                  10 * (1 - progress)
-                }px)`;
-              }
-            },
           });
         } else {
-          // Mobile: fade-up with blur
+          // Mobile: fade cards up
           [leftCardRef.current, rightCardRef.current].forEach((el) => {
             gsap.from(el, {
               y: 50,
               autoAlpha: 0,
-              filter: "blur(10px)",
               duration: 1.2,
               ease: "power2.out",
               scrollTrigger: {
                 trigger: el,
                 start: "top 85%",
-              },
-              onUpdate: function () {
-                const progress = this.progress();
-                if (el) {
-                  el.style.filter = `blur(${10 * (1 - progress)}px)`;
-                }
               },
             });
           });
@@ -104,13 +79,16 @@ const FlipC: React.FC = () => {
 
     return () => {
       mm.revert();
-      ScrollTrigger.killAll();
     };
   }, []);
 
   return (
-    <div className="flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-white dark:bg-black py-16">
-      <div ref={leftCardRef}>
+    <div className="relative isolate flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-white dark:bg-black py-16">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_12%_18%,rgba(139,92,246,0.16),transparent_38%),radial-gradient(ellipse_at_88%_82%,rgba(6,182,212,0.14),transparent_42%)]"
+      />
+      <div ref={leftCardRef} className="relative z-10">
         <FlipCard
           videoUrl={getFileUrl(pitchVideo?.videoUrl) || "/ally.mkv"}
           Title={pitchVideo?.title || "MEBOOKMETA PITCH ALLEY PREVIEW"}
@@ -122,7 +100,7 @@ const FlipC: React.FC = () => {
         />
       </div>
 
-      <div ref={rightCardRef}>
+      <div ref={rightCardRef} className="relative z-10">
         <FlipCard
           videoUrl={getFileUrl(universeVideo?.videoUrl) || "/charly.mkv"}
           Title={universeVideo?.title || "MEBOOKMETA ASK THE UNIVERSE PREVIEW"}

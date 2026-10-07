@@ -43,8 +43,9 @@ import {
 } from "../../../api/api";
 import StatusBadge from "../../components/workPage/StatusBadge";
 import DeleteConfirmModal from "../../components/workPage/deleteConfirmModel";
+import CommunityPostsPanel from "../../components/CommunityPostsPanel";
 
-type Tab = "overview" | "works" | "pitchAlley" | "askUniverse";
+type Tab = "overview" | "works" | "posts" | "pitchAlley" | "askUniverse";
 
 const ROLE_META: Record<
   string,
@@ -53,19 +54,19 @@ const ROLE_META: Record<
   author: {
     label: "Author",
     description: "Full publishing access — upload, edit and manage books.",
-    chip: "bg-amber-400/10 text-amber-300 border-amber-400/30",
+    chip: "bg-amber-400/10 text-amber-700 dark:text-amber-300 border-amber-400/30",
     dot: "bg-amber-400",
   },
   writer: {
     label: "Writer",
     description: "Full publishing access — upload, edit and manage books.",
-    chip: "bg-violet-400/10 text-violet-300 border-violet-400/30",
+    chip: "bg-violet-400/10 text-violet-700 dark:text-violet-300 border-violet-400/30",
     dot: "bg-violet-400",
   },
   user: {
     label: "Reader",
     description: "Browse and enjoy books from our creators.",
-    chip: "bg-slate-400/10 text-slate-300 border-slate-400/30",
+    chip: "bg-slate-400/10 text-slate-700 dark:text-slate-300 border-slate-400/30",
     dot: "bg-slate-400",
   },
 };
@@ -376,7 +377,7 @@ function ShareQrModal({
           <span className="flex-1 text-xs text-gray-400 truncate">{profileUrl}</span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-xs font-semibold text-cyan-300 hover:text-cyan-200 transition"
+            className="flex items-center gap-1 text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200 transition"
           >
             <Copy className="w-3.5 h-3.5" />
             {copied ? "Copied" : "Copy"}
@@ -487,14 +488,15 @@ export default function ProfilePage() {
     ...(isAuthor
       ? ([
           { key: "works", label: "My Works" },
+          { key: "posts", label: "My Posts" },
           { key: "pitchAlley", label: "Pitch Alley" },
           { key: "askUniverse", label: "Ask the Universe" },
         ] as { key: Tab; label: string }[])
-      : []),
+      : ([{ key: "posts", label: "My Posts" }] as { key: Tab; label: string }[])),
   ];
 
   return (
-    <div className="min-h-screen bg-[#050507] text-white">
+    <div className="profile-page min-h-screen bg-[#050507] text-white">
       {/* Top Navigation Bar */}
       {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -531,9 +533,9 @@ export default function ProfilePage() {
       </div> */}
 
       {/* Cover */}
-      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-cyan-950 via-[#0a0a12] to-violet-950">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
       {/* Main Content */}
@@ -553,7 +555,7 @@ export default function ProfilePage() {
 
               {/* Profile Info */}
               <div className="text-center mb-5">
-                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white via-violet-200 to-cyan-300 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {user.name || "Unnamed User"}
                 </h1>
                 <span
@@ -627,15 +629,15 @@ export default function ProfilePage() {
           {/* Right Column */}
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <div className="flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
+            <div className="flex gap-2 mb-6 border-b border-white/10 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`relative px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
+                  className={`relative rounded-t-lg px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
                     activeTab === tab.key
-                      ? "text-white"
-                      : "text-gray-500 hover:text-gray-300"
+                      ? "bg-violet-100 text-gray-900 dark:bg-white/10 dark:text-white"
+                      : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-white/5 dark:hover:text-gray-300"
                   }`}
                 >
                   {tab.label}
@@ -779,6 +781,10 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {activeTab === "posts" && (
+              <CommunityPostsPanel userId={user._id} canCreate compact />
+            )}
+
             {activeTab === "pitchAlley" && isAuthor && (
               <MyVideoSection
                 section="pitch_alley"
@@ -835,9 +841,9 @@ function PublicProfileView({ id }: { id: string }) {
   const [profile, setProfile] = useState<IAuthorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [activeTab, setActiveTab] = useState<"works" | "pitchAlley" | "askUniverse">(() => {
+  const [activeTab, setActiveTab] = useState<"works" | "posts" | "pitchAlley" | "askUniverse">(() => {
     const tab = searchParams.get("tab");
-    return tab === "pitchAlley" || tab === "askUniverse" ? tab : "works";
+    return tab === "posts" || tab === "pitchAlley" || tab === "askUniverse" ? tab : "works";
   });
   // TODO: replace with a real follow-state call once the API supports it.
   const [isFollowing, setIsFollowing] = useState(false);
@@ -866,7 +872,7 @@ function PublicProfileView({ id }: { id: string }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050507] text-gray-500">
+      <div className="profile-page min-h-screen flex items-center justify-center bg-[#050507] text-gray-500">
         <div className="w-8 h-8 border-2 border-white/10 border-t-cyan-400 rounded-full animate-spin" />
       </div>
     );
@@ -874,11 +880,8 @@ function PublicProfileView({ id }: { id: string }) {
 
   if (notFound || !profile) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-3 bg-[#050507] text-white">
+      <div className="profile-page min-h-screen flex flex-col items-center justify-center gap-3 bg-[#050507] text-white">
         <p className="text-lg font-semibold">Profile not found</p>
-        <Link href="/" className="text-sm text-cyan-300 hover:underline">
-          Back to home
-        </Link>
       </div>
     );
   }
@@ -891,7 +894,7 @@ function PublicProfileView({ id }: { id: string }) {
   const following = (author as any)?.following ?? 0;
 
   return (
-    <div className="min-h-screen bg-[#050507] text-white">
+    <div className="profile-page min-h-screen bg-[#050507] text-white">
       {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
@@ -903,9 +906,9 @@ function PublicProfileView({ id }: { id: string }) {
         </div>
       </div> */}
 
-      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-cyan-950 via-[#0a0a12] to-violet-950">
+      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
-        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 -mt-20 relative z-10">
@@ -921,7 +924,7 @@ function PublicProfileView({ id }: { id: string }) {
               </div>
 
               <div className="text-center mb-5">
-                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-white via-violet-200 to-cyan-300 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {author.name || "Unnamed User"}
                 </h1>
                 <span
@@ -1010,6 +1013,7 @@ function PublicProfileView({ id }: { id: string }) {
             <div className="flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
               {[
                 { key: "works", label: "Published Works" },
+                { key: "posts", label: "Posts" },
                 { key: "pitchAlley", label: "Pitch Alley" },
                 { key: "askUniverse", label: "Ask the Universe" },
               ].map((tab) => (
@@ -1017,7 +1021,9 @@ function PublicProfileView({ id }: { id: string }) {
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as typeof activeTab)}
                   className={`relative px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
-                    activeTab === tab.key ? "text-white" : "text-gray-500 hover:text-gray-300"
+                    activeTab === tab.key
+                      ? "text-gray-900 dark:text-white"
+                      : "text-gray-600 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-300"
                   }`}
                 >
                   {tab.label}
@@ -1067,6 +1073,8 @@ function PublicProfileView({ id }: { id: string }) {
                   ))}
                 </div>
               ))}
+
+            {activeTab === "posts" && <CommunityPostsPanel userId={author._id ?? id} compact />}
 
             {activeTab === "pitchAlley" &&
               (profile.pitchVideos && profile.pitchVideos.length > 0 ? (

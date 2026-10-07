@@ -104,6 +104,18 @@ export interface ICreativeVideo {
   updatedAt: string;
 }
 
+export interface ICommunityPost {
+  _id: string;
+  userId: string;
+  userName: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  likeCount: number;
+  liked: boolean;
+  createdAt: string;
+}
+
 export interface IAuthorProfile {
   user: IPublicAuthor;
   books: IBook[];
@@ -394,6 +406,33 @@ export const viewCreativeVideo = async (
   id: string,
 ): Promise<{ success: boolean; message: string; data: { views: number } }> => {
   const { data } = await axiosInstance.post(Endpoint.viewCreativeVideo(id));
+  return data;
+};
+
+/* =====================================================
+   COMMUNITY POSTS
+===================================================== */
+
+export const getCommunityPosts = async (params?: { userId?: string; limit?: number }) => {
+  const { data } = await axiosInstance.get<{ data: ICommunityPost[] }>(Endpoint.communityPosts, { params });
+  return data;
+};
+
+export const createCommunityPost = async (formData: FormData) => {
+  const { data } = await axiosInstance.post<{ data: ICommunityPost }>(Endpoint.communityPosts, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+    timeout: 0,
+  });
+  return data;
+};
+
+export const toggleCommunityPostLike = async (id: string) => {
+  const { data } = await axiosInstance.post<{ data: { liked: boolean; likeCount: number } }>(Endpoint.communityPostLike(id));
+  return data;
+};
+
+export const deleteCommunityPost = async (id: string) => {
+  const { data } = await axiosInstance.delete(Endpoint.communityPost(id));
   return data;
 };
 

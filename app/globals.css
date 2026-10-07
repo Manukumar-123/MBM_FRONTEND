@@ -9,6 +9,7 @@
 :root {
   --background: #ffffff;
   --foreground: #0a0a0a;
+  --mobile-panel-background: #ffffff;
   --card-bg: #f1f1f1;
   --border-color: #e0e0e0;
 }
@@ -16,8 +17,44 @@
 .dark {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --mobile-panel-background: linear-gradient(
+    to bottom,
+    #303030 0%,
+    #080808 20%,
+    #080808 80%,
+    #260b0f 100%
+  );
   --card-bg: #191919;
   --border-color: #323232;
+}
+
+/* The profile screen uses a dark visual palette in dark mode. Keep its cards,
+   labels, and controls readable when the site is switched to light mode. */
+html:not(.dark) .profile-page {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+html:not(.dark) .profile-page [class*="bg-[#050507]"],
+html:not(.dark) .profile-page [class*="bg-[#0a0a0f]"],
+html:not(.dark) .profile-page [class*="bg-white/"] {
+  background-color: #fff !important;
+}
+
+html:not(.dark) .profile-page [class*="border-white/"] {
+  border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+html:not(.dark) .profile-page [class~="text-white"]:not([class*="bg-gradient"]) {
+  color: #111827 !important;
+}
+
+html:not(.dark) .profile-page [class~="hover:text-white"]:hover {
+  color: #111827 !important;
+}
+
+html:not(.dark) .profile-page .text-gray-400 {
+  color: #4b5563;
 }
 
 /* =========================================
@@ -89,6 +126,13 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* Auth pages identify themselves in their first render so the shared site
+   chrome is hidden immediately, even while the root layout route updates. */
+body:has(.auth-screen) header,
+body:has(.auth-screen) footer {
+  display: none !important;
 }
 
 /* Card */

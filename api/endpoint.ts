@@ -20,6 +20,11 @@ export const Endpoint = {
   deleteCreativeVideo: (id: string) => `/api/creative-videos/${id}`,
   viewCreativeVideo: (id: string) => `/api/creative-videos/${id}/view`,
 
+  // Community posts
+  communityPosts: "api/community-posts",
+  communityPostLike: (id: string) => `/api/community-posts/${id}/like`,
+  communityPost: (id: string) => `/api/community-posts/${id}`,
+
   // Admin panel
   adminLogin: "api/admin/auth/login",
   getCategories: "api/categories",

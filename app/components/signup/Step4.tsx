@@ -61,7 +61,7 @@ export default function Step4({ onBack, identifier, userDetails }: Step4Props) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
+    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         <button
           onClick={onBack}

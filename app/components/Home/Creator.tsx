@@ -43,14 +43,9 @@ const Creator: React.FC = () => {
 
           // Shrink and rotate video
           tl.to(videoWrapperRef.current, {
-            width: "320px",
-            height: "640px",
+            scale: 0.42,
             borderRadius: "3rem",
             rotate: 10,
-            left: "50%",
-            top: "50%",
-            xPercent: -50,
-            yPercent: -50,
             duration: 4,
             ease: "power2.inOut",
           });
@@ -63,15 +58,8 @@ const Creator: React.FC = () => {
               {
                 autoAlpha: 0,
                 y: 50,
-                filter: "blur(10px)",
                 duration: 1.2,
                 ease: "power2.out",
-                onUpdate: function () {
-                  this.targets().forEach((target: HTMLDivElement) => {
-                    const progress = this.progress();
-                    target.style.filter = `blur(${10 * (1 - progress)}px)`;
-                  });
-                },
               },
               `-=${offset}`,
             );
@@ -109,16 +97,15 @@ const Creator: React.FC = () => {
             },
           );
 
-          // Headings fade-up + blur for mobile
+          // Fade headings up on mobile
           [HeadingRef.current, HeadingSecondRef.current].forEach((el) => {
             if (!el) return;
             gsap.fromTo(
               el,
-              { autoAlpha: 0, y: 50, filter: "blur(10px)" },
+              { autoAlpha: 0, y: 50 },
               {
                 autoAlpha: 1,
                 y: 0,
-                filter: "blur(0px)",
                 duration: 1.2,
                 ease: "power2.out",
                 scrollTrigger: {
@@ -130,7 +117,6 @@ const Creator: React.FC = () => {
           });
         }
 
-        return () => ScrollTrigger.killAll();
       },
     );
 
@@ -152,16 +138,16 @@ const Creator: React.FC = () => {
           playsInline
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/40 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-white/60 dark:bg-black/40 pointer-events-none"></div>
       </div>
 
       {/* Scrollable Content */}
       <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-12 py-12 sm:py-16 space-y-6">
         <div ref={HeadingRef}>
-          <h1 className="text-2xl sm:text-5xl md:text-7xl font-semibold tracking-wide text-white text-center mt-16">
+          <h1 className="text-2xl sm:text-5xl md:text-7xl font-semibold tracking-wide text-black dark:text-white text-center mt-16">
             Empowering <br /> Music Creators <br /> to Thrive.
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-white text-center">
+          <p className="text-sm sm:text-base md:text-lg text-black dark:text-white text-center">
             Build, connect, and monetize all <br /> in one place — on your
             terms.
           </p>
@@ -176,11 +162,11 @@ const Creator: React.FC = () => {
           ref={HeadingSecondRef}
           className="max-w-3xl mx-auto text-center px-4 sm:px-6"
         >
-          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-black dark:text-white mb-6">
             An Enhanced <br />
             Fan Experience
           </h1>
-          <p className="text-sm sm:text-base md:text-lg text-white">
+          <p className="text-sm sm:text-base md:text-lg text-black dark:text-white">
             M_B_M puts you in control. Engage with your <br />
             favorite music creators, explore new talent, access exclusive
             content, and <br /> experience music on your terms.
