@@ -5,13 +5,30 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useTheme } from "next-themes";
-import { Sun, Moon, User as UserIcon, LogOut, Search } from "lucide-react";
+import {
+  Bell,
+  BookOpen,
+  Loader2,
+  LogOut,
+  Menu,
+  Moon,
+  PenLine,
+  Search,
+  Settings,
+  Sun,
+  Upload,
+  User as UserIcon,
+  X,
+} from "lucide-react";
+import Image from "next/image";
+import { toast } from "react-hot-toast";
+import { getFileUrl, searchGlobally, type IGlobalSearchResults } from "@/api/api";
 import useAuthStore from "../store/authStore";
-import { searchGlobally, IGlobalSearchResults } from "@/api/api";
 
 export default function Header() {
-  const headerRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const avatarRef = useRef<HTMLDivElement>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [query, setQuery] = useState("");
@@ -19,6 +36,7 @@ export default function Header() {
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
@@ -33,6 +51,7 @@ export default function Header() {
       setSearchLoading(false);
       return;
     }
+
     setSearchResults({ creators: [], books: [], videos: [] });
     setSearchLoading(true);
     let active = true;
@@ -46,56 +65,65 @@ export default function Header() {
         if (active) setSearchLoading(false);
       }
     }, 250);
-    return () => { active = false; window.clearTimeout(timer); };
+
+    return () => {
+      active = false;
+      window.clearTimeout(timer);
+    };
   }, [query]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) setSearchOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Close the account dropdown when clicking outside of it
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) {
-        setAvatarOpen(false);
-      }
+    const handleClickOutside = (event: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(event.target as Node)) setAvatarOpen(false);
+      if (headerRef.current && !headerRef.current.contains(event.target as Node)) setMobileMenuOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isTyping = target?.matches("input, textarea, select, [contenteditable='true']");
+      if (event.key === "/" && !isTyping && searchRef.current?.offsetParent) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+      }
+      if (event.key === "Escape") {
+        setSearchOpen(false);
+        setAvatarOpen(false);
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleGlobalKeyDown);
+    return () => document.removeEventListener("keydown", handleGlobalKeyDown);
   }, []);
 
   const getInitials = (name?: string) => {
     if (!name) return "U";
-    return name
-      .trim()
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((w) => w[0]?.toUpperCase())
-      .join("");
+    return name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("");
   };
 
   const handleLogout = () => {
     clearAccessToken();
     clearUser();
     setAvatarOpen(false);
+    setMobileMenuOpen(false);
     router.replace("/login");
   };
 
-  // Scroll animation
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 50) setIsScrolled(true);
-      else setIsScrolled(false);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
 
-    // GSAP entrance animation (fromTo keeps the header visible by default even
-    // if this tween gets interrupted, instead of getting stuck at opacity 0)
     let tween: gsap.core.Tween | undefined;
     if (headerRef.current) {
       tween = gsap.fromTo(
@@ -119,133 +147,127 @@ export default function Header() {
   }, []);
 
   const hasSearchResults = searchResults.creators.length + searchResults.books.length + searchResults.videos.length > 0;
+  const profileHref = user?._id ? `/profile/${user._id}` : "/login";
+  const avatarUrl = user?.avatarUrl ? getFileUrl(user.avatarUrl) : null;
+  const closeMenus = () => {
+    setAvatarOpen(false);
+    setMobileMenuOpen(false);
+  };
 
   return (
-    <header
-      ref={headerRef}
-      className={`fixed w-full top-0 z-50 transition-all backdrop-blur-md bg-white/80 dark:bg-black/30 ${
-        isScrolled ? "bg-white/95 dark:bg-black/70 shadow-lg " : ""
-      }`}
-    >
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4 md:py-6 relative">
-        <Link href="/" className="text-gray-900 dark:text-white font-bold text-2xl">
+    <header ref={headerRef} className={`site-header-shell${isScrolled ? " is-scrolled" : ""}`}>
+      <div className="site-header-wrap">
+        <Link href="/" className="site-header-logo" aria-label="MeBookMeta home">
+          <span className="site-header-mark" aria-hidden="true" />
           MeBookMeta
         </Link>
 
-        {/* Search bar */}
-        <div className="relative w-64 hidden md:block" ref={searchRef}>
-          <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+        <div className="site-header-search" ref={searchRef} role="search">
+          <Search size={17} className="site-header-search-icon" aria-hidden="true" />
           <input
-            type="text"
+            ref={searchInputRef}
+            type="search"
+            role="combobox"
             value={query}
-            onChange={(e) => { setQuery(e.target.value); setSearchOpen(true); }}
+            onChange={(event) => { setQuery(event.target.value); setSearchOpen(true); }}
             onFocus={() => setSearchOpen(true)}
-            onKeyDown={(e) => { if (e.key === "Escape") setSearchOpen(false); }}
-            placeholder="Search creators and works"
-            aria-label="Search creators and works"
-            className="w-full pl-10 pr-4 py-2 rounded-full border-2 border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white bg-white/50 dark:bg-transparent placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
+            onKeyDown={(event) => { if (event.key === "Escape") setSearchOpen(false); }}
+            placeholder="Search creators, works, tags"
+            aria-label="Search MeBookMeta"
+            aria-expanded={searchOpen && query.trim().length >= 2}
+            aria-controls="site-header-search-results"
+            autoComplete="off"
+            spellCheck={false}
           />
+          {searchLoading ? (
+            <Loader2 size={16} className="site-header-search-clear animate-spin" aria-label="Searching" />
+          ) : query ? (
+            <button type="button" className="site-header-search-clear" aria-label="Clear search" onClick={() => { setQuery(""); setSearchOpen(false); }}>
+              <X size={15} />
+            </button>
+          ) : <kbd>/</kbd>}
+
           {searchOpen && query.trim().length >= 2 && (
-            <div className="absolute mt-2 w-80 right-0 max-h-[70vh] overflow-y-auto bg-white dark:bg-black border text-gray-900 dark:text-white border-gray-200 dark:border-[#323232] rounded-2xl shadow-lg p-2 z-50">
-              {searchLoading && <p className="p-3 text-sm text-gray-500">Searching…</p>}
-              {!searchLoading && !hasSearchResults && <p className="p-3 text-sm text-gray-500">No matching creators or content.</p>}
-              {searchResults.creators.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Creators</p>{searchResults.creators.map((creator) => <button key={creator._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${creator._id}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{creator.name || "Creator"}</span><span className="text-xs text-gray-500 capitalize">{creator.role || "Creator"}</span></button>)}</section>}
-              {searchResults.books.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Works</p>{searchResults.books.map((book) => <button key={book._id} onClick={() => { setSearchOpen(false); router.push(`/books/${book._id}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{book.title}</span><span className="text-xs text-gray-500">by {book.author}</span></button>)}</section>}
-              {searchResults.videos.length > 0 && <section><p className="px-3 py-2 text-xs font-semibold uppercase text-gray-500">Videos</p>{searchResults.videos.map((video) => <button key={video._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${video.userId}`); }} className="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"><span className="block text-sm font-medium">{video.title}</span><span className="text-xs text-gray-500">Creator video</span></button>)}</section>}
+            <div className="site-header-search-results" id="site-header-search-results" role="listbox" aria-label="Search suggestions">
+              {searchLoading && <p className="site-header-search-state">Searching…</p>}
+              {!searchLoading && !hasSearchResults && <p className="site-header-search-state">No matching creators or content.</p>}
+              {searchResults.creators.length > 0 && <section><p className="site-header-search-heading">Creators</p>{searchResults.creators.map((creator) => <button role="option" aria-selected="false" key={creator._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${creator._id}`); }}><span>{creator.name || "Creator"}</span><small>{creator.role || "Creator"}</small></button>)}</section>}
+              {searchResults.books.length > 0 && <section><p className="site-header-search-heading">Works</p>{searchResults.books.map((book) => <button role="option" aria-selected="false" key={book._id} onClick={() => { setSearchOpen(false); router.push(`/books/${book._id}`); }}><span>{book.title}</span><small>by {book.author}</small></button>)}</section>}
+              {searchResults.videos.length > 0 && <section><p className="site-header-search-heading">Videos</p>{searchResults.videos.map((video) => <button role="option" aria-selected="false" key={video._id} onClick={() => { setSearchOpen(false); router.push(`/profile/${video.userId}`); }}><span>{video.title}</span><small>Creator video</small></button>)}</section>}
             </div>
           )}
         </div>
 
-        <nav className="hidden md:flex gap-6 text-gray-900 dark:text-white font-medium">
-          {/* <Link href="/">For creators</Link>
-          <Link href="/">For fans</Link>
-          <Link href="/">Partners</Link> */}
+        <nav className="site-header-nav" aria-label="Main navigation">
           <Link href="/">About</Link>
-          <Link href="/">Contact Us</Link>
+          <Link href="/">Contact us</Link>
         </nav>
 
-        <Link
-          href="/payment"
-          className="hidden md:block bg-white text-black font-semibold px-5 py-2 rounded-full hover:bg-gray-200 transition"
-        >
-          Join the Beta
-        </Link>
+        <div className="site-header-actions">
+          {mounted && (
+            <button type="button" className="site-header-icon-btn" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label="Toggle theme" title="Toggle theme">
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          )}
 
-        {/* Theme toggle */}
-        {mounted && (
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="p-2 rounded-full border border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white hover:bg-black/10 dark:hover:bg-white/10 transition"
-            aria-label="Toggle theme"
-          >
-            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          {accessToken && user ? (
+            <>
+              {(user.role === "author" || user.role === "writer") && (
+                <Link href="/work" className="site-header-upload"><Upload size={15} /><span>Upload work</span></Link>
+              )}
+              <button type="button" className="site-header-icon-btn site-header-notifications" aria-label="Notifications" title="Notifications" onClick={() => toast("Notifications are not available yet.")}>
+                <Bell size={17} />
+              </button>
+              <div className="site-header-account" ref={avatarRef}>
+                <button type="button" className="site-header-avatar" onClick={() => setAvatarOpen((open) => !open)} aria-label="Account menu" aria-haspopup="menu" aria-expanded={avatarOpen}>
+                  {avatarUrl ? <Image src={avatarUrl} alt="" width={40} height={40} unoptimized /> : getInitials(user.name)}
+                </button>
+                {avatarOpen && (
+                  <div className="site-header-menu" role="menu">
+                    <div className="site-header-menu-user">
+                      <div className="site-header-menu-avatar">{avatarUrl ? <Image src={avatarUrl} alt="" width={40} height={40} unoptimized /> : getInitials(user.name)}</div>
+                      <div className="site-header-menu-identity"><strong>{user.name || "Unnamed User"}</strong><small>{user.identifier}</small><span>{user.role || "Member"}</span></div>
+                    </div>
+                    <Link href={profileHref} role="menuitem" onClick={closeMenus}><UserIcon size={17} />My profile</Link>
+                    <Link href={`${profileHref}?tab=works`} role="menuitem" onClick={closeMenus}><BookOpen size={17} />My works</Link>
+                    <Link href={`${profileHref}?tab=posts`} role="menuitem" onClick={closeMenus}><PenLine size={17} />My posts</Link>
+                    <Link href="/settings" role="menuitem" onClick={closeMenus}><Settings size={17} />Settings</Link>
+                    <hr />
+                    <button type="button" role="menuitem" className="is-danger" onClick={handleLogout}><LogOut size={17} />Log out</button>
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="site-header-auth-actions">
+              <Link href="/login" className="site-header-login">Login</Link>
+              <Link href="/signup" className="site-header-signup">Sign up</Link>
+            </div>
+          )}
+
+          <button type="button" className="site-header-mobile-toggle" aria-label={mobileMenuOpen ? "Close menu" : "Open menu"} aria-expanded={mobileMenuOpen} onClick={() => setMobileMenuOpen((open) => !open)}>
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-        )}
-
-        {/* Account avatar */}
-     {/* Account / Auth */}
-{accessToken && user ? (
-  <div className="relative" ref={avatarRef}>
-    <button
-      onClick={() => setAvatarOpen((prev) => !prev)}
-      className="w-9 h-9 md:w-10 md:h-10 cursor-pointer rounded-full flex items-center justify-center bg-green-500 text-white font-semibold text-sm border-2 border-white/50 dark:border-black/50 hover:opacity-90 transition"
-      aria-label="Account menu"
-      aria-expanded={avatarOpen}
-    >
-      {getInitials(user.name)}
-    </button>
-
-    {avatarOpen && (
-      <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black border border-gray-200 dark:border-[#323232] rounded-xl shadow-lg py-2 z-50">
-        <div className="px-4 py-2 border-b border-gray-100 dark:border-[#222]">
-          <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-            {user.name || "Unnamed User"}
-          </p>
-
-          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-            {user.identifier}
-          </p>
         </div>
 
-        <Link
-          href={`/profile/${user._id}`}
-          onClick={() => setAvatarOpen(false)}
-          className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 transition"
-        >
-          <UserIcon size={16} />
-          Profile
-        </Link>
-
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-500/10 transition"
-        >
-          <LogOut size={16} />
-          Logout
-        </button>
-      </div>
-    )}
-  </div>
-) : (
-  <div className="hidden md:flex items-center gap-3">
-    <Link
-      href="/login"
-      className="px-4 py-2 rounded-full border border-gray-300 dark:border-[#323232] text-gray-900 dark:text-white hover:bg-black/5 dark:hover:bg-white/10 transition font-medium"
-    >
-      Login
-    </Link>
-
-    <Link
-      href="/signup"
-      className="px-5 py-2 rounded-full bg-black dark:bg-white text-white dark:text-black font-semibold hover:opacity-80 transition"
-    >
-      Sign Up
-    </Link>
-  </div>
-)}
-
-        {/* Mobile menu toggle */}
-        <div className="md:hidden text-gray-900 dark:text-white">☰</div>
+        {mobileMenuOpen && (
+          <div className="site-header-mobile-menu">
+            <Link href="/" onClick={closeMenus}>About</Link>
+            <Link href="/" onClick={closeMenus}>Contact us</Link>
+            {accessToken && user ? (
+              <>
+                <Link href={profileHref} onClick={closeMenus}>My profile</Link>
+                <Link href={`${profileHref}?tab=works`} onClick={closeMenus}>My works</Link>
+                <Link href={`${profileHref}?tab=posts`} onClick={closeMenus}>My posts</Link>
+                <Link href="/settings" onClick={closeMenus}>Settings</Link>
+                {(user.role === "author" || user.role === "writer") && <Link href="/work" onClick={closeMenus}>Upload work</Link>}
+                <button type="button" className="is-danger" onClick={handleLogout}><LogOut size={16} />Log out</button>
+              </>
+            ) : (
+              <div className="site-header-mobile-auth"><Link href="/login" onClick={closeMenus}>Login</Link><Link href="/signup" onClick={closeMenus}>Sign up</Link></div>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

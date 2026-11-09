@@ -6,24 +6,15 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   BadgeCheck,
   BookOpen,
-  Calendar,
   Copy,
   Eye,
-  LogOut,
-  Mail,
   MessageCircle,
   Pencil,
-  Phone,
   Plus,
   QrCode,
-  Settings,
   Sparkles,
   Trash2,
-  Upload,
-  User as UserIcon,
   UserPlus,
-  Users,
-  VenetianMask,
   Video,
   X,
 } from "lucide-react";
@@ -45,7 +36,10 @@ import StatusBadge from "../../components/workPage/StatusBadge";
 import DeleteConfirmModal from "../../components/workPage/deleteConfirmModel";
 import CommunityPostsPanel from "../../components/CommunityPostsPanel";
 
-type Tab = "overview" | "works" | "posts" | "pitchAlley" | "askUniverse";
+type Tab = "works" | "posts" | "pitchAlley" | "askUniverse" | "about";
+
+const parseProfileTab = (value: string | null): Tab =>
+  value === "posts" || value === "pitchAlley" || value === "askUniverse" || value === "about" ? value : "works";
 
 const ROLE_META: Record<
   string,
@@ -395,14 +389,20 @@ function ShareQrModal({
 export default function ProfilePage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
   const profileId = Array.isArray(params?.id) ? params.id[0] : params?.id ?? "";
-  const { user, accessToken, hasHydrated, clearAccessToken, clearUser } = useAuthStore();
+  const tabParam = searchParams.get("tab");
+  const { user, accessToken, hasHydrated } = useAuthStore();
 
   const isOwnProfile = !!user?._id && user._id === profileId;
   const isAuthor = user?.role === "author" || user?.role === "writer";
   const roleInfo = ROLE_META[user?.role ?? "user"] ?? ROLE_META.user;
 
-  const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const [activeTab, setActiveTab] = useState<Tab>(() => parseProfileTab(tabParam));
+
+  useEffect(() => {
+    setActiveTab(parseProfileTab(tabParam));
+  }, [tabParam]);
 
   const [books, setBooks] = useState<IBook[]>([]);
   const [booksLoading, setBooksLoading] = useState(false);
@@ -460,12 +460,6 @@ export default function ProfilePage() {
     }
   };
 
-  const handleLogout = () => {
-    clearAccessToken();
-    clearUser();
-    router.replace("/login");
-  };
-
   if (!hasHydrated || !accessToken || !user) return null;
 
   if (!isOwnProfile) {
@@ -479,20 +473,15 @@ export default function ProfilePage() {
     drafts: books.filter((b) => b.status === "draft").length,
   };
 
-  // TODO: wire to real social-graph fields once the API returns them.
-  const followers = (user as any)?.followers ?? 0;
-  const following = (user as any)?.following ?? 0;
+  const followers = 0;
+  const following = 0;
 
-  const tabs: { key: Tab; label: string }[] = [
-    { key: "overview", label: "Overview" },
-    ...(isAuthor
-      ? ([
-          { key: "works", label: "My Works" },
-          { key: "posts", label: "My Posts" },
-          { key: "pitchAlley", label: "Pitch Alley" },
-          { key: "askUniverse", label: "Ask the Universe" },
-        ] as { key: Tab; label: string }[])
-      : ([{ key: "posts", label: "My Posts" }] as { key: Tab; label: string }[])),
+  const tabs: { key: Tab; label: string; hint?: string }[] = [
+    { key: "works", label: "Works" },
+    { key: "posts", label: "Posts" },
+    { key: "pitchAlley", label: "Pitch Alley", hint: "Pitch ideas" },
+    { key: "askUniverse", label: "Ask the Universe", hint: "Ask the community" },
+    { key: "about", label: "About" },
   ];
 
   return (
@@ -533,28 +522,30 @@ export default function ProfilePage() {
       </div> */}
 
       {/* Cover */}
-      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
+      <div className="profile-banner relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
         <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 -mt-20 relative z-10">
+      <div className="profile-layout max-w-7xl mx-auto px-4 -mt-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Profile Card */}
           <div className="lg:col-span-1">
-            <div className="bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
+            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
               {/* Avatar */}
-              <div className="flex justify-center -mt-16 mb-4">
+              <div className="profile-avatar-wrap flex justify-center -mt-16 mb-4">
                 <div className="p-[3px] rounded-full bg-gradient-to-tr from-cyan-400 via-violet-400 to-blue-500 shadow-lg shadow-cyan-500/20">
                   <div className="w-28 h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-3xl font-bold">
-                    {getInitials(user.name)}
+                    {user.avatarUrl ? (
+                      <img src={getFileUrl(user.avatarUrl) || user.avatarUrl} alt={`${user.name || "User"} profile`} className="h-full w-full rounded-full object-cover" />
+                    ) : getInitials(user.name)}
                   </div>
                 </div>
               </div>
 
               {/* Profile Info */}
-              <div className="text-center mb-5">
+              <div className="profile-card-heading text-center mb-5">
                 <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {user.name || "Unnamed User"}
                 </h1>
@@ -564,7 +555,7 @@ export default function ProfilePage() {
                   <BadgeCheck className="w-3.5 h-3.5" />
                   {roleInfo.label}
                 </span>
-                <p className="text-sm text-gray-500 mt-3">{roleInfo.description}</p>
+                <p className="profile-bio text-sm text-gray-500 mt-3">{user.bio || roleInfo.description}</p>
               </div>
 
               {/* Stats row */}
@@ -574,54 +565,14 @@ export default function ProfilePage() {
                 <StatBlock label="Following" value={formatCount(following)} />
               </div>
 
-              {/* Author quick actions */}
-              {isAuthor ? (
-                <div className="space-y-2 mb-6">
-                  <GradientButton href="/work" icon={Upload}>
-                    Upload New Work
-                  </GradientButton>
-                  <GradientButton href="/workList" icon={BookOpen} variant="outline">
-                    Manage My Works
-                  </GradientButton>
-                </div>
-              ) : (
-                <div className="mb-6">
-                  <GradientButton href="/settings" icon={Pencil} variant="outline">
-                    Edit Profile
-                  </GradientButton>
-                </div>
-              )}
+              <div className="mb-4">
+                <GradientButton href="/settings" icon={Pencil}>
+                  Edit Profile
+                </GradientButton>
+              </div>
 
-              {/* Personal Info */}
-              <div className="space-y-4 text-gray-500 pt-2 border-t border-white/10">
-                {[
-                  {
-                    icon: user.identifier?.includes("@") ? Mail : Phone,
-                    label: "Contact",
-                    value: user.identifier || "—",
-                  },
-                  {
-                    icon: Calendar,
-                    label: "Date of Birth",
-                    value: fmtDate(user.dob),
-                  },
-                  {
-                    icon: VenetianMask,
-                    label: "Gender",
-                    value: user.gender
-                      ? user.gender.charAt(0).toUpperCase() + user.gender.slice(1)
-                      : "—",
-                  },
-                  { icon: UserIcon, label: "Account Type", value: roleInfo.label },
-                ].map((info, idx) => (
-                  <div className="flex items-start gap-3 mt-4" key={idx}>
-                    <info.icon className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
-                    <div>
-                      <div className="text-xs text-gray-600 mb-1">{info.label}</div>
-                      <div className="text-sm text-white break-all">{info.value}</div>
-                    </div>
-                  </div>
-                ))}
+              <div className="profile-joined border-t border-white/10 pt-4 text-sm text-gray-500">
+                Joined {user.createdAt ? fmtDate(user.createdAt) : "MeBookMeta"}
               </div>
             </div>
           </div>
@@ -629,7 +580,7 @@ export default function ProfilePage() {
           {/* Right Column */}
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <div className="flex gap-2 mb-6 border-b border-white/10 overflow-x-auto">
+            <div className="profile-tabs flex gap-2 mb-6 border-b border-white/10 overflow-x-auto">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
@@ -640,7 +591,7 @@ export default function ProfilePage() {
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-white/5 dark:hover:text-gray-300"
                   }`}
                 >
-                  {tab.label}
+                  {tab.label}{tab.hint && <small>{tab.hint}</small>}
                   {activeTab === tab.key && (
                     <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-gradient-to-r from-cyan-400 to-violet-400 rounded-full" />
                   )}
@@ -648,69 +599,72 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            {activeTab === "overview" && (
-              <div className="space-y-6">
-                {/* Stats */}
-                {isAuthor ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    {[
-                      { label: "Total Works", value: stats.total },
-                      { label: "Published", value: stats.published },
-                      { label: "In Review", value: stats.pending },
-                      { label: "Drafts", value: stats.drafts },
-                    ].map((s) => (
-                      <div
-                        key={s.label}
-                        className="bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-center"
-                      >
-                        <div className="text-2xl font-bold text-white">{s.value}</div>
-                        <div className="text-xs text-gray-500 mt-1">{s.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <EmptyState
-                    icon={Upload}
-                    title="Become an Author"
-                    description="Reader accounts can browse and enjoy books. Author and writer accounts unlock publishing tools like uploading manuscripts, managing works and tracking sales. Contact support to upgrade your account."
-                  />
-                )}
-
-                <div className="bg-white/[0.03] rounded-2xl p-6 border border-white/10">
-                  <h3 className="font-semibold mb-4">Account Details</h3>
-                  <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            {activeTab === "about" && (
+              <div className="profile-panel">
+                <section className="profile-surface rounded-2xl p-6">
+                  <h2 className="text-xl font-bold">About</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-400">{user.bio || roleInfo.description}</p>
+                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
                     <div>
-                      <dt className="text-gray-500">Name</dt>
-                      <dd className="font-medium mt-0.5">{user.name || "—"}</dd>
+                      <dt className="text-gray-500">Account type</dt>
+                      <dd className="mt-1 font-medium">{roleInfo.label}</dd>
                     </div>
                     <div>
-                      <dt className="text-gray-500">Contact</dt>
-                      <dd className="font-medium mt-0.5">{user.identifier || "—"}</dd>
+                      <dt className="text-gray-500">Member since</dt>
+                      <dd className="mt-1 font-medium">{user.createdAt ? fmtDate(user.createdAt) : "MeBookMeta"}</dd>
                     </div>
-                    <div>
-                      <dt className="text-gray-500">Date of Birth</dt>
-                      <dd className="font-medium mt-0.5">{fmtDate(user.dob)}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-gray-500">Gender</dt>
-                      <dd className="font-medium mt-0.5">{user.gender || "—"}</dd>
-                    </div>
-                    <div>
-                      <dt className="text-gray-500">Account Type</dt>
-                      <dd className="font-medium mt-0.5">{roleInfo.label}</dd>
-                    </div>
+                    {user.craft && <div><dt className="text-gray-500">Craft</dt><dd className="mt-1 font-medium">{user.craft}</dd></div>}
+                    {user.location && <div><dt className="text-gray-500">Location</dt><dd className="mt-1 font-medium">{user.location}</dd></div>}
                   </dl>
-                </div>
+                  {!!user.socialLinks?.length && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {user.socialLinks.map((social, index) => (
+                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50">
+                          {social.platform === "x" ? "X / Twitter" : social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </section>
               </div>
             )}
-
             {activeTab === "works" && isAuthor && (
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-lg">My Works</h3>
+              <div className="profile-panel">
+                <section className="profile-surface profile-setup rounded-2xl p-6">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <h2 className="text-xl font-bold">Set up your profile</h2>
+                      <p className="mt-1 text-sm text-gray-400">Your creator space is ready. Add a work to start building your shelf.</p>
+                    </div>
+                    <Link href="/settings" className="text-sm font-semibold text-cyan-300 hover:text-cyan-200">Edit profile</Link>
+                  </div>
+                  <div className="profile-progress mt-5"><span style={{ width: books.length ? "100%" : "66%" }} /></div>
+                  <div className="profile-checklist mt-3">
+                    <div className="profile-check is-done"><span>✓</span>Create your account</div>
+                    <div className="profile-check is-done"><span>✓</span>Choose your account type</div>
+                    <div className={`profile-check ${books.length ? "is-done" : ""}`}><span>{books.length ? "✓" : ""}</span>Upload your first work</div>
+                  </div>
+                </section>
+
+                <div className="flex items-center justify-between gap-3 mb-4">
+                  <h2 className="text-2xl font-bold">Works</h2>
                   <GradientButton href="/work" icon={Plus}>
-                    Upload New Work
+                    Upload new work
                   </GradientButton>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                  {[
+                    { label: "Works", value: stats.total },
+                    { label: "Published", value: stats.published },
+                    { label: "In review", value: stats.pending },
+                    { label: "Drafts", value: stats.drafts },
+                  ].map((stat) => (
+                    <div key={stat.label} className="profile-surface rounded-2xl p-4 text-center">
+                      <div className="text-xl font-bold">{stat.value}</div>
+                      <div className="mt-1 text-xs text-gray-400">{stat.label}</div>
+                    </div>
+                  ))}
                 </div>
 
                 {booksLoading ? (
@@ -731,9 +685,9 @@ export default function ProfilePage() {
                     {books.map((book) => (
                       <div
                         key={book._id}
-                        className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex gap-3 p-3 hover:border-white/20 transition"
+                        className="profile-work-card bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex gap-3 p-3 hover:border-white/20 transition"
                       >
-                        <div className="w-16 h-20 flex-shrink-0 bg-white/[0.05] rounded-lg overflow-hidden">
+                        <div className="profile-work-cover w-16 h-20 flex-shrink-0 bg-white/[0.05] rounded-lg overflow-hidden">
                           {book.frontCover && (
                             <img
                               src={getFileUrl(book.frontCover) ?? undefined}
@@ -781,30 +735,48 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {activeTab === "works" && !isAuthor && (
+              <div className="profile-panel">
+                <EmptyState
+                  icon={BookOpen}
+                  title="Works are for creators"
+                  description="Reader accounts can browse and enjoy books. Author and writer accounts can publish works and share them here."
+                />
+              </div>
+            )}
+
             {activeTab === "posts" && (
-              <CommunityPostsPanel userId={user._id} canCreate compact />
+              <div className="profile-panel"><CommunityPostsPanel userId={user._id} canCreate compact /></div>
             )}
 
             {activeTab === "pitchAlley" && isAuthor && (
-              <MyVideoSection
+              <div className="profile-panel"><MyVideoSection
                 section="pitch_alley"
                 title="Pitch Alley"
                 uploadHref="/work/pitch-alley"
                 uploadLabel="Upload Pitch"
                 emptyTitle="No Pitches Yet"
                 emptyDescription="Record a short video pitching your book to readers and publishers browsing Pitch Alley."
-              />
+              /></div>
+            )}
+
+            {activeTab === "pitchAlley" && !isAuthor && (
+              <div className="profile-panel"><EmptyState icon={Video} title="Pitch Alley" description="Pitch videos are available to author and writer accounts." /></div>
             )}
 
             {activeTab === "askUniverse" && isAuthor && (
-              <MyVideoSection
+              <div className="profile-panel"><MyVideoSection
                 section="ask_universe"
                 title="Ask the Universe"
                 uploadHref="/work/ask-universe"
                 uploadLabel="Post a Video"
                 emptyTitle="Nothing Posted Yet"
                 emptyDescription="Ask the community a question about your work, your genre, or your next project."
-              />
+              /></div>
+            )}
+
+            {activeTab === "askUniverse" && !isAuthor && (
+              <div className="profile-panel"><EmptyState icon={Sparkles} title="Ask the Universe" description="Ask the Universe videos are available to author and writer accounts." /></div>
             )}
           </div>
         </div>
@@ -841,9 +813,9 @@ function PublicProfileView({ id }: { id: string }) {
   const [profile, setProfile] = useState<IAuthorProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [activeTab, setActiveTab] = useState<"works" | "posts" | "pitchAlley" | "askUniverse">(() => {
+  const [activeTab, setActiveTab] = useState<"works" | "posts" | "pitchAlley" | "askUniverse" | "about">(() => {
     const tab = searchParams.get("tab");
-    return tab === "posts" || tab === "pitchAlley" || tab === "askUniverse" ? tab : "works";
+    return tab === "posts" || tab === "pitchAlley" || tab === "askUniverse" || tab === "about" ? tab : "works";
   });
   // TODO: replace with a real follow-state call once the API supports it.
   const [isFollowing, setIsFollowing] = useState(false);
@@ -888,10 +860,8 @@ function PublicProfileView({ id }: { id: string }) {
 
   const { user: author, books, bookCount } = profile;
   const roleInfo = ROLE_META[author.role ?? "user"] ?? ROLE_META.user;
-  const totalViews = books.reduce((sum, b) => sum + (b.viewCount ?? 0), 0);
-  // TODO: wire to real social-graph fields once the API returns them.
-  const followers = (author as any)?.followers ?? 0;
-  const following = (author as any)?.following ?? 0;
+  const followers = 0;
+  const following = 0;
 
   return (
     <div className="profile-page min-h-screen bg-[#050507] text-white">
@@ -906,24 +876,26 @@ function PublicProfileView({ id }: { id: string }) {
         </div>
       </div> */}
 
-      <div className="relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
+      <div className="profile-banner relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
         <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 -mt-20 relative z-10">
+      <div className="profile-layout max-w-7xl mx-auto px-4 -mt-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
-            <div className="bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
-              <div className="flex justify-center -mt-16 mb-4">
+            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
+              <div className="profile-avatar-wrap flex justify-center -mt-16 mb-4">
                 <div className="p-[3px] rounded-full bg-gradient-to-tr from-cyan-400 via-violet-400 to-blue-500 shadow-lg shadow-cyan-500/20">
                   <div className="w-28 h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-3xl font-bold">
-                    {getInitials(author.name)}
+                    {author.avatarUrl ? (
+                      <img src={getFileUrl(author.avatarUrl) || author.avatarUrl} alt={`${author.name || "Creator"} profile`} className="h-full w-full rounded-full object-cover" />
+                    ) : getInitials(author.name)}
                   </div>
                 </div>
               </div>
 
-              <div className="text-center mb-5">
+              <div className="profile-card-heading text-center mb-5">
                 <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {author.name || "Unnamed User"}
                 </h1>
@@ -933,7 +905,7 @@ function PublicProfileView({ id }: { id: string }) {
                   <BadgeCheck className="w-3.5 h-3.5" />
                   {roleInfo.label}
                 </span>
-                <p className="text-sm text-gray-500 mt-3">{roleInfo.description}</p>
+                <p className="profile-bio text-sm text-gray-500 mt-3">{author.bio || roleInfo.description}</p>
               </div>
 
               {/* Stats row */}
@@ -965,57 +937,21 @@ function PublicProfileView({ id }: { id: string }) {
                 Share via QR
               </button>
 
-              <div className="space-y-4 text-gray-500 pt-2 border-t border-white/10">
-                {[
-                  {
-                    icon: Calendar,
-                    label: "Member Since",
-                    value: fmtDate(author.createdAt),
-                  },
-                  {
-                    icon: VenetianMask,
-                    label: "Gender",
-                    value: author.gender
-                      ? author.gender.charAt(0).toUpperCase() + author.gender.slice(1)
-                      : "—",
-                  },
-                  { icon: UserIcon, label: "Account Type", value: roleInfo.label },
-                ].map((info, idx) => (
-                  <div className="flex items-start gap-3 mt-4" key={idx}>
-                    <info.icon className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-500" />
-                    <div>
-                      <div className="text-xs text-gray-600 mb-1">{info.label}</div>
-                      <div className="text-sm text-white break-all">{info.value}</div>
-                    </div>
-                  </div>
-                ))}
+              <div className="profile-joined border-t border-white/10 pt-4 text-sm text-gray-500">
+                Member since {fmtDate(author.createdAt)}
               </div>
             </div>
           </div>
 
           <div className="lg:col-span-2">
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              {[
-                { label: "Published Works", value: bookCount },
-                { label: "Total Views", value: totalViews },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="bg-white/[0.03] border border-white/10 rounded-2xl p-4 text-center"
-                >
-                  <div className="text-2xl font-bold text-white">{s.value}</div>
-                  <div className="text-xs text-gray-500 mt-1">{s.label}</div>
-                </div>
-              ))}
-            </div>
-
             {/* Tabs */}
-            <div className="flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
+            <div className="profile-tabs flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
               {[
-                { key: "works", label: "Published Works" },
+                { key: "works", label: "Works" },
                 { key: "posts", label: "Posts" },
-                { key: "pitchAlley", label: "Pitch Alley" },
-                { key: "askUniverse", label: "Ask the Universe" },
+                { key: "pitchAlley", label: "Pitch Alley", hint: "Pitch ideas" },
+                { key: "askUniverse", label: "Ask the Universe", hint: "Ask the community" },
+                { key: "about", label: "About" },
               ].map((tab) => (
                 <button
                   key={tab.key}
@@ -1026,7 +962,7 @@ function PublicProfileView({ id }: { id: string }) {
                       : "text-gray-600 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-300"
                   }`}
                 >
-                  {tab.label}
+                  {tab.label}{tab.hint && <small>{tab.hint}</small>}
                   {activeTab === tab.key && (
                     <span className="absolute left-0 right-0 -bottom-px h-[2px] bg-gradient-to-r from-cyan-400 to-violet-400 rounded-full" />
                   )}
@@ -1034,68 +970,92 @@ function PublicProfileView({ id }: { id: string }) {
               ))}
             </div>
 
-            {activeTab === "works" &&
-              (books.length === 0 ? (
-                <EmptyState
-                  icon={BookOpen}
-                  title="No Published Works Yet"
-                  description="This creator hasn't published any books yet — check back soon."
-                />
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {books.map((book) => (
-                    <Link
-                      key={book._id}
-                      href={`/books/${book._id}`}
-                      className="bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex gap-3 p-3 hover:border-white/20 transition"
-                    >
-                      <div className="w-16 h-20 flex-shrink-0 bg-white/[0.05] rounded-lg overflow-hidden">
-                        {book.frontCover && (
-                          <img
-                            src={getFileUrl(book.frontCover) ?? undefined}
-                            alt={book.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-sm truncate">{book.title}</h4>
-                        <div className="text-xs text-gray-500 mt-1">{book.category}</div>
-                        <div className="flex items-center gap-3 mt-3 text-gray-500 text-xs">
-                          <span className="inline-flex items-center gap-1">
-                            <Eye className="w-3.5 h-3.5" />
-                            {book.viewCount ?? 0}
-                          </span>
-                          <span>{fmtDate(book.createdAt)}</span>
+            {activeTab === "works" && (
+              <div className="profile-panel">
+                <h2 className="mb-5 text-2xl font-bold">Works</h2>
+                {books.length === 0 ? (
+                  <EmptyState
+                    icon={BookOpen}
+                    title="No Published Works Yet"
+                    description="This creator hasn't published any books yet — check back soon."
+                  />
+                ) : (
+                  <div className="profile-public-works grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {books.map((book) => (
+                      <Link
+                        key={book._id}
+                        href={`/books/${book._id}`}
+                        className="profile-work-card bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden flex gap-3 p-3 hover:border-white/20 transition"
+                      >
+                        <div className="profile-work-cover w-16 h-20 flex-shrink-0 bg-white/[0.05] rounded-lg overflow-hidden">
+                          {book.frontCover && (
+                            <img
+                              src={getFileUrl(book.frontCover) ?? undefined}
+                              alt={book.title}
+                              className="w-full h-full object-cover"
+                            />
+                          )}
                         </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ))}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-sm truncate">{book.title}</h3>
+                          <div className="text-xs text-gray-500 mt-1">{book.category}</div>
+                          <div className="flex items-center gap-3 mt-3 text-gray-500 text-xs">
+                            <span className="inline-flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{book.viewCount ?? 0}</span>
+                            <span>{fmtDate(book.createdAt)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            {activeTab === "about" && (
+              <div className="profile-panel">
+                <section className="profile-surface rounded-2xl p-6">
+                  <h2 className="text-xl font-bold">About {author.name || "this creator"}</h2>
+                  <p className="mt-2 text-sm leading-6 text-gray-400">{author.bio || roleInfo.description}</p>
+                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+                    <div><dt className="text-gray-500">Account type</dt><dd className="mt-1 font-medium">{roleInfo.label}</dd></div>
+                    <div><dt className="text-gray-500">Member since</dt><dd className="mt-1 font-medium">{fmtDate(author.createdAt)}</dd></div>
+                    {author.craft && <div><dt className="text-gray-500">Craft</dt><dd className="mt-1 font-medium">{author.craft}</dd></div>}
+                    {author.location && <div><dt className="text-gray-500">Location</dt><dd className="mt-1 font-medium">{author.location}</dd></div>}
+                  </dl>
+                  {!!author.socialLinks?.length && (
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {author.socialLinks.map((social, index) => (
+                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50">
+                          {social.platform === "x" ? "X / Twitter" : social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </section>
+              </div>
+            )}
 
-            {activeTab === "posts" && <CommunityPostsPanel userId={author._id ?? id} compact />}
+            {activeTab === "posts" && <div className="profile-panel"><CommunityPostsPanel userId={author._id ?? id} compact /></div>}
 
             {activeTab === "pitchAlley" &&
               (profile.pitchVideos && profile.pitchVideos.length > 0 ? (
-                <VideoGrid videos={profile.pitchVideos} trackViews />
+                <div className="profile-panel"><VideoGrid videos={profile.pitchVideos} trackViews /></div>
               ) : (
-                <EmptyState
+                <div className="profile-panel"><EmptyState
                   icon={Video}
                   title="No Pitches Yet"
                   description={`${author.name || "This creator"} hasn't posted to Pitch Alley yet.`}
-                />
+                /></div>
               ))}
 
             {activeTab === "askUniverse" &&
               (profile.universeVideos && profile.universeVideos.length > 0 ? (
-                <VideoGrid videos={profile.universeVideos} trackViews />
+                <div className="profile-panel"><VideoGrid videos={profile.universeVideos} trackViews /></div>
               ) : (
-                <EmptyState
+                <div className="profile-panel"><EmptyState
                   icon={Sparkles}
                   title="Nothing Posted Yet"
                   description={`${author.name || "This creator"} hasn't posted to Ask the Universe yet.`}
-                />
+                /></div>
               ))}
           </div>
         </div>

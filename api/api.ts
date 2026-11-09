@@ -84,12 +84,48 @@ export interface IPublicAuthor {
   name?: string;
   role?: string;
   gender?: string;
+  bio?: string;
+  avatarUrl?: string;
+  craft?: string;
+  location?: string;
+  socialLinks?: IProfileSocialLink[];
   createdAt: string;
   bookCount: number;
   views?: number;
   likes?: number;
   comments?: number;
 }
+
+export type ProfileSocialPlatform = "website" | "instagram" | "x" | "youtube" | "tiktok" | "goodreads";
+
+export interface IProfileSocialLink {
+  platform: ProfileSocialPlatform;
+  url: string;
+}
+
+export interface IMyProfile {
+  _id: string;
+  identifier: string;
+  name: string;
+  dob: string;
+  gender: string;
+  role: "user" | "author" | "writer";
+  step: number;
+  bio?: string;
+  avatarUrl?: string;
+  craft?: string;
+  location?: string;
+  socialLinks: IProfileSocialLink[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type IUpdateMyProfile = Pick<IMyProfile, "name" | "dob" | "gender"> &
+  Partial<Pick<IMyProfile, "bio" | "avatarUrl" | "craft" | "location">> & {
+    socialLinks: IProfileSocialLink[];
+  };
+
+export type IProfileUpdatePayload = IUpdateMyProfile;
 
 export interface ICreativeVideo {
   _id: string;
@@ -175,6 +211,12 @@ export interface IVerifyOtpUser {
   dob?: string;
   gender?: string;
   role?: "user" | "author" | "writer";
+  bio?: string;
+  avatarUrl?: string;
+  craft?: string;
+  location?: string;
+  socialLinks?: IProfileSocialLink[];
+  createdAt?: string;
   step: number;
 }
 
@@ -335,6 +377,25 @@ export const getCreators = async (params?: {
   return data;
 };
 
+export const getMyProfile = async (): Promise<{
+  success: boolean;
+  message: string;
+  data: IMyProfile;
+}> => {
+  const { data } = await axiosInstance.get(Endpoint.getMyProfile);
+  return data;
+};
+
+export const updateMyProfile = async (
+  profile: IProfileUpdatePayload | FormData,
+): Promise<{ success: boolean; message: string; data: IMyProfile }> => {
+  const config = typeof FormData !== "undefined" && profile instanceof FormData
+    ? { headers: { "Content-Type": "multipart/form-data" } }
+    : undefined;
+  const { data } = await axiosInstance.patch(Endpoint.updateMyProfile, profile, config);
+  return data;
+};
+
 export const getAuthorById = async (
   id: string,
 ): Promise<{ success: boolean; message: string; data: IAuthorProfile }> => {
@@ -478,9 +539,16 @@ export const getSubcategories = async (): Promise<{
 export const getFileUrl = (path?: string | null) => {
   if (!path) return null;
 
-  const base =
-    process.env.NEXT_PUBLIC_API_URL?.replace("/", "") ||
-    "http://localhost:4000";
+  // API responses may already contain an absolute URL. Keep it intact.
+  if (/^https?:\/\//i.test(path)) return path;
 
-  return `${base}${path}`;
+  const base = (
+    process.env.NEXT_PUBLIC_API_URL ||
+    process.env.NEXT_PUBLIC_API_BASE_URL ||
+    "http://localhost:4000"
+  )
+    .replace(/\/+$/, "")
+    .replace(/\/api$/i, "");
+
+  return `${base}/${path.replace(/^\/+/, "")}`;
 };

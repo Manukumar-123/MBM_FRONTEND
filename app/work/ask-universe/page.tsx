@@ -8,7 +8,7 @@ export default function AskUniverseUploadPage() {
     <CreativeVideoUploader
       section="ask_universe"
       heading="Ask the Universe"
-      description="Post a video asking the community a question about your work, your genre, or your next project. Max 100 MB, up to 1 minute — automatically compressed to 25 MB."
+      description="Post a short video question about your work, your genre, or your next project. Other creatives answer from the community."
       titlePlaceholder="What are you asking the universe?"
     />
   );

@@ -10,6 +10,8 @@ export const Endpoint = {
   deleteBook: (id: string) => `/api/books/${id}`,
   updateBook: (id: string) => `/api/books/${id}`,
   creators: "/api/users/creators",
+  getMyProfile: "/api/users/me",
+  updateMyProfile: "/api/users/me",
   getAuthorById: (id: string) => `/api/users/${id}`,
 
   // Creative videos (Pitch Alley / Ask the Universe)

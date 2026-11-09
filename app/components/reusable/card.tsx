@@ -14,7 +14,7 @@ import "swiper/css/effect-cards";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FALLBACK_COVER = "https://flowbite.com/docs/images/people/profile-picture-1.jpg";
+const FALLBACK_COVER = "/iphoneCover.jpg";
 
 
 const Creator: React.FC = () => {
@@ -154,6 +154,10 @@ const Creator: React.FC = () => {
                   fill
                   className="object-cover"
                   unoptimized
+                  onError={(event) => {
+                    event.currentTarget.onerror = null;
+                    event.currentTarget.src = FALLBACK_COVER;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
 

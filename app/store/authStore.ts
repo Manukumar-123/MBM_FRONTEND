@@ -9,6 +9,12 @@ interface UserDetails {
   gender?: string;
   role?: "user" | "author" | "writer";
   step?: number;
+  bio?: string;
+  avatarUrl?: string;
+  craft?: string;
+  location?: string;
+  socialLinks?: Array<{ platform: string; url: string }>;
+  createdAt?: string;
 }
 
 interface AuthState {

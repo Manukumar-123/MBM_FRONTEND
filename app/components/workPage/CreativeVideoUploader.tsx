@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Loader2, Trash2, UploadCloud, Video as VideoIcon } from "lucide-react";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  BadgeCheck,
+  Eye,
+  Loader2,
+  Plus,
+  Sparkles,
+  Trash2,
+  UploadCloud,
+  Video as VideoIcon,
+} from "lucide-react";
 
 import {
   deleteCreativeVideo,
@@ -10,6 +21,7 @@ import {
   uploadCreativeVideo,
   type ICreativeVideo,
 } from "../../../api/api";
+import useAuthStore from "../../store/authStore";
 
 const MAX_VIDEO_BYTES = 100 * 1024 * 1024; // 100MB accepted, server compresses down to 25MB
 const MAX_VIDEO_DURATION_SECONDS = 60; // 1 minute
@@ -51,6 +63,15 @@ function formatBytes(bytes = 0): string {
   return `${mb.toFixed(mb >= 100 ? 0 : 1)} MB`;
 }
 
+function formatDate(date?: string): string {
+  if (!date || Number.isNaN(new Date(date).getTime())) return "Recently uploaded";
+  return new Date(date).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
 export default function CreativeVideoUploader({
   section,
   heading,
@@ -67,6 +88,8 @@ export default function CreativeVideoUploader({
   const [progress, setProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ICreativeVideo | null>(null);
+  const { user } = useAuthStore();
 
   const fetchVideos = useCallback(async () => {
     setLoading(true);
@@ -84,8 +107,7 @@ export default function CreativeVideoUploader({
     fetchVideos();
   }, [fetchVideos]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selected = e.target.files?.[0] ?? null;
+  const handleSelectedFile = async (selected: File | null) => {
     setFileError(null);
 
     if (!selected) {
@@ -125,6 +147,10 @@ export default function CreativeVideoUploader({
     setFile(selected);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    void handleSelectedFile(e.target.files?.[0] ?? null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitError(null);
@@ -151,6 +177,8 @@ export default function CreativeVideoUploader({
       setTitle("");
       setCaption("");
       setFile(null);
+      const fileInput = document.getElementById("creative-video-file") as HTMLInputElement | null;
+      if (fileInput) fileInput.value = "";
       await fetchVideos();
     } catch (err: any) {
       setSubmitError(
@@ -165,11 +193,11 @@ export default function CreativeVideoUploader({
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this video?")) return;
     setDeletingId(id);
     try {
       await deleteCreativeVideo(id);
       setVideos((prev) => prev.filter((v) => v._id !== id));
+      setDeleteTarget(null);
     } catch {
       alert("Failed to delete video");
     } finally {
@@ -177,132 +205,146 @@ export default function CreativeVideoUploader({
     }
   };
 
+  const isPitch = section === "pitch_alley";
+  const featuredVideo = videos[0];
+  const profileHref = user?._id ? `/profile/${user._id}` : "/profile";
+
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050507] dark:text-white">
+    <div className="creative-page min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050507] dark:text-white">
+      <div className="creative-wrap">
+        <Link href={profileHref} className="creative-back"><ArrowLeft className="h-4 w-4" />Back to profile</Link>
 
-
-      <div className="max-w-5xl mx-auto px-4 py-8 mt-20">
-        <h1 className="text-2xl font-bold mb-1">{heading}</h1>
-        <p className="text-sm text-slate-600 dark:text-gray-500 mb-8">{description}</p>
-
-        {videos.length > 0 && (
-          <div className="text-xs text-amber-800 dark:text-amber-300/90 bg-amber-100 dark:bg-amber-400/10 border border-amber-300 dark:border-amber-400/20 rounded-lg px-3.5 py-2.5 mb-4">
-            You can only have one video here — uploading a new one will replace your current video.
+        <header className="creative-heading">
+          <div>
+            <h1>{heading}</h1>
+            <p>{description}</p>
           </div>
-        )}
+          <span className="creative-chip">{isPitch ? "One pitch video per author" : "Video questions"}</span>
+        </header>
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl p-5 mb-8 flex flex-col gap-3"
-        >
-          <input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder={titlePlaceholder}
-            maxLength={150}
-            className="bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 dark:placeholder:text-gray-600"
-          />
-          <textarea
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-            placeholder="Add a short description (optional)"
-            maxLength={1000}
-            className="bg-slate-50 dark:bg-white/[0.04] border border-slate-200 dark:border-white/10 rounded-lg px-3.5 py-2.5 text-sm placeholder:text-slate-400 dark:placeholder:text-gray-600 min-h-[70px]"
-          />
-
-          <label className="flex items-center gap-3 bg-slate-50 dark:bg-white/[0.04] border border-dashed border-slate-300 dark:border-white/15 rounded-lg px-3.5 py-3 text-sm cursor-pointer hover:border-cyan-400/40 transition">
-            <UploadCloud className="w-4 h-4 text-cyan-300 flex-shrink-0" />
-            <span className="flex-1 truncate text-slate-700 dark:text-gray-300">
-              {file ? file.name : "Choose a video file — max 100 MB, up to 1 minute"}
-            </span>
-            <input
-              type="file"
-              accept="video/mp4,video/quicktime,video/webm,video/x-matroska,video/x-msvideo"
-              className="hidden"
-              onChange={handleFileChange}
-            />
-          </label>
-          {file && (
-            <div className="text-xs text-slate-500 dark:text-gray-500 -mt-1">
-              {formatBytes(file.size)} selected
-            </div>
-          )}
-          {fileError && <div className="text-xs text-red-400">{fileError}</div>}
-          {submitError && <div className="text-xs text-red-400">{submitError}</div>}
-
-          {uploading && (
-            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-cyan-400 to-blue-500 transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={uploading}
-            className="self-start inline-flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 disabled:opacity-60 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition"
-          >
-            {uploading ? (
+        <div className="creative-grid">
+          <section className="creative-left">
+            {isPitch ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Uploading {progress}%
+                {loading ? (
+                  <div className="creative-card creative-empty"><Loader2 className="h-7 w-7 animate-spin" />Loading your pitch…</div>
+                ) : featuredVideo ? (
+                  <article className="creative-card creative-featured">
+                    <div className="creative-video-frame">
+                      <video src={getFileUrl(featuredVideo.videoUrl) ?? undefined} controls playsInline />
+                      <h2>{featuredVideo.title}</h2>
+                      <span className="creative-live"><i />Live</span>
+                    </div>
+                    <div className="creative-video-meta">
+                      <div><strong>Your pitch video</strong><small>{formatDate(featuredVideo.createdAt)} · {formatBytes(featuredVideo.videoSize)}</small></div>
+                      <button type="button" onClick={() => setDeleteTarget(featuredVideo)} disabled={deletingId === featuredVideo._id} className="creative-icon-button" aria-label="Delete pitch"><Trash2 className="h-4 w-4" /></button>
+                    </div>
+                    <div className="creative-stats">
+                      <div><strong>{featuredVideo.views ?? 0}</strong><small>Views</small></div>
+                      <div><strong>{formatBytes(featuredVideo.videoSize)}</strong><small>File size</small></div>
+                      <div><strong>{formatDate(featuredVideo.createdAt)}</strong><small>Uploaded</small></div>
+                    </div>
+                  </article>
+                ) : (
+                  <div className="creative-card creative-empty">
+                    <VideoIcon className="h-10 w-10" />
+                    <strong>No pitch video yet</strong>
+                    <p>Upload a short video and it will appear here and in Pitch Alley.</p>
+                  </div>
+                )}
+
+                <section className="creative-card creative-tips">
+                  <h2>Make your pitch land</h2>
+                  <ol>
+                    <li><strong>Hook in 5 seconds.</strong> Say what the book is and who it is for.</li>
+                    <li><strong>Show, don’t summarise.</strong> Use the cover, a line from the book, or you reading.</li>
+                    <li><strong>End with one ask.</strong> For example, “Read chapter one” or “Get in touch.”</li>
+                  </ol>
+                </section>
               </>
             ) : (
               <>
-                <UploadCloud className="w-4 h-4" />
-                {videos.length > 0 ? "Replace video" : "Publish video"}
-              </>
-            )}
-          </button>
-        </form>
-
-        <h2 className="text-sm font-semibold text-slate-600 dark:text-gray-400 mb-3">Your video</h2>
-
-        {loading ? (
-          <div className="flex items-center justify-center py-16 text-slate-500 dark:text-gray-500 gap-2">
-            <Loader2 className="w-5 h-5 animate-spin" />
-            Loading…
-          </div>
-        ) : videos.length === 0 ? (
-          <div className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl p-10 text-center text-slate-500 dark:text-gray-500">
-            <VideoIcon className="w-8 h-8 mx-auto mb-3 text-slate-400 dark:text-gray-600" />
-            No videos uploaded yet.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {videos.map((v) => (
-              <div
-                key={v._id}
-                className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 rounded-2xl overflow-hidden"
-              >
-                <video
-                  src={getFileUrl(v.videoUrl) ?? undefined}
-                  controls
-                  className="w-full aspect-video bg-black"
-                />
-                <div className="p-3 flex items-start gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold truncate">{v.title}</div>
-                    <div className="text-xs text-slate-500 dark:text-gray-500 mt-0.5">
-                      {v.views} views · {formatBytes(v.videoSize)}
+                {loading ? (
+                  <div className="creative-card creative-empty"><Loader2 className="h-7 w-7 animate-spin" />Loading your video…</div>
+                ) : videos.length > 0 ? (
+                  <div className="creative-video-grid">
+                    {videos.map((video) => (
+                      <article className="creative-card creative-video-card" key={video._id}>
+                        <div className="creative-video-frame compact">
+                          <video src={getFileUrl(video.videoUrl) ?? undefined} controls playsInline />
+                          <h2>{video.title}</h2>
+                          <span className="creative-live"><i />Live</span>
+                        </div>
+                        <div className="creative-video-meta">
+                          <div><strong>{video.title}</strong><small className="creative-view-line"><Eye className="h-3.5 w-3.5" />{video.views ?? 0} views · {formatDate(video.createdAt)}</small></div>
+                          <button type="button" onClick={() => setDeleteTarget(video)} disabled={deletingId === video._id} className="creative-icon-button" aria-label="Delete video"><Trash2 className="h-4 w-4" /></button>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="creative-card creative-empty">
+                    <Sparkles className="h-10 w-10" />
+                    <strong>Nothing posted yet</strong>
+                    <p>Ask the community a question about your work, your genre, or your next project.</p>
+                    <div className="creative-prompts">
+                      {["Feedback on the opening of my story", "How do I find a publisher?", "Which cover works better?"].map((prompt) => (
+                        <button type="button" key={prompt} onClick={() => setTitle(prompt)}>{prompt}</button>
+                      ))}
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleDelete(v._id)}
-                    disabled={deletingId === v._id}
-                    className="p-2 rounded-full bg-white/[0.04] hover:bg-red-500/20 hover:text-red-400 border border-white/10 transition flex-shrink-0"
-                    aria-label="Delete video"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+                )}
+              </>
+            )}
+          </section>
+
+          <section className="creative-right">
+            <form onSubmit={handleSubmit} className="creative-card creative-form">
+              <h2>{isPitch ? (featuredVideo ? "Replace your pitch" : "Upload your pitch") : "Post a video"}</h2>
+              {videos.length > 0 && <div className="creative-note"><BadgeCheck className="h-4 w-4" />Uploading a new video replaces the current one.</div>}
+
+              <label htmlFor="creative-title">{isPitch ? "Pitch title" : "Your question"}</label>
+              <input id="creative-title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={titlePlaceholder} maxLength={150} />
+              <div className="creative-count">{title.length} / 150</div>
+
+              <label htmlFor="creative-description">Description <small>(optional)</small></label>
+              <textarea id="creative-description" value={caption} onChange={(e) => setCaption(e.target.value)} placeholder={isPitch ? "One or two lines about your book" : "Add context so people can answer well"} maxLength={1000} rows={3} />
+
+              <label
+                className="creative-drop"
+                htmlFor="creative-video-file"
+                onDragOver={(event) => event.preventDefault()}
+                onDrop={(event) => { event.preventDefault(); void handleSelectedFile(event.dataTransfer.files[0] ?? null); }}
+              >
+                <span className="creative-drop-icon"><UploadCloud className="h-5 w-5" /></span>
+                <strong>{file ? file.name : "Drag a video here, or browse"}</strong>
+                <span className="creative-rules"><i>MP4 or MOV</i><i>Max 100 MB</i><i>Up to 1 minute</i></span>
+                <small>We compress it to about 25 MB for you.</small>
+                <input id="creative-video-file" type="file" accept={ALLOWED_TYPES.join(",")} onChange={handleFileChange} />
+              </label>
+              {file && <div className="creative-file-size">{formatBytes(file.size)} selected</div>}
+              {fileError && <div className="creative-error" role="alert">{fileError}</div>}
+              {submitError && <div className="creative-error" role="alert">{submitError}</div>}
+
+              {uploading && <div className="creative-upload-progress"><span style={{ width: `${progress}%` }} /></div>}
+
+              <button type="submit" disabled={uploading} className="creative-submit">
+                {uploading ? <><Loader2 className="h-4 w-4 animate-spin" />Uploading {progress}%</> : <><Plus className="h-4 w-4" />{isPitch ? (featuredVideo ? "Replace pitch" : "Publish pitch") : (featuredVideo ? "Replace video" : "Post video")}</>}
+              </button>
+            </form>
+          </section>
+        </div>
       </div>
+
+      {deleteTarget && (
+        <div className="creative-modal-backdrop" role="presentation" onClick={() => !deletingId && setDeleteTarget(null)}>
+          <section className="creative-card creative-modal" role="dialog" aria-modal="true" aria-labelledby="delete-video-title" onClick={(event) => event.stopPropagation()}>
+            <h2 id="delete-video-title">Delete this video?</h2>
+            <p>It will be removed from {heading} and can’t be restored.</p>
+            <div><button type="button" onClick={() => setDeleteTarget(null)} disabled={!!deletingId} className="creative-secondary">Keep video</button><button type="button" onClick={() => void handleDelete(deleteTarget._id)} disabled={!!deletingId} className="creative-danger">{deletingId ? "Deleting…" : "Delete video"}</button></div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
