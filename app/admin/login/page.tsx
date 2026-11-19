@@ -46,8 +46,8 @@ export default function AdminLoginPage() {
 
   return (
     <div className="min-h-screen bg-[#08080b] flex items-center justify-center px-4 py-16 relative overflow-hidden">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-cyan-500/10 blur-[100px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full bg-violet-500/10 blur-[100px]" />
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-cyan-500/10 blur-[100px]" />
+      <div className="absolute bottom-1/4 right-1/4 w-64 h-64 sm:w-96 sm:h-96 rounded-full bg-violet-500/10 blur-[100px]" />
 
       <div className="w-full max-w-sm relative">
         <div className="flex items-center gap-2 mb-8 justify-center">
@@ -57,9 +57,9 @@ export default function AdminLoginPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-2xl border border-white/[0.08] bg-[#111116] p-8"
+          className="rounded-2xl border border-white/[0.08] bg-[#111116] p-6 sm:p-8"
         >
-          <h1 className="font-serif text-[24px] text-white mb-1">Admin sign in</h1>
+          <h1 className="font-serif text-[22px] sm:text-[24px] text-white mb-1">Admin sign in</h1>
           <p className="text-[13px] text-[#8a8a98] mb-6">
             Manage creators, works, and the platform.
           </p>
@@ -72,7 +72,7 @@ export default function AdminLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@mebookmeta.com"
-              className="bg-transparent outline-none text-[13.5px] text-white placeholder-[#5f5f6e] w-full"
+              className="bg-transparent outline-none text-[13.5px] max-md:text-base text-white placeholder-[#5f5f6e] w-full"
             />
           </div>
 
@@ -84,14 +84,14 @@ export default function AdminLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="bg-transparent outline-none text-[13.5px] text-white placeholder-[#5f5f6e] w-full"
+              className="bg-transparent outline-none text-[13.5px] max-md:text-base text-white placeholder-[#5f5f6e] w-full"
             />
           </div>
 
           <button
             type="submit"
             disabled={isPending}
-            className="w-full py-2.5 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
+            className="w-full py-2.5 max-md:py-3 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 transition-opacity disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {isPending ? <Spinner /> : "Sign in"}
           </button>

@@ -75,10 +75,10 @@ export default function Step1({ onNext, initialValue = "" }: Step1Props) {
   };
 
   return (
-    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4">
-      <div className="w-full max-w-md mt-28">
+    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md mt-12 sm:mt-28 max-md:mt-4">
         {/* Logo */}
-        <div className="flex justify-center mb-12">
+        <div className="flex justify-center mb-8 sm:mb-12">
           <div className="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
             <span className="text-2xl font-bold text-white">M</span>
           </div>
@@ -86,12 +86,12 @@ export default function Step1({ onNext, initialValue = "" }: Step1Props) {
 
         {/* Title */}
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white text-center mb-2"></h1>
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white text-center mb-12">
+        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white text-center mb-8 sm:mb-12">
           mebookmeta
         </h1>
 
         {/* Progress Bar */}
-        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
+        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-8 sm:mb-12">
           <div className="h-full w-1/4 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
@@ -116,7 +116,7 @@ export default function Step1({ onNext, initialValue = "" }: Step1Props) {
           <button
             onClick={handleToggle}
             type="button"
-            className="text-green-500 text-sm font-semibold mt-3 hover:text-green-400 transition-colors"
+            className="text-green-500 text-sm font-semibold mt-3 hover:text-green-400 transition-colors max-md:mt-1 max-md:min-h-10"
           >
             {usePhone ? "Use email instead" : "Use phone number instead"}
           </button>
@@ -148,7 +148,7 @@ export default function Step1({ onNext, initialValue = "" }: Step1Props) {
           onClick={validateAndProceed}
           className={`w-full  ${
             isPending ? "bg-gray-400" : "bg-green-500"
-          }  text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg`}
+          }  text-black font-bold h-12 sm:h-14 rounded-full transition-colors duration-200 text-base sm:text-lg`}
           disabled={isPending}
         >
           {isPending ? <Spinner /> : "Next"}

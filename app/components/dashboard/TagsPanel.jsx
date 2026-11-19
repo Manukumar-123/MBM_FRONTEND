@@ -78,12 +78,12 @@ export default function TagsPanel({ accountType, allGenres, initialSelectedGenre
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3 max-sm:flex-wrap">
         <h2 className="text-sm font-bold">Genres</h2>
         <span className="text-xs text-gray-600">{selected.size} of {allGenres.length} selected</span>
       </div>
 
-      <div className="relative max-w-[320px] mb-3">
+      <div className="relative max-w-[320px] mb-3 max-md:max-w-full">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">
           <circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" />
         </svg>
@@ -103,27 +103,27 @@ export default function TagsPanel({ accountType, allGenres, initialSelectedGenre
       </div>
 
       {/* Custom / meta tags — freeform, separate from the fixed genre list above */}
-      <div className="flex items-center gap-2 mt-8 mb-1">
+      <div className="flex items-center gap-2 mt-8 mb-1 max-sm:flex-wrap">
         <h2 className="text-sm font-bold">Custom / meta tags</h2>
         <span className="text-xs text-gray-600">{customTags.length} tags</span>
       </div>
       <p className="text-[12.5px] text-gray-600 mb-3">
         Free-form tags for search discoverability — not part of the fixed genre list above.
       </p>
-      <form onSubmit={handleAddCustom} className="flex gap-2 mb-3 max-w-[420px]">
+      <form onSubmit={handleAddCustom} className="flex gap-2 mb-3 max-w-[420px] max-md:max-w-full">
         <input
           value={newCustom}
           onChange={(e) => setNewCustom(e.target.value)}
           placeholder="Add a custom tag"
-          className="flex-1 bg-surface border border-borderline rounded-lg px-3 py-2 text-[13px]"
+          className="flex-1 max-md:min-w-0 bg-surface border border-borderline rounded-lg px-3 py-2 text-[13px]"
         />
         <Button type="submit" shape="rect" variant="secondary" size="sm">Add</Button>
       </form>
-      <div className="flex flex-col gap-1.5 max-w-[420px]">
+      <div className="flex flex-col gap-1.5 max-w-[420px] max-md:max-w-full">
         {customTags.length === 0 && <div className="text-sm text-gray-600">No custom tags yet.</div>}
         {customTags.map((t) => (
           <div key={t.name} className="flex items-center gap-2.5 bg-surface border border-borderline-soft rounded-lg px-3 py-2.5">
-            <span className="text-[13px] font-semibold">{t.name}</span>
+            <span className="text-[13px] font-semibold max-md:min-w-0 max-md:break-all">{t.name}</span>
             <span className="text-[11.5px] text-gray-600 ml-1">SEO tag</span>
             <Button icon danger size="sm" className="ml-auto" onClick={() => handleDeleteCustom(t.name)} aria-label={`Delete ${t.name}`}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-8 0v13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V7" /></svg>

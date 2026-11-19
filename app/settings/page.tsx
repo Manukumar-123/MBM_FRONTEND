@@ -312,9 +312,9 @@ export default function EditProfilePage() {
   if (!hasHydrated || !accessToken || !user) return null;
 
   return (
-    <div className="edit-profile-page min-h-screen bg-slate-50 px-4 pb-20 pt-24 text-slate-900 dark:bg-[#050507] dark:text-white">
-      <div className="edit-profile-wrap mx-auto max-w-4xl">
-        <Link href={profileHref} className="edit-profile-back"><ArrowLeft className="h-4 w-4" />Back to profile</Link>
+    <div className="edit-profile-page min-h-screen overflow-x-clip bg-slate-50 px-4 pb-20 pt-24 max-[860px]:!pt-2 text-slate-900 dark:bg-[#050507] dark:text-white">
+      <div className="edit-profile-wrap mx-auto w-full max-w-4xl max-sm:!px-0">
+        <Link href={profileHref} className="edit-profile-back max-md:min-h-[40px]"><ArrowLeft className="h-4 w-4" />Back to profile</Link>
 
         <header className="edit-profile-header">
           <div>
@@ -322,7 +322,7 @@ export default function EditProfilePage() {
             <h1>Edit your profile</h1>
             <p>Update the details people see on your creator profile and keep your account information current.</p>
           </div>
-          <Link href={profileHref} className="edit-profile-public-link"><ExternalLink className="h-4 w-4" />View profile</Link>
+          <Link href={profileHref} className="edit-profile-public-link max-md:min-h-[40px]"><ExternalLink className="h-4 w-4" />View profile</Link>
         </header>
 
         {loading ? (
@@ -334,21 +334,21 @@ export default function EditProfilePage() {
             <section className="edit-profile-card">
               <div className="edit-profile-section-heading">
                 <span className="edit-profile-section-icon"><UserRound className="h-5 w-5" /></span>
-                <div><h2>Public profile</h2><p>These details appear on your public profile.</p></div>
+                <div className="max-md:min-w-0"><h2>Public profile</h2><p>These details appear on your public profile.</p></div>
               </div>
 
-              <div className="edit-profile-photo-row">
+              <div className="edit-profile-photo-row flex-wrap sm:flex-nowrap">
                 <div className="edit-profile-avatar">
                   {avatarPreviewSrc && !photoPreviewFailed ? <Image src={avatarPreviewSrc} alt="Profile photo preview" width={84} height={84} unoptimized onError={() => setPhotoPreviewFailed(true)} /> : <span>{initials(draft.name)}</span>}
                   <span className="edit-profile-avatar-badge"><ImagePlus className="h-4 w-4" /></span>
                 </div>
-                <div className="edit-profile-photo-copy">
+                <div className="edit-profile-photo-copy min-w-0 flex-1">
                   <strong>Profile photo</strong>
                   <p>Upload a JPG, PNG, or WebP up to 5 MB, or use an image URL.</p>
                   <div className="edit-profile-photo-controls">
-                    <label className="edit-profile-upload-button"><ImagePlus className="h-4 w-4" />Choose photo<input type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoSelection} /></label>
-                    {photoFile && <span className="edit-profile-photo-filename">{photoFile.name}</span>}
-                    {draft.avatarUrl && <button type="button" onClick={() => setField("avatarUrl", "")}>Remove photo</button>}
+                    <label className="edit-profile-upload-button max-md:min-h-[40px]"><ImagePlus className="h-4 w-4" />Choose photo<input type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoSelection} /></label>
+                    {photoFile && <span className="edit-profile-photo-filename max-w-full max-sm:!max-w-full">{photoFile.name}</span>}
+                    {draft.avatarUrl && <button type="button" className="max-md:min-h-[40px]" onClick={() => setField("avatarUrl", "")}>Remove photo</button>}
                   </div>
                 </div>
               </div>
@@ -385,19 +385,19 @@ export default function EditProfilePage() {
                         <select aria-label="Social platform" value={link.platform} onChange={(event) => updateSocialLink(index, { platform: event.target.value as ProfileSocialPlatform })}>
                           {SOCIAL_PLATFORMS.map((platform) => <option key={platform.value} value={platform.value}>{platform.label}</option>)}
                         </select>
-                        <input type="url" aria-label={`${link.platform} URL`} value={link.url} onChange={(event) => updateSocialLink(index, { url: event.target.value })} />
-                        <button type="button" onClick={() => removeSocialLink(index)} aria-label="Remove social link"><Trash2 className="h-4 w-4" /></button>
+                        <input type="url" className="max-sm:!w-auto max-sm:flex-1 max-sm:min-h-[40px]" aria-label={`${link.platform} URL`} value={link.url} onChange={(event) => updateSocialLink(index, { url: event.target.value })} />
+                        <button type="button" className="max-sm:min-h-[40px]" onClick={() => removeSocialLink(index)} aria-label="Remove social link"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     ))}
                   </div>
                 ) : <p className="edit-profile-empty-links">No social links yet. Add your website or a social account below.</p>}
 
-                <div className="edit-profile-add-link">
+                <div className="edit-profile-add-link [&>button]:w-full sm:[&>button]:w-auto">
                   <select aria-label="New link platform" value={newPlatform} onChange={(event) => setNewPlatform(event.target.value as ProfileSocialPlatform)}>
                     {SOCIAL_PLATFORMS.map((platform) => <option key={platform.value} value={platform.value}>{platform.label}</option>)}
                   </select>
                   <input type="url" value={newUrl} onChange={(event) => setNewUrl(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); handleAddLink(); } }} placeholder="https://example.com" aria-label="New social link URL" />
-                  <button type="button" onClick={handleAddLink} disabled={draft.socialLinks.length >= 8}><Plus className="h-4 w-4" />Add link</button>
+                  <button type="button" className="max-md:min-h-[40px]" onClick={handleAddLink} disabled={draft.socialLinks.length >= 8}><Plus className="h-4 w-4" />Add link</button>
                 </div>
               </div>
             </section>
@@ -405,7 +405,7 @@ export default function EditProfilePage() {
             <section className="edit-profile-card">
               <div className="edit-profile-section-heading">
                 <span className="edit-profile-section-icon"><UserRound className="h-5 w-5" /></span>
-                <div><h2>Personal details</h2><p>These details are private and only visible to you.</p></div>
+                <div className="max-md:min-w-0"><h2>Personal details</h2><p>These details are private and only visible to you.</p></div>
               </div>
 
               <div className="edit-profile-fields">
@@ -434,9 +434,9 @@ export default function EditProfilePage() {
             {error && <div className="edit-profile-error" role="alert">{error}</div>}
             {saved && <div className="edit-profile-success"><Check className="h-4 w-4" />Your profile has been saved.</div>}
 
-            <div className="edit-profile-actions">
-              <button type="button" className="edit-profile-discard" onClick={discardChanges} disabled={!hasChanges || saving}>Discard changes</button>
-              <button type="submit" className="edit-profile-save" disabled={saving || !hasChanges}>
+            <div className="edit-profile-actions flex-col-reverse sm:flex-row">
+              <button type="button" className="edit-profile-discard max-md:min-h-[44px]" onClick={discardChanges} disabled={!hasChanges || saving}>Discard changes</button>
+              <button type="submit" className="edit-profile-save max-md:min-h-[44px]" disabled={saving || !hasChanges}>
                 {saving ? <><Loader2 className="h-4 w-4 animate-spin" />Saving…</> : <><Save className="h-4 w-4" />Save changes</>}
               </button>
             </div>

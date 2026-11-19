@@ -61,30 +61,39 @@ const Creator: React.FC = () => {
     })();
   }, []);
 
+  // Animate text when it comes into view (once, with cleanup)
   useEffect(() => {
-    // Animate text when it comes into view
-    if (leftRef.current) {
+    if (!leftRef.current) return;
+    const ctx = gsap.context(() => {
       gsap.fromTo(
         leftRef.current,
-        { opacity: 0, filter: "blur(10px)", y: 50 },
+        { opacity: 0, filter: "blur(10px)", y: 50, willChange: "transform, opacity, filter" },
         {
           opacity: 1,
           filter: "blur(0px)",
           y: 0,
           duration: 1.2,
           ease: "power2.out",
+          // Drop filter/will-change after finishing so scrolling doesn't repaint a blur layer
+          clearProps: "filter,willChange",
           scrollTrigger: {
             trigger: leftRef.current,
             start: "top 80%",
+            once: true,
           },
         },
       );
-    }
+    });
+    return () => ctx.revert();
+  }, []);
 
-    // Animate Swiper container when it comes into view
-    if (swiperRef.current) {
+  // Animate Swiper slides when they exist and come into view
+  useEffect(() => {
+    if (!swiperRef.current || works.length === 0) return;
+    const ctx = gsap.context(() => {
+      const slides = swiperRef.current!.querySelectorAll(".swiper-slide");
       gsap.fromTo(
-        swiperRef.current.querySelectorAll(".swiper-slide"),
+        slides,
         { opacity: 0, y: -50, scale: 0.8 },
         {
           opacity: 1,
@@ -96,26 +105,24 @@ const Creator: React.FC = () => {
           scrollTrigger: {
             trigger: swiperRef.current,
             start: "top 80%",
+            once: true,
           },
         },
       );
-    }
+    }, swiperRef);
+    return () => ctx.revert();
   }, [works]);
 
   return (
-    <section className="relative w-full overflow-hidden min-h-screen text-gray-900 dark:text-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-16">
+    <section className="relative w-full overflow-hidden min-h-screen text-gray-900 dark:text-white flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-0 px-5 sm:px-6 md:px-12 lg:px-20 py-16 max-md:min-h-0 max-md:px-0 max-md:py-10 max-md:text-center">
       {/* Left Content */}
-      <div ref={leftRef} className="lg:px-40 px-4 dark:text-white text-white">
-        <h1 className="text-4xl font-bold mb-2 ">
+      <div ref={leftRef} className="xl:px-40 lg:px-12 px-0 sm:px-4 dark:text-white text-white">
+        <h1 className="text-3xl sm:text-4xl font-bold mb-2 ">
           The Greatest Challenge for Creatives
         </h1>
-        <h2 className="text-sm md:text-md font-bold leading-7 tracking-widest ">
+        <h2 className="text-sm md:text-md font-bold leading-7 tracking-widest max-md:leading-6 max-md:tracking-wide">
           It’s not content creation. Creating is literally what we as Creatives
-          do. No, our biggest <br /> challenge is in Sharing Work and the Time
-          and Cost of Sharing Work – specifically, <br /> sharing work with
-          ideal audiences, creating a following (a unique brand) and becoming
-          successful or profitable.
-          <br /> <br />
+          do. No, our biggest <br /> 
           Meet that challenge for only $49.99/month on this site
         </h2>
         <button className="px-6 mt-4 py-3 bg-white text-black font-semibold rounded-full shadow-md hover:scale-105 transition">
@@ -126,7 +133,7 @@ const Creator: React.FC = () => {
       {/* Right Swiper Cards Effect */}
       <div
         ref={swiperRef}
-        className="md:w-1/2 mt-10 md:mt-0 flex flex-col items-center"
+        className="w-full lg:w-1/2 mt-10 lg:mt-0 flex flex-col items-center"
       >
         {loading ? (
           <div className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px] rounded-3xl bg-white/10 animate-pulse" />
@@ -140,7 +147,7 @@ const Creator: React.FC = () => {
           grabCursor={true}
           onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
           modules={[EffectCards]}
-          className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px]"
+          className="w-[240px] h-[420px] sm:w-[300px] md:w-[360px] md:h-[500px] [transform:translateZ(0)]"
         >
           {works.map((work) => (
             <SwiperSlide key={work._id}>
@@ -152,6 +159,8 @@ const Creator: React.FC = () => {
                   src={getFileUrl(work.frontCover) ?? FALLBACK_COVER}
                   alt={work.title}
                   fill
+                  sizes="(min-width: 768px) 360px, (min-width: 640px) 300px, 240px"
+                  decoding="async"
                   className="object-cover"
                   unoptimized
                   onError={(event) => {
@@ -161,7 +170,7 @@ const Creator: React.FC = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-black/10" />
 
-                <div className="relative z-10 flex flex-col justify-between h-full p-6">
+                <div className="relative z-10 flex flex-col justify-between h-full p-6 max-md:p-5 max-md:text-left">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="bg-white/20 backdrop-blur-sm text-xs font-semibold px-3 py-1 rounded-full">
                       {work.category}
@@ -175,7 +184,7 @@ const Creator: React.FC = () => {
 
                   <div className="space-y-3">
                     <div>
-                      <h3 className="text-2xl font-bold">{work.title}</h3>
+                      <h3 className="text-2xl font-bold max-md:line-clamp-3 max-md:break-words">{work.title}</h3>
                       <p className="text-sm text-white/80">by {work.author}</p>
                     </div>
                     <button
@@ -184,7 +193,7 @@ const Creator: React.FC = () => {
                         e.stopPropagation();
                         void openCreatorProfile(work);
                       }}
-                      className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full hover:scale-105 transition"
+                      className="px-5 py-2 bg-white text-black text-sm font-semibold rounded-full hover:scale-105 transition max-md:min-h-10"
                     >
                       View Profile
                     </button>

@@ -7,7 +7,7 @@ export default function Stepper({ activeStep = 0 }) {
   return (
     <div className={s.stepper}>
       {STEPS.map((label, i) => (
-        <div key={label} style={{ display: "flex", alignItems: "center" }}>
+        <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           {i > 0 && <div className={s.stepConnector} />}
           <div className={`${s.step} ${i <= activeStep ? s.stepActive : ""}`}>
             <div className={s.stepNum}>

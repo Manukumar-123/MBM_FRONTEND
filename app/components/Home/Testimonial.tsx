@@ -60,11 +60,11 @@ const Testimonial = () => {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_10%_18%,rgba(251,146,60,0.14),transparent_38%),radial-gradient(ellipse_at_90%_78%,rgba(139,92,246,0.15),transparent_42%)]"
       />
-      <h1 className="relative z-10 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-20">
+      <h1 className="relative z-10 text-3xl md:text-5xl font-bold text-gray-900 dark:text-white text-center mb-12 md:mb-20 px-4 max-md:mb-10">
         What Our Users Say
       </h1>
 
-      <div ref={swiperRef} className="relative z-10 md:w-100 w-10/12 mx-auto">
+      <div ref={swiperRef} className="relative z-10 md:w-100 w-10/12 max-w-sm md:max-w-none mx-auto">
         <Swiper
           effect={"cards"}
           grabCursor={true}
@@ -79,7 +79,7 @@ const Testimonial = () => {
         >
           {testimonials.map((item, index) => (
             <SwiperSlide key={index}>
-              <div className="flex flex-col p-8 h-68 rounded-2xl bg-white shadow-xl">
+              <div className="flex flex-col p-5 sm:p-8 min-h-68 sm:h-68 rounded-2xl bg-white shadow-xl">
                 <div className="flex">
                   <div className=" flex gap-4">
                     <Image
@@ -87,10 +87,10 @@ const Testimonial = () => {
                       height={50}
                       src={item.avatar}
                       alt={item.name}
-                      className="rounded-full object-cover"
+                      className="rounded-full object-cover shrink-0 h-[50px] w-[50px]"
                     />
                     <div className="flex flex-col gap-1">
-                      <div className="flex gap-3 items-center -mt-1">
+                      <div className="flex flex-wrap gap-x-3 items-center -mt-1">
                         <p className="font-semibold cursor-pointer">
                           {item.name}
                         </p>
@@ -110,7 +110,7 @@ const Testimonial = () => {
                 <div className="italic mt-2 text-[18px] text-[#4b587c] font-normal">
                   Cucumba
                 </div>
-                <div className="flex gap-6 text-[#4b587c] text-[12px] mt-4">
+                <div className="flex gap-4 sm:gap-6 text-[#4b587c] text-[12px] mt-4 max-md:flex-wrap max-md:gap-x-4 max-md:gap-y-2">
                   <span className="flex items-center gap-1 cursor-pointer">
                     <span className="text-[8px]">▲</span>Helpful
                   </span>

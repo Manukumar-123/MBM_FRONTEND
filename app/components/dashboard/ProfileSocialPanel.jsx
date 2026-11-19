@@ -51,12 +51,12 @@ export default function ProfileSocialPanel({ profile, socialLinks: initialLinks 
       <h1 className="text-[22px] font-bold font-display mb-1">Profile &amp; social</h1>
       <p className="text-gray-400 text-[13.5px] mb-6">This is what readers see on your public profile.</p>
 
-      <div className="flex items-center gap-4.5 mb-7">
-        <div className="relative w-[84px] h-[84px] group">
+      <div className="flex items-center gap-4.5 mb-7 max-sm:gap-3.5">
+        <div className="relative w-[84px] h-[84px] group max-md:flex-shrink-0">
           <div className="w-[84px] h-[84px] rounded-full bg-gradient-to-br from-cyan to-blue grid place-items-center overflow-hidden">
             {avatarUrl ? <img src={avatarUrl} alt="" className="w-full h-full object-cover" /> : <span className="text-2xl font-bold text-[#06121A]">{initials}</span>}
           </div>
-          <div className="absolute inset-0 rounded-full bg-black/55 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+          <div className="absolute inset-0 rounded-full bg-black/55 max-md:opacity-100 max-md:bg-black/35 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
             <label className="w-[30px] h-[30px] rounded-full bg-white/15 hover:bg-white/28 grid place-items-center cursor-pointer text-white">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 7h3l2-3h6l2 3h3v13H4z" /><circle cx="12" cy="13" r="3.5" /></svg>
               <input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} />
@@ -89,7 +89,7 @@ export default function ProfileSocialPanel({ profile, socialLinks: initialLinks 
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">{PLATFORM_ICONS[l.platform] || PLATFORM_ICONS.website}</svg>
             </div>
             <span className="flex-1 text-[13px] text-gray-400 truncate">{l.url}</span>
-            <button onClick={() => handleRemoveLink(l._id)} className="w-[26px] h-[26px] grid place-items-center rounded-full bg-surface-2 border border-borderline-soft text-gray-500 hover:text-danger hover:border-danger/40" aria-label="Remove link">
+            <button onClick={() => handleRemoveLink(l._id)} className="w-[26px] h-[26px] max-md:w-9 max-md:h-9 max-md:flex-shrink-0 grid place-items-center rounded-full bg-surface-2 border border-borderline-soft text-gray-500 hover:text-danger hover:border-danger/40" aria-label="Remove link">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M18 6 6 18M6 6l12 12" /></svg>
             </button>
           </div>
@@ -97,8 +97,8 @@ export default function ProfileSocialPanel({ profile, socialLinks: initialLinks 
         {links.length === 0 && <div className="text-sm text-gray-600">No social links yet.</div>}
       </div>
 
-      <form onSubmit={handleAddLink} className="flex gap-2">
-        <select value={newPlatform} onChange={(e) => setNewPlatform(e.target.value)} className="bg-surface border border-borderline rounded-lg px-2.5 text-[13px]">
+      <form onSubmit={handleAddLink} className="flex gap-2 max-sm:flex-wrap">
+        <select value={newPlatform} onChange={(e) => setNewPlatform(e.target.value)} className="bg-surface border border-borderline rounded-lg px-2.5 text-[13px] max-sm:min-h-[40px]">
           <option value="website">Website</option>
           <option value="instagram">Instagram</option>
           <option value="x">X / Twitter</option>
@@ -106,8 +106,8 @@ export default function ProfileSocialPanel({ profile, socialLinks: initialLinks 
           <option value="tiktok">TikTok</option>
           <option value="goodreads">Goodreads</option>
         </select>
-        <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="Paste a link" className="flex-1 bg-surface border border-borderline rounded-lg px-3 py-2 text-[13px]" />
-        <button className="bg-surface border border-borderline rounded-lg px-3.5 text-xs font-bold hover:border-cyan hover:text-cyan">Add</button>
+        <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="Paste a link" className="flex-1 max-sm:min-w-0 max-sm:min-h-[40px] bg-surface border border-borderline rounded-lg px-3 py-2 text-[13px]" />
+        <button className="bg-surface border border-borderline rounded-lg px-3.5 text-xs font-bold hover:border-cyan hover:text-cyan max-sm:min-h-[40px]">Add</button>
       </form>
 
       <Button shape="rect" onClick={handleSave} className="mt-7">

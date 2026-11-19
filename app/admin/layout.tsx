@@ -29,6 +29,7 @@ export default function AdminLayout({
   const { adminToken, hasHydrated } = useAdminAuthStore();
   const [checked, setChecked] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const isLoginPage = pathname === "/admin/login";
 
   useEffect(() => {
@@ -43,18 +44,48 @@ export default function AdminLayout({
     setChecked(true);
   }, [isLoginPage, adminToken, hasHydrated, router]);
 
+  // Close the mobile drawer on navigation and when growing to the lg breakpoint.
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const onChange = (e: MediaQueryListEvent) => {
+      if (e.matches) setMobileOpen(false);
+    };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
   if (isLoginPage) return <>{children}</>;
 
   if (!hasHydrated || !adminToken || !checked) return null;
 
   return (
-    <div className="min-h-screen bg-[#08080b]">
-      <Sidebar collapsed={collapsed} onToggle={() => setCollapsed((c) => !c)} />
-      <Topbar collapsed={collapsed} title={TITLES[pathname] ?? ""} />
+    <div className="min-h-screen bg-[#08080b] overflow-x-clip">
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm lg:hidden"
+          onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <Sidebar
+        collapsed={collapsed}
+        onToggle={() => setCollapsed((c) => !c)}
+        mobileOpen={mobileOpen}
+        onMobileClose={() => setMobileOpen(false)}
+      />
+      <Topbar
+        collapsed={collapsed}
+        title={TITLES[pathname] ?? ""}
+        onMenuClick={() => setMobileOpen(true)}
+      />
       <main
-        className={`${collapsed ? "ml-[76px]" : "ml-64"} pt-16 transition-all duration-200`}
+        className={`${collapsed ? "lg:ml-[76px]" : "lg:ml-64"} pt-16 transition-all duration-200`}
       >
-        <div className="p-8 max-w-[1400px]">{children}</div>
+        <div className="p-4 sm:p-6 lg:p-8 max-w-[1400px] min-w-0">{children}</div>
       </main>
     </div>
   );

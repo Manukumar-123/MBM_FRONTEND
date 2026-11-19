@@ -27,7 +27,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full min-h-[80vh] md:h-screen overflow-hidden">
       {/* Carousel as full background */}
       {/* <div className="absolute inset-0 w-full h-full">
         <Carousel />
@@ -36,13 +36,13 @@ export default function Hero() {
       {/* Hero content */}
       <div
         ref={contentRef}
-        className="relative z-10 mx-auto flex h-full max-w-5xl flex-col items-center justify-center px-5 text-center"
+        className="relative z-10 mx-auto flex min-h-[80vh] md:min-h-0 md:h-full max-w-5xl flex-col items-center justify-center px-5 pt-32 pb-12 md:py-0 text-center"
       >
         <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/70 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-neutral-600 shadow-sm backdrop-blur dark:border-white/15 dark:bg-white/5 dark:text-neutral-300 sm:text-xs">
           <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
           A home for creative minds
         </div>
-        <h1 className="max-w-4xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-neutral-950 dark:text-white sm:text-6xl md:text-7xl lg:text-8xl">
+        <h1 className="max-w-4xl text-[2.6rem] min-[380px]:text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-neutral-950 dark:text-white sm:text-6xl md:text-7xl lg:text-8xl">
           Made for <span className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-indigo-500 bg-clip-text italic text-transparent">creatives.</span>
         </h1>
         <p className="mt-6 max-w-2xl text-sm leading-7 text-neutral-600 dark:text-neutral-300 sm:text-base md:text-lg md:leading-8">

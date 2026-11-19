@@ -17,18 +17,18 @@ function AddRequestForm({ onAdded, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="bg-surface border border-cyan/25 rounded-2xl p-4 mb-4 flex flex-col gap-2.5">
       <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="What are you asking for?"
-        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px]" />
+        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px] max-md:w-full max-md:min-w-0" />
       <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe it to the community"
-        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px] min-h-[64px]" />
+        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px] min-h-[64px] max-md:w-full" />
       <div className="flex items-center gap-2">
         <label className="text-xs text-gray-400">Supporter goal</label>
         <input type="number" value={target} onChange={(e) => setTarget(e.target.value)} className="w-24 bg-surface-2 border border-borderline rounded-lg px-2 py-1.5 text-[13px]" />
       </div>
       <div className="flex gap-2">
-        <button className="bg-gradient-to-r from-cyan to-blue text-[#06121A] font-bold text-xs px-4 py-2 rounded-lg">
+        <button className="bg-gradient-to-r from-cyan to-blue text-[#06121A] font-bold text-xs px-4 py-2 rounded-lg max-md:min-h-[40px]">
           Post request
         </button>
-        <button type="button" onClick={onCancel} className="text-xs text-gray-400 hover:text-white px-2">Cancel</button>
+        <button type="button" onClick={onCancel} className="text-xs text-gray-400 hover:text-white px-2 max-md:min-h-[40px] max-md:px-3">Cancel</button>
       </div>
     </form>
   );
@@ -79,17 +79,17 @@ export default function AskUniversePanel({ initialRequests }) {
       )}
 
       {requests.map((r) => (
-        <div key={r._id} className="flex gap-3.5 bg-surface border border-borderline-soft rounded-2xl p-4 mb-2.5">
-          <div className="w-[70px] h-[70px] rounded-xl bg-gradient-to-br from-violet to-cyan flex-shrink-0 grid place-items-center">
+        <div key={r._id} className="flex gap-3.5 bg-surface border border-borderline-soft rounded-2xl p-4 mb-2.5 max-sm:flex-wrap max-sm:gap-3 max-sm:p-3.5">
+          <div className="w-[70px] h-[70px] max-sm:w-[48px] max-sm:h-[48px] rounded-xl bg-gradient-to-br from-violet to-cyan flex-shrink-0 grid place-items-center">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#06121A" strokeWidth="1.8"><path d="M12 2.5l2.6 5.9 6.4.7-4.8 4.4 1.3 6.3L12 16.8 6.5 19.8l1.3-6.3-4.8-4.4 6.4-.7Z" /></svg>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-[14px] font-bold mb-0.5">{r.title}</div>
-            <div className="text-xs text-gray-400 mb-2.5">{r.description}</div>
+            <div className="text-[14px] font-bold mb-0.5 max-md:break-words">{r.title}</div>
+            <div className="text-xs text-gray-400 mb-2.5 max-md:break-words">{r.description}</div>
             <Nodes current={r.currentSupporters} target={r.targetSupporters} />
             <div className="text-xs text-gray-400">{r.currentSupporters} of {r.targetSupporters} supporters</div>
           </div>
-          <div className="flex gap-1.5 self-start">
+          <div className="flex gap-1.5 self-start max-sm:order-first max-sm:ml-auto max-sm:w-full max-sm:justify-end">
             <Button icon onClick={() => handleEdit(r)} aria-label="Edit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg></Button>
             <Button icon danger onClick={() => handleDelete(r._id)} aria-label="Delete"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-8 0v13a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V7" /></svg></Button>
           </div>

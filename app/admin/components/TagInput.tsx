@@ -52,7 +52,7 @@ export default function TagInput({ tags, onChange, placeholder, disabled }: TagI
           <button
             type="button"
             onClick={() => removeTag(i)}
-            className="hover:text-rose-400"
+            className="hover:text-rose-400 max-md:p-1 max-md:-m-1"
             aria-label={`Remove ${tag}`}
           >
             <X size={13} />
@@ -67,7 +67,7 @@ export default function TagInput({ tags, onChange, placeholder, disabled }: TagI
         onBlur={addTag}
         placeholder={tags.length === 0 ? placeholder : ""}
         disabled={disabled}
-        className="flex-1 min-w-[120px] bg-transparent outline-none text-white placeholder-[#5f5f6e] text-[13px] py-1"
+        className="flex-1 min-w-[120px] bg-transparent outline-none text-white placeholder-[#5f5f6e] text-[13px] max-md:text-base py-1"
       />
     </div>
   );

@@ -1202,4 +1202,221 @@
   .stepConnector {
     display: none;
   }
+  .orb1 {
+    width: 360px;
+    height: 360px;
+    top: -140px;
+    right: -140px;
+  }
+  .orb2 {
+    width: 300px;
+    height: 300px;
+    left: -150px;
+  }
+  .hero {
+    margin-bottom: 40px;
+  }
+  .heroSubtitle {
+    font-size: 0.98rem;
+  }
+  .stepper {
+    margin-bottom: 40px;
+  }
+  .sectionHeader {
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+  }
+  .uploadZone {
+    padding: 32px 18px;
+  }
+  .uploadSpecs {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .toggleRow {
+    gap: 16px;
+  }
+  .pdfStatus > div {
+    min-width: 0;
+  }
+  .pdfName {
+    overflow-wrap: anywhere;
+  }
+  .progressOverlay {
+    padding: 0 24px;
+    text-align: center;
+  }
+  .progressBarOuter {
+    width: 100%;
+    max-width: 300px;
+  }
+  .modalOverlay {
+    padding: 16px;
+  }
+  .modalCard {
+    width: 100%;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    padding: 44px 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageWrapper {
+    padding: 28px 12px 48px;
+  }
+  .heroTitle {
+    font-size: 2.1rem;
+    letter-spacing: -0.5px;
+  }
+  .heroSubtitle {
+    font-size: 0.92rem;
+  }
+  .heroBadge {
+    font-size: 0.66rem;
+  }
+  .stepper {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .step {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .stepText {
+    font-size: 0.7rem;
+  }
+  .formSection {
+    padding: 22px 16px;
+  }
+  .sectionHeader {
+    gap: 12px;
+  }
+  .sectionIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+  .uploadZone {
+    padding: 26px 14px;
+  }
+  .uploadZoneSmall {
+    padding: 22px 14px;
+  }
+  .tagChip {
+    padding: 7px 14px;
+    font-size: 0.76rem;
+  }
+  .copyrightOption {
+    padding: 18px 16px;
+  }
+  .agreementBox {
+    padding: 14px;
+    gap: 12px;
+  }
+  .pdfStatus {
+    padding: 14px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 13px 20px;
+  }
+  .progressText {
+    font-size: 1.2rem;
+  }
+  .modalCard {
+    padding: 36px 20px;
+  }
+  .modalIcon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.7rem;
+  }
+  .modalTitle {
+    font-size: 1.5rem;
+  }
+  .modalText {
+    font-size: 0.85rem;
+  }
+}
+
+/* ══════════════════════════════
+   MOBILE POLISH (< 768px only)
+   ══════════════════════════════ */
+@media (max-width: 767px) {
+  .pageWrapper {
+    overflow-x: clip;
+  }
+  .heroTitle {
+    overflow-wrap: break-word;
+  }
+  .formSection:hover {
+    transform: none;
+  }
+  .sectionHeader {
+    align-items: flex-start;
+  }
+  .sectionHeader > div:last-child {
+    min-width: 0;
+  }
+  .uploadZone {
+    width: 100%;
+    min-height: 170px;
+  }
+  .uploadZoneSmall {
+    min-height: 140px;
+  }
+  .uploadTitle,
+  .uploadSubtitle {
+    overflow-wrap: anywhere;
+  }
+  .tagChip {
+    min-height: 40px;
+  }
+  .toggleRow > div:first-child {
+    min-width: 0;
+  }
+  .priceInput {
+    flex: 1;
+    max-width: none;
+  }
+  .removeBtn {
+    min-height: 40px;
+    padding: 0 8px;
+  }
+  .btn {
+    min-height: 46px;
+  }
+  .progressOverlay {
+    overflow-y: auto;
+  }
+  .modalCard {
+    max-height: calc(100dvh - 32px);
+  }
+  .modalCard .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .stepNum {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .pageWrapper {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Fixed-header clearance is handled by the layout shell ≤860px. */
+@media (max-width: 860px) {
+  .pageWrapper {
+    padding-top: 8px;
+  }
 }

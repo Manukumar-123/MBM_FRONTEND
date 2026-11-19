@@ -23,6 +23,7 @@ export default function RootLayout({
   const isAdmin = route.startsWith("/admin");
   const isAuthPage = route === "/login" || route === "/signup";
   const hideSiteChrome = !pathname || isAdmin || isAuthPage;
+  const isHome = route === "";
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning={true}>
@@ -39,7 +40,7 @@ export default function RootLayout({
             {" "}
             {/* ✅ wrap with QueryClientProvider */}
             {!hideSiteChrome && <AnimatedBackground />}
-            <div className="relative z-10">
+            <div className={`relative z-10${!hideSiteChrome && !isHome ? " site-shell--inner" : ""}`}>
               {!hideSiteChrome && <Header />}
               {!isAdmin && pathname && <BackButton />}
               <main>{children}</main>

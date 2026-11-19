@@ -52,7 +52,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider font-mono border ${info.text} ${info.bg} ${info.border}`}
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap px-3 py-1 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider font-mono border ${info.text} ${info.bg} ${info.border}`}
     >
       <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${info.dot}`} />
       {info.label}

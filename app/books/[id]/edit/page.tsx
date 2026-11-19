@@ -351,7 +351,7 @@ const EditBookPage: FC = () => {
   if (pageLoading) {
     return (
       <>
-        <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-4 text-ink-dim">
+        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-4 text-ink-dim">
           <div className="w-10 h-10 border-3 border-line border-t-gold rounded-full animate-spin-slow" />
           <p>Loading book data…</p>
         </div>
@@ -362,7 +362,7 @@ const EditBookPage: FC = () => {
   if (loadError) {
     return (
       <>
-        <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
+        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
           <p className="text-lg text-ink">{loadError}</p>
           <button
             onClick={() => router.push("/workList")}
@@ -378,12 +378,12 @@ const EditBookPage: FC = () => {
   return (
     <>
       {/* Ambient orbs */}
-      <div className="fixed top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-200px] right-[-200px] w-[500px] h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
+      <div className="fixed top-[-200px] left-[-200px] w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-200px] right-[-200px] w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-[1100px] mx-auto px-6 py-10">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-8 sm:py-10 max-md:overflow-x-hidden min-[861px]:mt-20 max-[860px]:!pt-2">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-6 text-sm">
+        <div className="flex flex-wrap items-center gap-2 mb-6 text-sm min-w-0">
           <span
             className="text-ink-dim cursor-pointer hover:text-gold transition-colors"
             onClick={() => router.push("/workList")}
@@ -392,7 +392,7 @@ const EditBookPage: FC = () => {
           </span>
           <span className="text-ink-muted">/</span>
           <span
-            className="text-ink-dim cursor-pointer hover:text-gold transition-colors"
+            className="text-ink-dim cursor-pointer hover:text-gold transition-colors max-md:break-words max-md:min-w-0"
             onClick={() => router.push(`/books/${bookId}`)}
           >
             {originalBook?.title}
@@ -406,7 +406,7 @@ const EditBookPage: FC = () => {
           <div className="inline-block font-mono text-[0.68rem] tracking-[0.2em] text-gold bg-gold-glow px-4 py-1.5 rounded-full border border-gold/20 mb-4">
             EDITING
           </div>
-          <h1 className="font-serif text-4xl font-semibold text-ink tracking-tight">
+          <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-ink tracking-tight max-sm:text-[1.75rem]">
             Edit Your Work
           </h1>
           <p className="text-sm text-ink-dim mt-2">
@@ -442,7 +442,7 @@ const EditBookPage: FC = () => {
 
           {/* Existing file info */}
           {!files.manuscript && originalBook?.manuscript && (
-            <div className="flex items-center gap-2.5 px-5 py-3.5 bg-success/[0.08] border border-success/20 rounded-sm text-success text-sm max-w-[800px] mx-auto -mt-3 mb-6">
+            <div className="flex items-center gap-2.5 px-5 py-3.5 bg-success/[0.08] border border-success/20 rounded-sm text-success text-sm max-w-[800px] mx-auto -mt-3 mb-6 max-sm:px-4 max-sm:items-start">
               <CheckCircle className="w-4 h-4 shrink-0" />
               Manuscript already uploaded. Upload a new file only if you want to
               replace it.
@@ -454,18 +454,18 @@ const EditBookPage: FC = () => {
           <AgreementsSection form={form} updateField={updateField} />
 
           {/* ── Actions ── */}
-          <div className="flex justify-end gap-4 mt-10 pt-6 border-t border-line max-w-[800px] mx-auto mb-16">
+          <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 sm:gap-4 mt-10 pt-6 border-t border-line max-w-[800px] mx-auto mb-16">
             <button
               type="button"
               onClick={() => router.push(`/books/${bookId}`)}
-              className="px-6 py-3 bg-elevated border border-line rounded-sm text-ink font-body text-sm font-medium hover:bg-surface hover:border-line-light transition-all"
+              className="w-full sm:w-auto px-6 py-3 bg-elevated border border-line rounded-sm text-ink font-body text-sm font-medium hover:bg-surface hover:border-line-light transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={uploading}
-              className="px-8 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0"
+              className="w-full sm:w-auto px-8 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0"
             >
               {uploading ? "Updating…" : "Save Changes"}
             </button>

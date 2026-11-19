@@ -114,7 +114,7 @@ function GradientButton({
     variant === "solid"
       ? "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/10"
       : "bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/10";
-  const base = `inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition ${classes}`;
+  const base = `inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2 rounded-full text-sm font-semibold transition max-md:min-h-[42px] ${classes}`;
 
   if (href) {
     return (
@@ -134,7 +134,7 @@ function GradientButton({
 
 function StatBlock({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="flex flex-col items-center px-4">
+    <div className="flex flex-col items-center px-4 max-sm:px-2 max-md:min-w-0">
       <span className="text-lg font-bold text-white">{value}</span>
       <span className="text-xs text-gray-500 mt-0.5">{label}</span>
     </div>
@@ -155,7 +155,7 @@ function EmptyState({
   actionHref?: string;
 }) {
   return (
-    <div className="bg-white/[0.03] rounded-2xl p-10 border border-white/10 text-center">
+    <div className="bg-white/[0.03] rounded-2xl p-6 sm:p-10 border border-white/10 text-center max-sm:px-4 max-sm:py-8">
       <div className="w-14 h-14 bg-white/[0.05] rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
         <Icon className="w-6 h-6 text-cyan-300" />
       </div>
@@ -197,7 +197,7 @@ function VideoGrid({
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-sm:gap-3">
       {videos.map((v) => (
         <div
           key={v._id}
@@ -224,7 +224,7 @@ function VideoGrid({
               <button
                 onClick={() => onDelete(v._id)}
                 disabled={deletingId === v._id}
-                className="p-2 rounded-full bg-white/[0.04] hover:bg-red-500/20 hover:text-red-400 border border-white/10 transition flex-shrink-0"
+                className="p-2 rounded-full bg-white/[0.04] hover:bg-red-500/20 hover:text-red-400 border border-white/10 transition flex-shrink-0 max-md:p-3"
                 aria-label="Delete video"
               >
                 <Trash2 className="w-3.5 h-3.5" />
@@ -287,8 +287,8 @@ function MyVideoSection({
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-lg">{title}</h3>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h3 className="font-semibold text-lg max-md:min-w-0 max-md:break-words">{title}</h3>
         <GradientButton href={uploadHref} icon={Plus}>
           {uploadLabel}
         </GradientButton>
@@ -346,32 +346,32 @@ function ShareQrModal({
       onClick={onClose}
     >
       <div
-        className="bg-[#0a0a0f] border border-white/10 rounded-2xl p-6 w-full max-w-sm relative"
+        className="bg-[#0a0a0f] border border-white/10 rounded-2xl p-5 sm:p-6 w-full max-w-sm max-h-[90vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-white transition"
+          className="absolute top-4 right-4 text-gray-500 hover:text-white transition max-md:top-2 max-md:right-2 max-md:p-2"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <h3 className="font-semibold text-lg mb-1">Share Profile</h3>
+        <h3 className="font-semibold text-lg mb-1 max-md:pr-8">Share Profile</h3>
         <p className="text-sm text-gray-500 mb-5">
           Scan to open {name || "this creator"}&apos;s MeBookMeta profile.
         </p>
 
         <div className="flex justify-center mb-5">
           <div className="p-3 bg-white rounded-2xl">
-            <img src={qrSrc} alt="Profile QR code" width={200} height={200} />
+            <img src={qrSrc} alt="Profile QR code" width={200} height={200} className="max-w-full h-auto" />
           </div>
         </div>
 
         <div className="flex items-center gap-2 bg-white/[0.04] border border-white/10 rounded-full px-4 py-2">
-          <span className="flex-1 text-xs text-gray-400 truncate">{profileUrl}</span>
+          <span className="flex-1 min-w-0 text-xs text-gray-400 truncate">{profileUrl}</span>
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 text-xs font-semibold text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200 transition"
+            className="flex flex-shrink-0 items-center gap-1 text-xs font-semibold max-md:min-h-[36px] max-md:px-1 text-cyan-700 hover:text-cyan-800 dark:text-cyan-300 dark:hover:text-cyan-200 transition"
           >
             <Copy className="w-3.5 h-3.5" />
             {copied ? "Copied" : "Copy"}
@@ -410,15 +410,6 @@ export default function ProfilePage() {
   const [deleteTarget, setDeleteTarget] = useState<IBook | null>(null);
   const [deleting, setDeleting] = useState(false);
   const [showQr, setShowQr] = useState(false);
-
-  useEffect(() => {
-    // Wait for the persisted store to hydrate — otherwise a reload sees accessToken/user
-    // as null for a moment and incorrectly bounces a logged-in user to /login.
-    if (!hasHydrated) return;
-    if (!accessToken || !user) {
-      router.replace("/login");
-    }
-  }, [hasHydrated, accessToken, user, router]);
 
   const fetchMyWorks = useCallback(async () => {
     if (!isOwnProfile || !isAuthor || !user?.name) return;
@@ -460,9 +451,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (!hasHydrated || !accessToken || !user) return null;
-
-  if (!isOwnProfile) {
+  if (!hasHydrated || !accessToken || !user || !isOwnProfile) {
     return <PublicProfileView id={profileId} />;
   }
 
@@ -485,7 +474,7 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="profile-page min-h-screen bg-[#050507] text-white">
+    <div className="profile-page min-h-screen overflow-x-clip bg-[#050507] text-white">
       {/* Top Navigation Bar */}
       {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -522,21 +511,21 @@ export default function ProfilePage() {
       </div> */}
 
       {/* Cover */}
-      <div className="profile-banner relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
+      <div className="profile-banner relative h-56 max-sm:!h-40 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
         <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
       {/* Main Content */}
-      <div className="profile-layout max-w-7xl mx-auto px-4 -mt-20 relative z-10">
+      <div className="profile-layout max-w-7xl mx-auto px-3 sm:px-4 -mt-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Profile Card */}
           <div className="lg:col-span-1">
-            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
+            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-5 sm:p-6 shadow-2xl border border-white/10 sticky top-20 max-sm:!p-5 max-sm:!rounded-[22px]">
               {/* Avatar */}
               <div className="profile-avatar-wrap flex justify-center -mt-16 mb-4">
                 <div className="p-[3px] rounded-full bg-gradient-to-tr from-cyan-400 via-violet-400 to-blue-500 shadow-lg shadow-cyan-500/20">
-                  <div className="w-28 h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-3xl font-bold">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-2xl sm:text-3xl font-bold">
                     {user.avatarUrl ? (
                       <img src={getFileUrl(user.avatarUrl) || user.avatarUrl} alt={`${user.name || "User"} profile`} className="h-full w-full rounded-full object-cover" />
                     ) : getInitials(user.name)}
@@ -546,7 +535,7 @@ export default function ProfilePage() {
 
               {/* Profile Info */}
               <div className="profile-card-heading text-center mb-5">
-                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl font-bold mb-2 break-words bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {user.name || "Unnamed User"}
                 </h1>
                 <span
@@ -559,7 +548,7 @@ export default function ProfilePage() {
               </div>
 
               {/* Stats row */}
-              <div className="flex items-center justify-center divide-x divide-white/10 py-4 border-y border-white/10 mb-5">
+              <div className="flex items-center justify-center divide-x divide-white/10 py-4 border-y border-white/10 mb-5 max-sm:py-3">
                 <StatBlock label="Works" value={formatCount(total)} />
                 <StatBlock label="Followers" value={formatCount(followers)} />
                 <StatBlock label="Following" value={formatCount(following)} />
@@ -580,12 +569,12 @@ export default function ProfilePage() {
           {/* Right Column */}
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <div className="profile-tabs flex gap-2 mb-6 border-b border-white/10 overflow-x-auto">
+            <div className="profile-tabs flex gap-2 mb-6 border-b border-white/10 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {tabs.map((tab) => (
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`relative rounded-t-lg px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
+                  className={`relative flex-shrink-0 rounded-t-lg px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
                     activeTab === tab.key
                       ? "bg-violet-100 text-gray-900 dark:bg-white/10 dark:text-white"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-500 dark:hover:bg-white/5 dark:hover:text-gray-300"
@@ -601,10 +590,10 @@ export default function ProfilePage() {
 
             {activeTab === "about" && (
               <div className="profile-panel">
-                <section className="profile-surface rounded-2xl p-6">
+                <section className="profile-surface rounded-2xl p-4 sm:p-6">
                   <h2 className="text-xl font-bold">About</h2>
                   <p className="mt-2 text-sm leading-6 text-gray-400">{user.bio || roleInfo.description}</p>
-                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm max-sm:gap-4 [&_dd]:break-words">
                     <div>
                       <dt className="text-gray-500">Account type</dt>
                       <dd className="mt-1 font-medium">{roleInfo.label}</dd>
@@ -619,7 +608,7 @@ export default function ProfilePage() {
                   {!!user.socialLinks?.length && (
                     <div className="mt-6 flex flex-wrap gap-2">
                       {user.socialLinks.map((social, index) => (
-                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50">
+                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50 max-md:inline-flex max-md:items-center max-md:min-h-[40px] max-md:px-4">
                           {social.platform === "x" ? "X / Twitter" : social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}
                         </a>
                       ))}
@@ -630,13 +619,13 @@ export default function ProfilePage() {
             )}
             {activeTab === "works" && isAuthor && (
               <div className="profile-panel">
-                <section className="profile-surface profile-setup rounded-2xl p-6">
+                <section className="profile-surface profile-setup rounded-2xl p-4 sm:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
                       <h2 className="text-xl font-bold">Set up your profile</h2>
                       <p className="mt-1 text-sm text-gray-400">Your creator space is ready. Add a work to start building your shelf.</p>
                     </div>
-                    <Link href="/settings" className="text-sm font-semibold text-cyan-300 hover:text-cyan-200">Edit profile</Link>
+                    <Link href="/settings" className="text-sm font-semibold text-cyan-300 hover:text-cyan-200 max-md:inline-flex max-md:items-center max-md:min-h-[40px]">Edit profile</Link>
                   </div>
                   <div className="profile-progress mt-5"><span style={{ width: books.length ? "100%" : "66%" }} /></div>
                   <div className="profile-checklist mt-3">
@@ -646,21 +635,21 @@ export default function ProfilePage() {
                   </div>
                 </section>
 
-                <div className="flex items-center justify-between gap-3 mb-4">
-                  <h2 className="text-2xl font-bold">Works</h2>
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                  <h2 className="text-xl sm:text-2xl font-bold">Works</h2>
                   <GradientButton href="/work" icon={Plus}>
                     Upload new work
                   </GradientButton>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 max-sm:gap-2.5">
                   {[
                     { label: "Works", value: stats.total },
                     { label: "Published", value: stats.published },
                     { label: "In review", value: stats.pending },
                     { label: "Drafts", value: stats.drafts },
                   ].map((stat) => (
-                    <div key={stat.label} className="profile-surface rounded-2xl p-4 text-center">
+                    <div key={stat.label} className="profile-surface rounded-2xl p-4 text-center max-sm:p-3">
                       <div className="text-xl font-bold">{stat.value}</div>
                       <div className="mt-1 text-xs text-gray-400">{stat.label}</div>
                     </div>
@@ -681,7 +670,7 @@ export default function ProfilePage() {
                     actionHref="/work"
                   />
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-[560px]:!grid-cols-2 max-[560px]:!gap-3">
                     {books.map((book) => (
                       <div
                         key={book._id}
@@ -704,24 +693,24 @@ export default function ProfilePage() {
                           <div className="text-xs text-gray-500 mt-2">
                             {fmtDate(book.createdAt)}
                           </div>
-                          <div className="flex items-center gap-3 mt-3 text-gray-500">
+                          <div className="flex items-center gap-3 mt-3 text-gray-500 max-md:gap-1 max-md:-ml-2 max-md:mt-1">
                             <Link
                               href={`/books/${book._id}`}
-                              className="hover:text-white transition"
+                              className="hover:text-white transition max-md:p-2"
                               title="View"
                             >
                               <Eye className="w-4 h-4" />
                             </Link>
                             <Link
                               href={`/books/${book._id}/edit`}
-                              className="hover:text-white transition"
+                              className="hover:text-white transition max-md:p-2"
                               title="Edit"
                             >
                               <Pencil className="w-4 h-4" />
                             </Link>
                             <button
                               onClick={() => setDeleteTarget(book)}
-                              className="hover:text-red-400 transition"
+                              className="hover:text-red-400 transition max-md:p-2"
                               title="Delete"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -809,6 +798,8 @@ export default function ProfilePage() {
 /* ---------------------------------------------------------------------- */
 
 function PublicProfileView({ id }: { id: string }) {
+  const router = useRouter();
+  const { accessToken } = useAuthStore();
   const searchParams = useSearchParams();
   const [profile, setProfile] = useState<IAuthorProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -864,7 +855,7 @@ function PublicProfileView({ id }: { id: string }) {
   const following = 0;
 
   return (
-    <div className="profile-page min-h-screen bg-[#050507] text-white">
+    <div className="profile-page min-h-screen overflow-x-clip bg-[#050507] text-white">
       {/* <div className="bg-black/40 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <Link
@@ -876,18 +867,18 @@ function PublicProfileView({ id }: { id: string }) {
         </div>
       </div> */}
 
-      <div className="profile-banner relative h-56 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
+      <div className="profile-banner relative h-56 max-sm:!h-40 overflow-hidden bg-gradient-to-r from-white via-slate-100 to-white dark:from-cyan-950 dark:via-[#0a0a12] dark:to-violet-950">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.15),transparent_45%),radial-gradient(circle_at_80%_30%,rgba(139,92,246,0.15),transparent_45%)]" />
         <div className="absolute inset-0 bg-white/10 dark:bg-black/40" />
       </div>
 
-      <div className="profile-layout max-w-7xl mx-auto px-4 -mt-20 relative z-10">
+      <div className="profile-layout max-w-7xl mx-auto px-3 sm:px-4 -mt-20 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-1">
-            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-6 shadow-2xl border border-white/10 sticky top-20">
+            <div className="profile-card bg-white/[0.03] backdrop-blur-xl rounded-2xl p-5 sm:p-6 shadow-2xl border border-white/10 sticky top-20 max-sm:!p-5 max-sm:!rounded-[22px]">
               <div className="profile-avatar-wrap flex justify-center -mt-16 mb-4">
                 <div className="p-[3px] rounded-full bg-gradient-to-tr from-cyan-400 via-violet-400 to-blue-500 shadow-lg shadow-cyan-500/20">
-                  <div className="w-28 h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-3xl font-bold">
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center bg-[#0a0a0f] text-white text-2xl sm:text-3xl font-bold">
                     {author.avatarUrl ? (
                       <img src={getFileUrl(author.avatarUrl) || author.avatarUrl} alt={`${author.name || "Creator"} profile`} className="h-full w-full rounded-full object-cover" />
                     ) : getInitials(author.name)}
@@ -896,7 +887,7 @@ function PublicProfileView({ id }: { id: string }) {
               </div>
 
               <div className="profile-card-heading text-center mb-5">
-                <h1 className="text-2xl font-bold mb-2 bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl font-bold mb-2 break-words bg-gradient-to-r from-gray-900 via-violet-700 to-cyan-700 dark:from-white dark:via-violet-200 dark:to-cyan-300 bg-clip-text text-transparent">
                   {author.name || "Unnamed User"}
                 </h1>
                 <span
@@ -909,7 +900,7 @@ function PublicProfileView({ id }: { id: string }) {
               </div>
 
               {/* Stats row */}
-              <div className="flex items-center justify-center divide-x divide-white/10 py-4 border-y border-white/10 mb-5">
+              <div className="flex items-center justify-center divide-x divide-white/10 py-4 border-y border-white/10 mb-5 max-sm:py-3">
                 <StatBlock label="Works" value={formatCount(bookCount)} />
                 <StatBlock label="Followers" value={formatCount(followers)} />
                 <StatBlock label="Following" value={formatCount(following)} />
@@ -918,20 +909,20 @@ function PublicProfileView({ id }: { id: string }) {
               {/* Message / Follow */}
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <GradientButton
-                  onClick={() => setIsFollowing((f) => !f)}
+                  onClick={() => accessToken ? setIsFollowing((f) => !f) : router.push("/login")}
                   icon={isFollowing ? BadgeCheck : UserPlus}
                   variant={isFollowing ? "outline" : "solid"}
                 >
                   {isFollowing ? "Following" : "Follow"}
                 </GradientButton>
                 {/* TODO: point at the real messaging route once it exists */}
-                <GradientButton href={`/messages/${author._id ?? id}`} icon={MessageCircle} variant="outline">
+                <GradientButton href={accessToken ? `/messages/${author._id ?? id}` : "/login"} icon={MessageCircle} variant="outline">
                   Message
                 </GradientButton>
               </div>
               <button
                 onClick={() => setShowQr(true)}
-                className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-gray-400 hover:text-white py-2 mb-6 transition"
+                className="w-full flex items-center justify-center gap-2 text-xs font-semibold text-gray-400 hover:text-white py-2 mb-6 transition max-md:min-h-[44px] max-md:mb-4"
               >
                 <QrCode className="w-3.5 h-3.5" />
                 Share via QR
@@ -945,7 +936,7 @@ function PublicProfileView({ id }: { id: string }) {
 
           <div className="lg:col-span-2">
             {/* Tabs */}
-            <div className="profile-tabs flex gap-1 mb-6 border-b border-white/10 overflow-x-auto">
+            <div className="profile-tabs flex gap-1 mb-6 border-b border-white/10 overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {[
                 { key: "works", label: "Works" },
                 { key: "posts", label: "Posts" },
@@ -956,7 +947,7 @@ function PublicProfileView({ id }: { id: string }) {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as typeof activeTab)}
-                  className={`relative px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
+                  className={`relative flex-shrink-0 px-4 py-3 text-sm font-semibold whitespace-nowrap transition ${
                     activeTab === tab.key
                       ? "text-gray-900 dark:text-white"
                       : "text-gray-600 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-300"
@@ -972,7 +963,7 @@ function PublicProfileView({ id }: { id: string }) {
 
             {activeTab === "works" && (
               <div className="profile-panel">
-                <h2 className="mb-5 text-2xl font-bold">Works</h2>
+                <h2 className="mb-5 text-xl sm:text-2xl font-bold max-sm:mb-0">Works</h2>
                 {books.length === 0 ? (
                   <EmptyState
                     icon={BookOpen}
@@ -980,7 +971,7 @@ function PublicProfileView({ id }: { id: string }) {
                     description="This creator hasn't published any books yet — check back soon."
                   />
                 ) : (
-                  <div className="profile-public-works grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="profile-public-works grid grid-cols-1 sm:grid-cols-2 gap-4 max-[560px]:!grid-cols-2 max-[560px]:!gap-3">
                     {books.map((book) => (
                       <Link
                         key={book._id}
@@ -999,7 +990,7 @@ function PublicProfileView({ id }: { id: string }) {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-semibold text-sm truncate">{book.title}</h3>
                           <div className="text-xs text-gray-500 mt-1">{book.category}</div>
-                          <div className="flex items-center gap-3 mt-3 text-gray-500 text-xs">
+                          <div className="flex items-center gap-3 mt-3 text-gray-500 text-xs max-sm:flex-wrap max-sm:gap-x-2 max-sm:gap-y-1">
                             <span className="inline-flex items-center gap-1"><Eye className="w-3.5 h-3.5" />{book.viewCount ?? 0}</span>
                             <span>{fmtDate(book.createdAt)}</span>
                           </div>
@@ -1012,10 +1003,10 @@ function PublicProfileView({ id }: { id: string }) {
             )}
             {activeTab === "about" && (
               <div className="profile-panel">
-                <section className="profile-surface rounded-2xl p-6">
-                  <h2 className="text-xl font-bold">About {author.name || "this creator"}</h2>
+                <section className="profile-surface rounded-2xl p-4 sm:p-6">
+                  <h2 className="text-xl font-bold break-words">About {author.name || "this creator"}</h2>
                   <p className="mt-2 text-sm leading-6 text-gray-400">{author.bio || roleInfo.description}</p>
-                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+                  <dl className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm max-sm:gap-4 [&_dd]:break-words">
                     <div><dt className="text-gray-500">Account type</dt><dd className="mt-1 font-medium">{roleInfo.label}</dd></div>
                     <div><dt className="text-gray-500">Member since</dt><dd className="mt-1 font-medium">{fmtDate(author.createdAt)}</dd></div>
                     {author.craft && <div><dt className="text-gray-500">Craft</dt><dd className="mt-1 font-medium">{author.craft}</dd></div>}
@@ -1024,7 +1015,7 @@ function PublicProfileView({ id }: { id: string }) {
                   {!!author.socialLinks?.length && (
                     <div className="mt-6 flex flex-wrap gap-2">
                       {author.socialLinks.map((social, index) => (
-                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50">
+                        <a key={`${social.platform}-${index}`} href={social.url} target="_blank" rel="noreferrer" className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs font-semibold text-cyan-200 hover:border-cyan-300/50 max-md:inline-flex max-md:items-center max-md:min-h-[40px] max-md:px-4">
                           {social.platform === "x" ? "X / Twitter" : social.platform.charAt(0).toUpperCase() + social.platform.slice(1)}
                         </a>
                       ))}

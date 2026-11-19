@@ -13,8 +13,8 @@ const VARIANTS = {
 };
 
 const SHAPES = { pill: "rounded-full", rect: "rounded-lg" };
-const SIZES = { sm: "text-xs px-3 py-1.5", md: "text-sm px-4 py-2.5" };
-const ICON_SIZES = { sm: "w-[30px] h-[30px]", md: "w-9 h-9" };
+const SIZES = { sm: "text-xs px-3 py-1.5 max-md:min-h-10", md: "text-sm px-4 py-2.5 max-md:min-h-10" };
+const ICON_SIZES = { sm: "w-[30px] h-[30px] max-md:min-w-10 max-md:min-h-10", md: "w-9 h-9 max-md:min-w-10 max-md:min-h-10" };
 
 export default function Button({
   variant = "primary",

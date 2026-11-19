@@ -40,7 +40,7 @@ export default function BackButton() {
       type="button"
       onClick={handleBack}
       aria-label="Go back"
-      className="fixed left-4 top-24 z-40 rounded-sm border border-line bg-elevated px-6 py-3 font-body text-sm font-medium text-ink shadow-md transition-all hover:bg-surface md:left-6"
+      className="fixed left-3 top-36 z-40 rounded-sm border border-line bg-elevated px-4 py-2 sm:left-4 sm:px-6 sm:py-3 min-[861px]:top-24 font-body text-sm font-medium text-ink shadow-md transition-all hover:bg-surface md:left-6 max-md:min-h-10 max-[860px]:relative max-[860px]:!top-auto max-[860px]:!left-auto max-[860px]:ml-4 max-[860px]:mt-3 max-[860px]:mb-3"
     >
       ← Back
     </button>

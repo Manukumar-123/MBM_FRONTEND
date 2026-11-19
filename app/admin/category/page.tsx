@@ -75,23 +75,23 @@ export default function CategoryPage() {
 
   return (
     <div>
-      <div className="flex items-end justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
           <div className="text-[13px] text-[#8a8a98] mb-1">Content</div>
-          <h1 className="font-serif text-[28px] leading-none text-white">Categories & tags</h1>
+          <h1 className="font-serif text-[24px] sm:text-[28px] leading-none text-white">Categories & tags</h1>
         </div>
-        <form onSubmit={handleSubmit} className="flex gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-2 w-full sm:w-auto">
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="New category"
-            className="px-3.5 py-2 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13px] text-white placeholder-[#5f5f6e] outline-none focus:border-cyan-400/40 w-44"
+            className="px-3.5 py-2 max-md:py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13px] max-md:text-base text-white placeholder-[#5f5f6e] outline-none focus:border-cyan-400/40 flex-1 min-w-0 sm:flex-none sm:w-44"
           />
           <button
             type="submit"
             disabled={isAdding}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-white text-[13px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
+            className="shrink-0 flex items-center gap-1.5 px-4 py-2 max-md:py-2.5 rounded-lg text-white text-[13px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
           >
             <Plus size={15} />
             {isAdding ? "Adding…" : "Add"}
@@ -102,7 +102,7 @@ export default function CategoryPage() {
       {isLoading ? (
         <p className="text-[#8a8a98] text-sm">Loading…</p>
       ) : categories.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-12 text-center">
+        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-6 sm:p-12 text-center">
           <div className="text-[13.5px] text-[#8a8a98]">
             No categories yet — add your first one above.
           </div>
@@ -112,12 +112,12 @@ export default function CategoryPage() {
           {categories.map((cat) => (
             <div
               key={cat._id}
-              className="rounded-2xl border border-white/[0.07] bg-[#111116] p-5 flex items-center justify-between"
+              className="rounded-2xl border border-white/[0.07] bg-[#111116] p-4 sm:p-5 flex items-center justify-between gap-3"
             >
-              <span className="text-[14.5px] text-white font-medium">{cat.name}</span>
+              <span className="text-[14.5px] text-white font-medium min-w-0 break-words">{cat.name}</span>
               <button
                 onClick={() => handleDelete(cat._id, cat.name)}
-                className="text-[#6f6f7e] hover:text-rose-400 transition-colors"
+                className="text-[#6f6f7e] hover:text-rose-400 transition-colors max-md:shrink-0 max-md:p-2.5 max-md:-m-2.5"
                 aria-label={`Delete ${cat.name}`}
               >
                 <Trash2 size={16} />

@@ -23,19 +23,15 @@ axiosInstance.interceptors.request.use(
   (error: AxiosError) => Promise.reject(error)
 );
 
-// ✅ Handle 401 (unauthorized)
+// Handle unauthorized API requests without interrupting public browsing.
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      console.warn("Unauthorized — clearing tokens and redirecting to login");
+      console.warn("Unauthorized API request");
 
       const { clearAccessToken } = useTokenStore.getState();
       clearAccessToken();
-
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
     }
 
     return Promise.reject(error);

@@ -731,3 +731,88 @@ html:not(.dark) .site-header-menu > a:hover,html:not(.dark) .site-header-menu > 
 @media (max-width: 1000px) { .site-header-search { max-width: 360px; } .site-header-wrap { gap: 14px; } .site-header-nav { gap: 12px; font-size: 13px; } }
 @media (max-width: 860px) { .site-header-search,.site-header-nav { display: none; } .site-header-mobile-toggle { display: grid; } }
 @media (max-width: 560px) { .site-header-wrap { min-height: 58px; gap: 8px; padding: 0 10px 0 14px; } .site-header-logo { gap: 8px; font-size: 18px; } .site-header-mark { width: 22px; height: 22px; } .site-header-actions { gap: 7px; } .site-header-auth-actions,.site-header-upload,.site-header-notifications { display: none; } .site-header-icon-btn,.site-header-avatar,.site-header-mobile-toggle { width: 36px; height: 36px; } .site-header-menu { right: -43px; width: min(280px,calc(100vw - 30px)); } }
+
+/* Shared narrow-screen safeguards and a two-row header with usable search. */
+@media (max-width: 860px) {
+  .site-header-wrap { flex-wrap: wrap; justify-content: space-between; gap: 8px 12px; border-radius: 24px; padding: 8px 12px; }
+  .site-header-logo { margin-right: auto; }
+  .site-header-search { display: flex; order: 3; flex: 0 0 100%; width: 100%; max-width: none; min-width: 0; margin: 0 0 2px; }
+  .site-header-nav { display: none; }
+  .site-header-mobile-toggle { display: grid; }
+  .site-header-upload,.site-header-notifications,.site-header-auth-actions { display: none; }
+  .site-header-mobile-menu { right: 0; }
+}
+
+@media (max-width: 640px) {
+  html, body { max-width: 100%; overflow-x: clip; }
+  img, video, canvas, iframe { max-width: 100%; }
+  input, select, textarea { max-width: 100%; }
+  .site-header-shell { top: 8px; padding: 0 8px; }
+  .site-header-wrap { border-radius: 20px; }
+  .site-header-search > input { height: 40px; }
+  .site-header-search-results { width: 100%; }
+  .site-header-mobile-menu { right: 0; width: min(320px, calc(100vw - 32px)); }
+  .creative-wrap { padding-left: 14px; padding-right: 14px; }
+  .edit-profile-wrap { padding-left: 14px; padding-right: 14px; }
+  .edit-profile-card { padding: 18px; }
+  .edit-profile-fields { grid-template-columns: minmax(0, 1fr); }
+  .edit-profile-link-row { flex-wrap: wrap; }
+  .edit-profile-link-row select { width: 100%; }
+  .edit-profile-add-link { flex-wrap: wrap; }
+  .edit-profile-add-link select { width: 100%; }
+  .profile-page .profile-tabs { width: 100%; border-radius: 18px; }
+  .profile-page .profile-tabs button { padding: 8px 12px; }
+  .profile-page .profile-card { padding: 20px; }
+  .profile-page .profile-card > .grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .site-header-logo { gap: 7px; font-size: 16px; }
+  .site-header-mark { width: 20px; height: 20px; }
+  .site-header-actions { gap: 6px; }
+  .site-header-icon-btn,.site-header-avatar,.site-header-mobile-toggle { width: 34px; height: 34px; }
+  .site-header-search-results { max-height: 60vh; }
+}
+
+/* Phone-only refinements (<768px). Desktop/tablet (>=768px) untouched. */
+@media (max-width: 767px) {
+  html, body { max-width: 100%; overflow-x: clip; }
+  img, video, canvas, iframe { max-width: 100%; }
+  input, select, textarea { max-width: 100%; }
+  /* Touch devices: hide the "/" keyboard hint and give controls >=40px tap targets */
+  .site-header-search kbd { display: none; }
+  button.site-header-search-clear { right: 4px; width: 36px; height: 36px; }
+  .site-header-icon-btn,.site-header-avatar,.site-header-mobile-toggle { width: 40px; height: 40px; }
+  .site-header-mobile-auth a { min-height: 40px; }
+  .site-header-mobile-menu > a,.site-header-mobile-menu > button { min-height: 44px; font-size: 14px; }
+  :root { --swiper-pagination-bullet-size: 10px; --swiper-pagination-bullet-horizontal-gap: 6px; }
+}
+
+@media (max-width: 360px) {
+  .site-header-logo { font-size: 15px; }
+  .site-header-actions { gap: 5px; }
+}
+
+/* ── Fixed-header clearance ──────────────────────────────────────────
+   The site header is position:fixed. --site-header-space is its bottom edge
+   plus a 12px gap. ≤860px the header wraps to two rows (logo + search). */
+:root { --site-header-space: 88px; }
+@media (max-width: 860px) { :root { --site-header-space: 134px; } }
+@media (max-width: 640px) { :root { --site-header-space: 128px; } }
+
+/* Desktop: only the profile page sat under the header. */
+@media (min-width: 861px) {
+  .profile-page { padding-top: var(--site-header-space); }
+  .profile-page .profile-banner { margin-top: 0; }
+  .profile-page .profile-card { top: 152px; }
+}
+
+/* Mobile/tablet: every inner page starts below the header, and the Back
+   button flows above the content instead of floating over it. */
+@media (max-width: 860px) {
+  .site-shell--inner { padding-top: var(--site-header-space); }
+  .site-shell--inner > [aria-label="Go back"] { margin-top: 0; }
+  .profile-page .profile-layout { margin-top: -24px; }
+  .profile-page .profile-layout > .grid { margin-top: 0; }
+  .creative-wrap { padding-top: 8px; }
+}

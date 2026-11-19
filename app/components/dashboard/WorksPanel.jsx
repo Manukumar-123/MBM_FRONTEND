@@ -28,32 +28,32 @@ function WorkRow({ work, onChanged }) {
   }
 
   return (
-    <div className="flex gap-4 bg-surface border border-borderline-soft hover:border-cyan/30 rounded-2xl p-4 mb-2.5 transition-colors">
+    <div className="flex gap-4 bg-surface border border-borderline-soft hover:border-cyan/30 rounded-2xl p-4 mb-2.5 transition-colors max-sm:gap-3 max-sm:p-3">
       <div className="flex gap-1.5 flex-shrink-0">
-        <div className="w-[52px] h-[72px] rounded-md bg-gradient-to-br from-violet to-blue" style={work.coverUrl ? { backgroundImage: `url(${work.coverUrl})`, backgroundSize: "cover" } : {}} />
-        <div className="w-[52px] h-[72px] rounded-md bg-gradient-to-br from-[#5B4FA6] to-[#221C4D]" style={work.backCoverUrl ? { backgroundImage: `url(${work.backCoverUrl})`, backgroundSize: "cover" } : {}} />
+        <div className="w-[52px] h-[72px] max-sm:w-[44px] max-sm:h-[62px] rounded-md bg-gradient-to-br from-violet to-blue" style={work.coverUrl ? { backgroundImage: `url(${work.coverUrl})`, backgroundSize: "cover" } : {}} />
+        <div className="w-[52px] h-[72px] max-sm:hidden rounded-md bg-gradient-to-br from-[#5B4FA6] to-[#221C4D]" style={work.backCoverUrl ? { backgroundImage: `url(${work.backCoverUrl})`, backgroundSize: "cover" } : {}} />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap mb-0.5">
-          <span className="text-[15px] font-bold">{work.title}</span>
+          <span className="text-[15px] font-bold max-md:break-words max-md:min-w-0">{work.title}</span>
           <span className={`text-[10.5px] font-bold px-2 py-0.5 rounded-full ${STATUS_STYLES[work.status]}`}>
             {work.status.replace("_", " ")}
           </span>
         </div>
-        <div className="text-xs text-gray-400 mb-2">{work.category || "Uncategorized"} {work.subtitle && `· ${work.subtitle}`}</div>
+        <div className="text-xs text-gray-400 mb-2 max-md:break-words">{work.category || "Uncategorized"} {work.subtitle && `· ${work.subtitle}`}</div>
 
         <div className="flex flex-wrap gap-1.5 mb-2.5">
           {(work.tags || []).length === 0 && <span className="text-[11.5px] text-gray-600">No tags yet</span>}
           {(work.tags || []).map((tag) => (
             <span key={tag} className="inline-flex items-center gap-1.5 bg-surface-2 border border-borderline-soft rounded-full pl-2.5 pr-1.5 py-0.5 text-[11.5px] text-gray-400">
               {tag}
-              <button onClick={() => handleRemoveTag(tag)} className="w-3.5 h-3.5 grid place-items-center text-gray-600 hover:text-danger" aria-label={`Remove ${tag}`}>✕</button>
+              <button onClick={() => handleRemoveTag(tag)} className="w-3.5 h-3.5 grid place-items-center text-gray-600 hover:text-danger max-md:w-5 max-md:h-5" aria-label={`Remove ${tag}`}>✕</button>
             </span>
           ))}
         </div>
 
-        <div className="flex items-center gap-3.5 text-xs text-gray-500">
+        <div className="flex items-center gap-3.5 text-xs text-gray-500 max-sm:flex-wrap max-sm:gap-x-3 max-sm:gap-y-1">
           <span>₹{work.price?.toFixed(2) ?? "0.00"}</span>
           <span>{work.license}</span>
         </div>

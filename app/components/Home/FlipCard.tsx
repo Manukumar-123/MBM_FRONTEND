@@ -83,7 +83,7 @@ const FlipC: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative isolate flex md:flex-row flex-col justify-center items-center w-full gap-12 bg-white dark:bg-black py-16">
+    <div className="relative isolate flex md:flex-row flex-col justify-center items-center w-full gap-8 lg:gap-12 px-5 bg-white dark:bg-black py-16 max-md:overflow-hidden max-md:px-4 max-md:py-12">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_12%_18%,rgba(139,92,246,0.16),transparent_38%),radial-gradient(ellipse_at_88%_82%,rgba(6,182,212,0.14),transparent_42%)]"
@@ -94,7 +94,7 @@ const FlipC: React.FC = () => {
           Title={pitchVideo?.title || "MEBOOKMETA PITCH ALLEY PREVIEW"}
           Back={
             <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              {pitchVideo?.userId && <Link href={`/profile/${pitchVideo.userId}?tab=pitchAlley`} className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full">View Profile</Link>}
+              {pitchVideo?.userId && <Link href={`/profile/${pitchVideo.userId}?tab=pitchAlley`} className="mt-4 px-4 py-2 cursor-pointer bg-white text-black rounded-full max-md:inline-flex max-md:min-h-10 max-md:items-center">View Profile</Link>}
             </div>
           }
         />
@@ -106,7 +106,7 @@ const FlipC: React.FC = () => {
           Title={universeVideo?.title || "MEBOOKMETA ASK THE UNIVERSE PREVIEW"}
           Back={
             <div className="w-full h-full flex flex-col justify-center items-center text-white rounded-xl">
-              {universeVideo?.userId && <Link href={`/profile/${universeVideo.userId}?tab=askUniverse`} className="mt-4 px-4 py-2 bg-white text-black rounded-full">View Profile</Link>}
+              {universeVideo?.userId && <Link href={`/profile/${universeVideo.userId}?tab=askUniverse`} className="mt-4 px-4 py-2 bg-white text-black rounded-full max-md:inline-flex max-md:min-h-10 max-md:items-center">View Profile</Link>}
             </div>
           }
         />

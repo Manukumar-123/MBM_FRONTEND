@@ -211,8 +211,8 @@ export default function CreativeVideoUploader({
 
   return (
     <div className="creative-page min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050507] dark:text-white">
-      <div className="creative-wrap">
-        <Link href={profileHref} className="creative-back"><ArrowLeft className="h-4 w-4" />Back to profile</Link>
+      <div className="creative-wrap max-md:!px-4">
+        <Link href={profileHref} className="creative-back max-md:!min-h-10"><ArrowLeft className="h-4 w-4" />Back to profile</Link>
 
         <header className="creative-heading">
           <div>
@@ -232,14 +232,14 @@ export default function CreativeVideoUploader({
                   <article className="creative-card creative-featured">
                     <div className="creative-video-frame">
                       <video src={getFileUrl(featuredVideo.videoUrl) ?? undefined} controls playsInline />
-                      <h2>{featuredVideo.title}</h2>
+                      <h2 className="break-words">{featuredVideo.title}</h2>
                       <span className="creative-live"><i />Live</span>
                     </div>
                     <div className="creative-video-meta">
                       <div><strong>Your pitch video</strong><small>{formatDate(featuredVideo.createdAt)} · {formatBytes(featuredVideo.videoSize)}</small></div>
                       <button type="button" onClick={() => setDeleteTarget(featuredVideo)} disabled={deletingId === featuredVideo._id} className="creative-icon-button" aria-label="Delete pitch"><Trash2 className="h-4 w-4" /></button>
                     </div>
-                    <div className="creative-stats">
+                    <div className="creative-stats max-md:[&_strong]:!text-[15px] max-md:[&_strong]:break-words">
                       <div><strong>{featuredVideo.views ?? 0}</strong><small>Views</small></div>
                       <div><strong>{formatBytes(featuredVideo.videoSize)}</strong><small>File size</small></div>
                       <div><strong>{formatDate(featuredVideo.createdAt)}</strong><small>Uploaded</small></div>
@@ -253,7 +253,7 @@ export default function CreativeVideoUploader({
                   </div>
                 )}
 
-                <section className="creative-card creative-tips">
+                <section className="creative-card creative-tips max-md:!p-5">
                   <h2>Make your pitch land</h2>
                   <ol>
                     <li><strong>Hook in 5 seconds.</strong> Say what the book is and who it is for.</li>
@@ -272,7 +272,7 @@ export default function CreativeVideoUploader({
                       <article className="creative-card creative-video-card" key={video._id}>
                         <div className="creative-video-frame compact">
                           <video src={getFileUrl(video.videoUrl) ?? undefined} controls playsInline />
-                          <h2>{video.title}</h2>
+                          <h2 className="break-words">{video.title}</h2>
                           <span className="creative-live"><i />Live</span>
                         </div>
                         <div className="creative-video-meta">
@@ -289,7 +289,7 @@ export default function CreativeVideoUploader({
                     <p>Ask the community a question about your work, your genre, or your next project.</p>
                     <div className="creative-prompts">
                       {["Feedback on the opening of my story", "How do I find a publisher?", "Which cover works better?"].map((prompt) => (
-                        <button type="button" key={prompt} onClick={() => setTitle(prompt)}>{prompt}</button>
+                        <button type="button" key={prompt} onClick={() => setTitle(prompt)} className="max-md:!min-h-10 max-md:!max-w-full">{prompt}</button>
                       ))}
                     </div>
                   </div>
@@ -317,7 +317,7 @@ export default function CreativeVideoUploader({
                 onDrop={(event) => { event.preventDefault(); void handleSelectedFile(event.dataTransfer.files[0] ?? null); }}
               >
                 <span className="creative-drop-icon"><UploadCloud className="h-5 w-5" /></span>
-                <strong>{file ? file.name : "Drag a video here, or browse"}</strong>
+                <strong className="max-w-full break-all">{file ? file.name : "Drag a video here, or browse"}</strong>
                 <span className="creative-rules"><i>MP4 or MOV</i><i>Max 100 MB</i><i>Up to 1 minute</i></span>
                 <small>We compress it to about 25 MB for you.</small>
                 <input id="creative-video-file" type="file" accept={ALLOWED_TYPES.join(",")} onChange={handleFileChange} />
@@ -328,7 +328,7 @@ export default function CreativeVideoUploader({
 
               {uploading && <div className="creative-upload-progress"><span style={{ width: `${progress}%` }} /></div>}
 
-              <button type="submit" disabled={uploading} className="creative-submit">
+              <button type="submit" disabled={uploading} className="creative-submit max-md:!w-full max-md:!self-stretch max-md:!min-h-11">
                 {uploading ? <><Loader2 className="h-4 w-4 animate-spin" />Uploading {progress}%</> : <><Plus className="h-4 w-4" />{isPitch ? (featuredVideo ? "Replace pitch" : "Publish pitch") : (featuredVideo ? "Replace video" : "Post video")}</>}
               </button>
             </form>
@@ -337,11 +337,11 @@ export default function CreativeVideoUploader({
       </div>
 
       {deleteTarget && (
-        <div className="creative-modal-backdrop" role="presentation" onClick={() => !deletingId && setDeleteTarget(null)}>
-          <section className="creative-card creative-modal" role="dialog" aria-modal="true" aria-labelledby="delete-video-title" onClick={(event) => event.stopPropagation()}>
+        <div className="creative-modal-backdrop max-md:!p-4" role="presentation" onClick={() => !deletingId && setDeleteTarget(null)}>
+          <section className="creative-card creative-modal max-h-[calc(100dvh-40px)] overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="delete-video-title" onClick={(event) => event.stopPropagation()}>
             <h2 id="delete-video-title">Delete this video?</h2>
             <p>It will be removed from {heading} and can’t be restored.</p>
-            <div><button type="button" onClick={() => setDeleteTarget(null)} disabled={!!deletingId} className="creative-secondary">Keep video</button><button type="button" onClick={() => void handleDelete(deleteTarget._id)} disabled={!!deletingId} className="creative-danger">{deletingId ? "Deleting…" : "Delete video"}</button></div>
+            <div className="flex-wrap max-md:!flex-col-reverse max-md:[&>button]:!w-full max-md:[&>button]:!min-h-11"><button type="button" onClick={() => setDeleteTarget(null)} disabled={!!deletingId} className="creative-secondary">Keep video</button><button type="button" onClick={() => void handleDelete(deleteTarget._id)} disabled={!!deletingId} className="creative-danger">{deletingId ? "Deleting…" : "Delete video"}</button></div>
           </section>
         </div>
       )}

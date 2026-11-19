@@ -128,14 +128,14 @@ const BookListPage: FC = () => {
   return (
     <>
       {/* Ambient orbs */}
-      <div className="fixed  top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-200px] right-[-200px] w-[500px] h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
+      <div className="fixed  top-[-200px] left-[-200px] w-[360px] h-[360px] sm:w-[600px] sm:h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-200px] right-[-200px] w-[320px] h-[320px] sm:w-[500px] sm:h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-[1100px] mx-auto px-6 py-10">
+      <div className="w-full max-w-[1100px] mx-auto px-4 sm:px-6 py-8 sm:py-10 max-[860px]:!pt-2">
         {/* ── Header ── */}
-        <div className="flex mt-20 items-start justify-between mb-8 gap-5 flex-wrap">
-          <div>
-            <h1 className="font-serif text-4xl font-semibold text-ink tracking-tight">
+        <div className="flex mt-16 sm:mt-20 max-[860px]:!mt-0 items-start justify-between mb-6 sm:mb-8 gap-4 sm:gap-5 flex-wrap">
+          <div className="min-w-0">
+            <h1 className="font-serif text-3xl sm:text-4xl font-semibold text-ink tracking-tight">
               Your Works
             </h1>
             <p className="text-sm text-ink-dim mt-1.5">
@@ -145,7 +145,7 @@ const BookListPage: FC = () => {
           </div>
           <button
             onClick={() => router.push("/work")}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
           >
             <Plus className="w-4 h-4" />
             Upload New Work
@@ -154,7 +154,7 @@ const BookListPage: FC = () => {
 
         {/* ── Filters ── */}
         <div className="flex gap-3 mb-7 flex-wrap">
-          <div className="relative flex-1 min-w-[220px]">
+          <div className="relative w-full sm:w-auto sm:flex-1 sm:min-w-[220px]">
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-muted pointer-events-none" />
             <input
               type="text"
@@ -169,7 +169,7 @@ const BookListPage: FC = () => {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer min-w-[150px]"
+            className="w-full sm:w-auto py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer sm:min-w-[150px]"
           >
             {STATUSES.map((s) => (
               <option key={s.value} value={s.value}>
@@ -180,7 +180,7 @@ const BookListPage: FC = () => {
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer min-w-[150px]"
+            className="w-full sm:w-auto py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer sm:min-w-[150px]"
           >
             <option value="">All Categories</option>
             {categoryOptions.map((c: string) => (
@@ -192,7 +192,7 @@ const BookListPage: FC = () => {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer min-w-[150px]"
+            className="w-full sm:w-auto py-3 px-4 bg-elevated border border-line rounded-sm text-ink font-body text-sm outline-none focus:border-gold-dim cursor-pointer sm:min-w-[150px]"
           >
             {SORT_OPTIONS.map((o) => (
               <option key={o.value} value={o.value}>
@@ -217,7 +217,7 @@ const BookListPage: FC = () => {
             </span>
           </div>
         ) : (
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-4 sm:gap-6 mb-10">
             {books.map((book) => (
               <div
                 key={book._id}
@@ -297,7 +297,7 @@ const BookListPage: FC = () => {
                       key={title}
                       title={title}
                       onClick={onClick}
-                      className={`w-9 h-9 flex items-center justify-center bg-elevated border border-line rounded-lg text-ink-dim transition-all
+                      className={`w-9 h-9 max-md:h-10 max-md:flex-1 flex items-center justify-center bg-elevated border border-line rounded-lg text-ink-dim transition-all
                         ${
                           danger
                             ? "hover:text-danger hover:border-danger/40 hover:bg-danger/10"
@@ -315,22 +315,22 @@ const BookListPage: FC = () => {
 
         {/* ── Pagination ── */}
         {(pagination.pages ?? 0) > 1 && (
-          <div className="flex items-center justify-center gap-5 my-5 mb-10">
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 my-5 mb-10">
             <button
               disabled={!pagination.hasPrev}
               onClick={() => setPage((p) => p - 1)}
-              className="px-5 py-2.5 bg-elevated border border-line rounded-sm text-ink font-body text-sm hover:border-gold-dim hover:text-gold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-4 sm:px-5 py-2.5 max-md:min-h-10 bg-elevated border border-line rounded-sm text-ink font-body text-sm hover:border-gold-dim hover:text-gold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               ← Previous
             </button>
-            <span className="text-sm text-ink-dim font-mono">
+            <span className="order-first w-full text-center sm:order-none sm:w-auto text-sm text-ink-dim font-mono">
               Page {pagination.page} of {pagination.pages} · {pagination.total}{" "}
               works
             </span>
             <button
               disabled={!pagination.hasNext}
               onClick={() => setPage((p) => p + 1)}
-              className="px-5 py-2.5 bg-elevated border border-line rounded-sm text-ink font-body text-sm hover:border-gold-dim hover:text-gold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              className="px-4 sm:px-5 py-2.5 max-md:min-h-10 bg-elevated border border-line rounded-sm text-ink font-body text-sm hover:border-gold-dim hover:text-gold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             >
               Next →
             </button>

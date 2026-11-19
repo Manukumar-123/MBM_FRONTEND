@@ -19,14 +19,14 @@ function AddVideoForm({ onAdded, onCancel }) {
   return (
     <form onSubmit={handleSubmit} className="bg-surface border border-cyan/25 rounded-2xl p-4 mb-4 flex flex-col gap-2.5">
       <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Pitch title — what are you describing?"
-        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px]" />
+        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px] max-md:w-full max-md:min-w-0" />
       <input value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} placeholder="Video URL (from /api/upload, or paste a hosted link)"
-        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px]" />
+        className="bg-surface-2 border border-borderline rounded-lg px-3 py-2 text-[13px] max-md:w-full max-md:min-w-0" />
       <div className="flex gap-2">
-        <button className="bg-gradient-to-r from-cyan to-blue text-[#06121A] font-bold text-xs px-4 py-2 rounded-lg">
+        <button className="bg-gradient-to-r from-cyan to-blue text-[#06121A] font-bold text-xs px-4 py-2 rounded-lg max-md:min-h-[40px]">
           Publish pitch
         </button>
-        <button type="button" onClick={onCancel} className="text-xs text-gray-400 hover:text-white px-2">Cancel</button>
+        <button type="button" onClick={onCancel} className="text-xs text-gray-400 hover:text-white px-2 max-md:min-h-[40px] max-md:px-3">Cancel</button>
       </div>
     </form>
   );
@@ -59,7 +59,7 @@ export default function PitchAlleyPanel({ initialVideos }) {
         />
       )}
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-sm:gap-2.5">
         {!adding && (
           <button onClick={() => setAdding(true)} className="aspect-video rounded-2xl bg-gradient-to-br from-violet to-blue text-white flex flex-col items-center justify-center gap-2 hover:brightness-110 transition">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
@@ -75,9 +75,9 @@ export default function PitchAlleyPanel({ initialVideos }) {
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
               </div>
             </div>
-            <div className="p-3">
+            <div className="p-3 max-sm:p-2.5 max-md:min-w-0">
               <div className="text-[13px] font-bold mb-1 truncate">{v.title}</div>
-              <div className="flex items-center text-[11.5px] text-gray-600">
+              <div className="flex items-center text-[11.5px] text-gray-600 max-sm:flex-wrap max-sm:gap-1">
                 {v.views ?? 0} views
                 <div className="ml-auto flex gap-1">
                   <Button icon onClick={() => handleEditTitle(v)} aria-label="Edit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg></Button>

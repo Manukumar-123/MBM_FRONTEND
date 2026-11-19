@@ -156,7 +156,7 @@ const ScrollAnimation: React.FC = () => {
       >
         <h1
           ref={HeadingRef}
-          className="mx-auto my-20 text-5xl font-bold text-gray-900 dark:text-white text-center relative z-10"
+          className="mx-auto my-12 sm:my-20 px-4 text-3xl min-[380px]:text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white text-center relative z-10"
         >
           The Global Media <br /> Marketplace!
         </h1>
@@ -164,7 +164,7 @@ const ScrollAnimation: React.FC = () => {
         {/* Mobile Shell */}
         <div
           ref={mobileRef}
-          className="group relative w-[280px] sm:w-[340px] md:w-[300px] h-[600px] sm:h-[700px] md:h-[700px] 
+          className="group relative w-[min(280px,calc(100vw-2rem))] sm:w-[340px] md:w-[300px] h-[560px] min-[380px]:h-[600px] sm:h-[700px] md:h-[700px] 
           rounded-2xl shadow-2xl overflow-hidden z-30 flex items-center justify-center 
           bg-gray-800 will-change-transform mx-auto"
         >
@@ -189,7 +189,7 @@ const ScrollAnimation: React.FC = () => {
           <div
             ref={contentInsideRef}
             className="absolute inset-0 w-full h-full flex flex-col items-start justify-start 
-            text-left px-6 py-8
+            text-left px-4 sm:px-6 py-8
             overflow-y-auto md:overflow-y-hidden md:overflow-y-auto"
             style={{
               background: "var(--mobile-panel-background)",

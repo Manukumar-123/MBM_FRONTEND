@@ -76,22 +76,22 @@ export default function SubcategoryPage() {
   };
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full max-w-2xl">
       <div className="mb-6">
         <div className="text-[13px] text-[#8a8a98] mb-1">Content</div>
-        <h1 className="font-serif text-[28px] leading-none text-white mb-1">Subcategories</h1>
+        <h1 className="font-serif text-[24px] sm:text-[28px] leading-none text-white mb-1">Subcategories</h1>
         <p className="text-[13px] text-[#8a8a98] mt-2">
           Select a category, then type a name and press Enter to add it as a tag
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="mb-8 space-y-4 rounded-2xl border border-white/[0.07] bg-[#111116] p-5">
+      <form onSubmit={handleSubmit} className="mb-8 space-y-4 rounded-2xl border border-white/[0.07] bg-[#111116] p-4 sm:p-5">
         <div>
           <label className="block text-[12.5px] text-[#9a9aa8] mb-1.5">Category</label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
-            className="w-full px-3.5 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13.5px] text-white outline-none focus:border-cyan-400/40"
+            className="w-full px-3.5 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.08] text-[13.5px] max-md:text-base text-white outline-none focus:border-cyan-400/40"
           >
             <option value="" className="bg-[#111116]">Select a category</option>
             {categories.map((cat) => (
@@ -115,7 +115,7 @@ export default function SubcategoryPage() {
         <button
           type="submit"
           disabled={isPending}
-          className="px-5 py-2.5 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
+          className="w-full sm:w-auto px-5 py-2.5 max-md:py-3 rounded-lg text-white text-[13.5px] font-medium bg-gradient-to-r from-cyan-500 to-violet-500 hover:opacity-90 disabled:opacity-60"
         >
           {isPending ? "Saving…" : "Save subcategories"}
         </button>
@@ -128,7 +128,7 @@ export default function SubcategoryPage() {
       {isLoading ? (
         <p className="text-[#8a8a98] text-sm">Loading…</p>
       ) : subcategories.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-8 text-center">
+        <div className="rounded-2xl border border-dashed border-white/[0.1] bg-[#111116] p-6 sm:p-8 text-center">
           <div className="text-[13.5px] text-[#8a8a98]">No subcategories yet.</div>
         </div>
       ) : (
@@ -136,7 +136,7 @@ export default function SubcategoryPage() {
           {subcategories.map((sub) => (
             <span
               key={sub._id}
-              className="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full text-[13px] bg-[#111116] border border-white/[0.08] text-white"
+              className="flex items-center gap-2 max-w-full pl-3 pr-2 py-1.5 rounded-full text-[13px] bg-[#111116] border border-white/[0.08] text-white break-all"
             >
               {sub.name}
               {typeof sub.category === "object" && (
@@ -144,7 +144,7 @@ export default function SubcategoryPage() {
               )}
               <button
                 onClick={() => removeSubcategory(sub._id)}
-                className="text-[#6f6f7e] hover:text-rose-400 transition-colors"
+                className="text-[#6f6f7e] hover:text-rose-400 transition-colors max-md:shrink-0 max-md:p-1.5 max-md:-my-1.5 max-md:-mr-1"
                 aria-label={`Delete ${sub.name}`}
               >
                 <Trash2 size={13} />

@@ -144,7 +144,7 @@ const Creator: React.FC = () => {
       {/* Scrollable Content */}
       <div className="relative z-10 flex flex-col items-center px-4 sm:px-6 md:px-12 py-12 sm:py-16 space-y-6">
         <div ref={HeadingRef}>
-          <h1 className="text-2xl sm:text-5xl md:text-7xl font-semibold tracking-wide text-black dark:text-white text-center mt-16">
+          <h1 className="text-2xl sm:text-5xl md:text-7xl font-semibold tracking-wide text-black dark:text-white text-center mt-16 max-sm:min-[380px]:text-3xl max-md:mt-10 max-md:mb-3">
             Empowering <br /> Music Creators <br /> to Thrive.
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-black dark:text-white text-center">
@@ -160,9 +160,9 @@ const Creator: React.FC = () => {
 
         <div
           ref={HeadingSecondRef}
-          className="max-w-3xl mx-auto text-center px-4 sm:px-6"
+          className="max-w-3xl mx-auto text-center px-4 sm:px-6 max-md:px-0"
         >
-          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-black dark:text-white mb-6">
+          <h1 className="text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-black dark:text-white mb-6 max-sm:min-[380px]:text-3xl max-md:mb-4">
             An Enhanced <br />
             Fan Experience
           </h1>

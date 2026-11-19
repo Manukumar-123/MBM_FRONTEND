@@ -65,7 +65,7 @@ export default function Step4({ onBack, identifier, userDetails }: Step4Props) {
       <div className="w-full max-w-md">
         <button
           onClick={onBack}
-          className="mb-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          className="mb-8 max-md:mb-6 max-md:min-h-10 max-md:-ml-1 max-md:pr-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -73,11 +73,11 @@ export default function Step4({ onBack, identifier, userDetails }: Step4Props) {
           Back
         </button>
 
-        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
+        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-8 sm:mb-12">
           <div className="h-full w-full bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">
           Select your role
         </h1>
         <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
@@ -111,7 +111,7 @@ export default function Step4({ onBack, identifier, userDetails }: Step4Props) {
           disabled={mutation.isPending}
           className={`w-full ${
             mutation.isPending ? "bg-gray-400" : "bg-green-500"
-          } text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg`}
+          } text-black font-bold h-12 sm:h-14 rounded-full transition-colors duration-200 text-base sm:text-lg`}
         >
           {mutation.isPending ? <Spinner /> : "Create Account"}
         </button>

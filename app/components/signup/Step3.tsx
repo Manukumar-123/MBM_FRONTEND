@@ -88,7 +88,7 @@ export default function Step3({
       <div className="w-full max-w-md">
         <button
           onClick={onBack}
-          className="mb-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          className="mb-8 max-md:mb-6 max-md:min-h-10 max-md:-ml-1 max-md:pr-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -96,11 +96,11 @@ export default function Step3({
           Back
         </button>
 
-        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
+        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-8 sm:mb-12">
           <div className="h-full w-3/4 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-1">
           Tell us about yourself
         </h1>
         <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">
@@ -130,12 +130,12 @@ export default function Step3({
           <label className="block text-gray-900 dark:text-white font-semibold mb-2 text-sm">
             Date of birth
           </label>
-          <div className="flex gap-3">
+          <div className="flex gap-2 sm:gap-3">
             <select
               name="year"
               value={formData.year}
               onChange={handleInputChange}
-              className="flex-1 px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+              className="flex-1 min-w-0 px-2 sm:px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
             >
               <option value="">YYYY</option>
               {years.map((year) => (
@@ -149,7 +149,7 @@ export default function Step3({
               name="month"
               value={formData.month}
               onChange={handleInputChange}
-              className="flex-1 px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+              className="flex-1 min-w-0 px-2 sm:px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
             >
               <option value="">Month</option>
               {months.map((month, i) => (
@@ -163,7 +163,7 @@ export default function Step3({
               name="day"
               value={formData.day}
               onChange={handleInputChange}
-              className="flex-1 px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+              className="flex-1 min-w-0 px-2 sm:px-3 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
             >
               <option value="">DD</option>
               {days.map((day) => (
@@ -183,11 +183,11 @@ export default function Step3({
           <label className="block text-gray-900 dark:text-white font-semibold mb-2 text-sm">
             Gender
           </label>
-          <div className="space-y-3">
+          <div className="space-y-3 max-md:space-y-1">
             {genderOptions.map((option) => (
               <label
                 key={option.value}
-                className="flex items-center gap-3 cursor-pointer group"
+                className="flex items-center gap-3 cursor-pointer group max-md:min-h-10"
               >
                 <input
                   type="radio"
@@ -228,12 +228,12 @@ export default function Step3({
         {/* --- Button --- */}
         <button
           onClick={validateAndProceed}
-          className="w-full bg-green-500 text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg"
+          className="w-full bg-green-500 text-black font-bold h-12 sm:h-14 rounded-full transition-colors duration-200 text-base sm:text-lg"
         >
           Next
         </button>
 
-        <p className="text-gray-400 text-xs text-center">
+        <p className="text-gray-400 text-xs text-center max-md:mt-4">
           By continuing, you agree to our{" "}
           <a href="#" className="text-green-500 hover:underline">
             Terms

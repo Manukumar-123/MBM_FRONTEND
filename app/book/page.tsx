@@ -22,7 +22,12 @@ const Page = () => {
 
   React.useEffect(() => {
     const updateSize = () => {
-      const w = Math.min(window.innerWidth * 0.5, 600); // max 600 width
+      // Narrow screens: one page fits the viewport (portrait mode kicks in
+      // automatically when the container is narrower than two pages).
+      const w =
+        window.innerWidth < 640
+          ? Math.min(window.innerWidth * 0.9, 400)
+          : Math.min(window.innerWidth * 0.5, 600); // max 600 width
       const h = Math.min(window.innerHeight * 0.8, 700); // max 700 height
       setBookSize({ width: w, height: h });
     };
@@ -35,7 +40,7 @@ const Page = () => {
   if (!bookSize.width || !bookSize.height) return null;
 
   return (
-    <div className="flex justify-center pt-16 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden">
+    <div className="flex justify-center pt-16 max-[860px]:!pt-2 px-2 sm:px-0 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden max-md:px-4">
       <HTMLFlipBook
         width={bookSize.width}
         height={bookSize.height}
@@ -49,19 +54,19 @@ const Page = () => {
         }}
       >
         {/* --- 📘 FRONT COVER --- */}
-        <div className="flex flex-col justify-center items-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white text-center p-10">
-          <h1 className="text-4xl font-bold mb-3">🌙 The Star Whisperer</h1>
-          <p className="text-lg italic">A tale of dreams and destiny</p>
+        <div className="flex flex-col justify-center items-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white text-center p-6 sm:p-10">
+          <h1 className="text-2xl sm:text-4xl font-bold mb-3">🌙 The Star Whisperer</h1>
+          <p className="text-base sm:text-lg italic">A tale of dreams and destiny</p>
           <div className="mt-8 text-sm opacity-80">By Manu Kumar</div>
         </div>
 
         {/* --- Page 1 --- */}
-        <div className="bg-white flex flex-col justify-between p-10">
+        <div className="bg-white flex flex-col justify-between p-5 sm:p-10">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-indigo-700">
+            <h2 className="text-lg sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-700">
               Chapter 1 — The Night Sky
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               In a small village tucked beneath the hills, a young girl named
               Mira spent her nights gazing at the stars. While others slept, she
               whispered her secrets to the constellations.
@@ -71,12 +76,12 @@ const Page = () => {
         </div>
 
         {/* --- Page 2 --- */}
-        <div className="bg-white flex flex-col justify-between p-10">
+        <div className="bg-white flex flex-col justify-between p-5 sm:p-10">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-indigo-700">
+            <h2 className="text-lg sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-700">
               Chapter 2 — The Falling Star
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               One midnight, the sky broke open with light. A single star fell,
               landing near the forest edge. Mira ran barefoot, chasing the glow,
               until she found a small crystal pulsating gently in the moss.
@@ -86,12 +91,12 @@ const Page = () => {
         </div>
 
         {/* --- Page 3 --- */}
-        <div className="bg-white flex flex-col justify-between p-10">
+        <div className="bg-white flex flex-col justify-between p-5 sm:p-10">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-indigo-700">
+            <h2 className="text-lg sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-700">
               Chapter 3 — The Wish
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               When Mira touched the crystal, she heard a whisper — faint yet
               clear. “One wish, child of light.” She wished not for gold or
               beauty, but for courage to explore beyond her quiet village.
@@ -101,12 +106,12 @@ const Page = () => {
         </div>
 
         {/* --- Page 4 --- */}
-        <div className="bg-white flex flex-col justify-between p-10">
+        <div className="bg-white flex flex-col justify-between p-5 sm:p-10">
           <div>
-            <h2 className="text-2xl font-bold mb-4 text-indigo-700">
+            <h2 className="text-lg sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-700">
               Chapter 4 — The Journey
             </h2>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
               The next dawn, Mira set out carrying nothing but the crystal. The
               winds guided her, and every night, the stars shimmered brighter as
               if cheering her onward.
@@ -116,9 +121,9 @@ const Page = () => {
         </div>
 
         {/* --- 📘 BACK COVER --- */}
-        <div className="flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 to-indigo-700 text-white text-center p-10">
-          <h2 className="text-3xl font-bold mb-3">✨ The End ✨</h2>
-          <p className="text-lg italic opacity-90">
+        <div className="flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 to-indigo-700 text-white text-center p-6 sm:p-10">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">✨ The End ✨</h2>
+          <p className="text-base sm:text-lg italic opacity-90">
             Every dream begins with a whisper to the stars.
           </p>
           <p className="mt-6 text-sm opacity-70">— Thank you for reading</p>

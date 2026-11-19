@@ -105,11 +105,11 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
 
         {/* Author Info */}
         <div className="px-4 sm:px-6 pb-5">
-          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-all">
+          <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-gray-700 dark:group-hover:text-gray-200 transition-all max-md:break-words">
             {author.name}
           </h3>
 
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-3 max-md:flex-wrap">
             <span className="text-xs text-gray-500 dark:text-gray-400 capitalize">
               {author.role}
             </span>
@@ -124,7 +124,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center gap-4 mb-4 border-b border-gray-200 dark:border-neutral-800 pb-3">
+          <div className="flex items-center gap-4 mb-4 border-b border-gray-200 dark:border-neutral-800 pb-3 max-md:flex-wrap max-md:gap-x-4 max-md:gap-y-2">
             <div className="flex items-center gap-1">
               <Eye className="w-4 h-4 text-gray-400" />
 
@@ -212,7 +212,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
               onClick={(e) => {
                 e.stopPropagation();
               }}
-              className="py-2 rounded-lg bg-white text-black font-semibold text-sm hover:bg-gray-300 transition-all"
+              className="py-2 rounded-lg bg-white text-black font-semibold text-sm hover:bg-gray-300 transition-all max-md:min-h-10"
             >
               Follow
             </button>
@@ -223,7 +223,7 @@ const AuthorCard: React.FC<AuthorCardProps> = ({
                 e.stopPropagation();
                 handleAuthorClick(author._id);
               }}
-              className="py-2 rounded-lg border border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 transition-all"
+              className="py-2 rounded-lg border border-gray-300 dark:border-neutral-700 text-gray-700 dark:text-gray-300 hover:border-gray-500 dark:hover:border-gray-500 transition-all max-md:min-h-10"
             >
               View
             </button>
@@ -349,9 +349,9 @@ const AuthorsGrid: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white p-6 md:p-10">
+      <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white p-4 sm:p-6 md:p-10 max-md:overflow-x-hidden">
         <div className="relative max-w-6xl mx-auto text-center mb-10">
-          <h1 className="text-4xl md:text-6xl font-black mb-3 mt-20">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-black mb-3 mt-20 max-[860px]:!mt-0">
             Featured Authors
           </h1>
 
@@ -375,14 +375,14 @@ const AuthorsGrid: React.FC = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-white dark:bg-black flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center max-md:px-4">
           <p className="text-red-500 mb-4">
             {error}
           </p>
 
           <button
             onClick={() => window.location.reload()}
-            className="px-5 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black"
+            className="px-5 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black max-md:min-h-10"
           >
             Retry
           </button>
@@ -396,10 +396,10 @@ const AuthorsGrid: React.FC = () => {
   ===================================================== */
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white p-6 md:p-10">
+    <div className="min-h-screen bg-white dark:bg-black text-gray-900 dark:text-white p-4 sm:p-6 md:p-10 max-md:overflow-x-hidden">
       {/* Header */}
       <div className="relative max-w-6xl mx-auto text-center mb-10">
-        <h1 className="text-4xl md:text-6xl font-black mb-3 mt-20">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-black mb-3 mt-20 max-[860px]:!mt-0">
           Featured Authors
         </h1>
 
@@ -418,7 +418,7 @@ const AuthorsGrid: React.FC = () => {
         </div>
       ) : (
         /* Authors */
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {authors.map((author, index) => (
             <AuthorCard
               key={author._id}

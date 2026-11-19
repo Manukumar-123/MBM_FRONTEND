@@ -1,7 +1,7 @@
 "use client";
 
 import { getBookById, toggleBookLike, getBookComments, addBookComment, type IComment } from "@/api/api";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import * as React from "react";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +17,7 @@ const HTMLFlipBook = dynamic(
 
 const Book = () => {
   const { id } = useParams();
+  const router = useRouter();
   const { accessToken, user } = useAuthStore();
 
   const [book, setBook] = useState<any>(null);
@@ -105,7 +106,7 @@ const Book = () => {
   const handleToggleLike = async () => {
     if (!id || likeBusy) return;
     if (!accessToken) {
-      setError("Please log in to like this book.");
+      router.push("/login");
       return;
     }
 
@@ -143,7 +144,7 @@ const Book = () => {
     e.preventDefault();
     if (!id || !commentText.trim() || commentSubmitting) return;
     if (!accessToken) {
-      setError("Please log in to comment.");
+      router.push("/login");
       return;
     }
 
@@ -413,7 +414,7 @@ const Book = () => {
   if (error) {
     return (
       <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-white">
-        <p className="text-red-500 mb-4">
+        <p className="text-red-500 mb-4 max-md:px-4 max-md:text-center">
           {error}
         </p>
 
@@ -421,7 +422,7 @@ const Book = () => {
           onClick={() =>
             window.location.reload()
           }
-          className="px-5 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black"
+          className="px-5 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black max-md:min-h-10"
         >
           Retry
         </button>
@@ -473,19 +474,19 @@ const Book = () => {
   }
 
   return (
-    <div className="flex justify-center pt-16 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden">
+    <div className="flex justify-center pt-16 max-[860px]:!pt-2 items-center min-h-screen bg-gray-100 dark:bg-black overflow-hidden max-md:px-4 max-md:pb-24 max-md:overflow-x-hidden">
 
       {/* Like / comments floating bar */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3">
         {showComments && (
-          <div className="w-80 max-h-96 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+          <div className="w-[calc(100vw-2rem)] sm:w-80 max-h-[70vh] sm:max-h-96 bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-neutral-800">
               <span className="font-semibold text-sm text-gray-900 dark:text-white">
                 Comments
               </span>
               <button
                 onClick={() => setShowComments(false)}
-                className="text-gray-400 hover:text-gray-700 dark:hover:text-white"
+                className="text-gray-400 hover:text-gray-700 dark:hover:text-white max-md:p-2 max-md:-m-2"
                 aria-label="Close comments"
               >
                 <X className="w-4 h-4" />
@@ -518,12 +519,12 @@ const Book = () => {
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Add a comment…"
                 maxLength={1000}
-                className="flex-1 text-sm bg-gray-100 dark:bg-neutral-800 rounded-full px-3 py-2 outline-none text-gray-900 dark:text-white"
+                className="flex-1 text-sm bg-gray-100 dark:bg-neutral-800 rounded-full px-3 py-2 outline-none text-gray-900 dark:text-white max-md:min-w-0 max-md:min-h-10 max-md:text-base"
               />
               <button
                 type="submit"
                 disabled={commentSubmitting || !commentText.trim()}
-                className="p-2 rounded-full bg-black text-white dark:bg-white dark:text-black disabled:opacity-40"
+                className="p-2 rounded-full bg-black text-white dark:bg-white dark:text-black disabled:opacity-40 max-md:p-3"
                 aria-label="Send comment"
               >
                 <Send className="w-4 h-4" />
@@ -536,7 +537,7 @@ const Book = () => {
           <button
             onClick={handleToggleLike}
             disabled={likeBusy}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition max-md:min-h-10"
             aria-label="Like this book"
           >
             <Heart
@@ -547,7 +548,7 @@ const Book = () => {
 
           <button
             onClick={handleOpenComments}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800 transition max-md:min-h-10"
             aria-label="View comments"
           >
             <MessageCircle className="w-4 h-4 text-gray-500" />
@@ -634,14 +635,14 @@ const Book = () => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full flex flex-col justify-center items-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white text-center p-10">
+            <div className="w-full h-full flex flex-col justify-center items-center bg-gradient-to-br from-indigo-600 to-purple-700 text-white text-center p-6 sm:p-10">
 
-              <h1 className="text-4xl font-bold mb-3">
+              <h1 className="text-2xl sm:text-4xl font-bold mb-3 break-words">
                 {book?.title}
               </h1>
 
               {book?.subtitle && (
-                <p className="text-lg italic">
+                <p className="text-base sm:text-lg italic">
                   {book.subtitle}
                 </p>
               )}
@@ -660,13 +661,13 @@ const Book = () => {
 
         {/* BACK COVER */}
 
-        <div className="w-full h-full flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 to-indigo-700 text-white text-center p-10">
+        <div className="w-full h-full flex flex-col justify-center items-center bg-gradient-to-br from-purple-600 to-indigo-700 text-white text-center p-6 sm:p-10">
 
-          <h2 className="text-3xl font-bold mb-3">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3">
             ✨ The End ✨
           </h2>
 
-          <p className="text-lg italic opacity-90">
+          <p className="text-base sm:text-lg italic opacity-90">
             Thank you for reading
           </p>
 

@@ -117,18 +117,18 @@ export default function PremiumPage() {
   ];
 
   return (
-    <div className="relative min-h-screen bg-gray-50 text-gray-900 dark:bg-black dark:text-white">
-      <div className="relative z-10 max-w-7xl mx-auto px-4">
+    <div className="relative min-h-screen overflow-x-clip bg-gray-50 text-gray-900 dark:bg-black dark:text-white">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center py-16 mb-20">
-          <h1 className="text-6xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 leading-tight animate-fade-in-down mt-10">
+        <div className="text-center py-10 sm:py-16 mb-12 sm:mb-20 max-sm:mb-8 max-[860px]:!pt-2">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black text-gray-900 dark:text-white mb-6 leading-tight animate-fade-in-down mt-6 sm:mt-10 max-[860px]:!mt-0 max-sm:text-[2rem] max-sm:mb-4">
             Unleash Your
             <br />
             <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
               Creative Potential
             </span>
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto animate-fade-in-up leading-relaxed">
+          <p className="text-base sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto animate-fade-in-up leading-relaxed">
             Join MeBookMeta Premium and share your books, music, videos with the
             world. Get unlimited uploads, AI assistance, and more.
           </p>
@@ -136,27 +136,27 @@ export default function PremiumPage() {
 
         {/* Main Content */}
         <div
-          className="grid md:grid-cols-2 gap-16 items-center mb-32"
+          className="grid md:grid-cols-2 gap-10 md:gap-16 items-center mb-20 md:mb-32"
           id="features"
         >
           {/* Features Showcase */}
           <div>
-            <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-10"></h2>
+            <h2 className="text-4xl font-black text-gray-900 dark:text-white mb-10 max-md:hidden"></h2>
             <div className="space-y-4">
               {features.map((feature, idx) => (
                 <div
                   key={idx}
-                  className="flex gap-4 p-5 bg-white dark:bg-gradient-to-br dark:from-white/5 dark:to-white/[0.02] backdrop-blur-xl rounded-xl border border-gray-200 dark:border-white/10 hover:border-cyan-500/50 transition-all duration-300 hover:translate-x-3 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer group"
+                  className="flex gap-3 sm:gap-4 p-4 sm:p-5 bg-white dark:bg-gradient-to-br dark:from-white/5 dark:to-white/[0.02] backdrop-blur-xl rounded-xl border border-gray-200 dark:border-white/10 hover:border-cyan-500/50 transition-all duration-300 sm:hover:translate-x-3 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer group"
                   style={{
                     animation: `slideInLeft 0.6s ease forwards`,
                     animationDelay: `${0.5 + idx * 0.1}s`,
                   }}
                 >
-                  <div className="text-4xl flex-shrink-0 group-hover:scale-110 group-hover:animate-bounce transition-transform duration-300">
+                  <div className="text-3xl sm:text-4xl flex-shrink-0 group-hover:scale-110 group-hover:animate-bounce transition-transform duration-300">
                     {feature.icon}
                   </div>
-                  <div>
-                    <h3 className="text-gray-900 dark:text-white font-bold text-lg group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                  <div className="min-w-0">
+                    <h3 className="text-gray-900 dark:text-white font-bold text-base sm:text-lg group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                       {feature.title}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
@@ -171,7 +171,7 @@ export default function PremiumPage() {
           {/* Pricing Card */}
           <div id="pricing" className="flex justify-center">
             <div
-              className="w-full max-w-md bg-gradient-to-br from-white to-gray-100 dark:from-white/10 dark:to-white/5 backdrop-blur-2xl rounded-2xl p-8 md:p-12 shadow-2xl border border-gray-200 dark:border-white/20 relative overflow-hidden group"
+              className="w-full max-w-md bg-gradient-to-br from-white to-gray-100 dark:from-white/10 dark:to-white/5 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl border border-gray-200 dark:border-white/20 relative overflow-hidden group"
               style={{ animation: `scaleIn 0.8s ease 0.4s both` }}
             >
               {/* Animated gradient border */}
@@ -183,7 +183,7 @@ export default function PremiumPage() {
 
               <div className="relative z-10">
                 {/* Plan Badge */}
-                <div className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-600/50 dark:border-cyan-500/50 text-cyan-800 dark:text-cyan-300 px-4 py-2 rounded-full text-sm font-bold mb-8 backdrop-blur-md">
+                <div className="inline-block bg-gradient-to-r from-cyan-500/20 to-blue-600/20 border border-cyan-600/50 dark:border-cyan-500/50 text-cyan-800 dark:text-cyan-300 px-4 py-2 rounded-full text-xs sm:text-sm font-bold mb-6 sm:mb-8 backdrop-blur-md">
                   ✨ CREATOR PRO
                 </div>
 
@@ -191,7 +191,7 @@ export default function PremiumPage() {
                 <div className="text-center mb-10">
                   <div className="flex items-baseline justify-center gap-2 mb-3">
                     <span className="text-2xl font-bold text-cyan-400">$</span>
-                    <span className="text-6xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                    <span className="text-5xl sm:text-6xl font-black bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
                       50
                     </span>
                     <span className="text-lg text-gray-600 dark:text-gray-400 font-normal">
@@ -211,7 +211,7 @@ export default function PremiumPage() {
                       <div className="w-6 h-6 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0 text-xs group-hover/item:scale-125 transition-transform">
                         ✓
                       </div>
-                      <div className="flex-1 group-hover/item:translate-x-2 transition-transform">
+                      <div className="flex-1 group-hover/item:translate-x-2 transition-transform max-md:min-w-0">
                         <div className="font-semibold text-gray-900 dark:text-white text-sm">
                           {feature.title}
                         </div>
@@ -226,7 +226,7 @@ export default function PremiumPage() {
                 {/* CTA Button */}
                 <button
                   onClick={handleSubscription}
-                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-4 px-6 rounded-lg font-bold text-lg hover:shadow-2xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all duration-300 mb-4 relative overflow-hidden group/btn border border-cyan-400/30"
+                  className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg font-bold text-base sm:text-lg hover:shadow-2xl hover:shadow-cyan-500/50 hover:-translate-y-1 transition-all duration-300 mb-4 relative overflow-hidden group/btn border border-cyan-400/30"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     🚀 Start Creating Today
@@ -235,7 +235,7 @@ export default function PremiumPage() {
                 </button>
 
                 {/* Trust Badges */}
-                <div className="grid grid-cols-3 gap-4 mb-6 pt-6 border-t border-gray-200 dark:border-white/10">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-6 pt-6 border-t border-gray-200 dark:border-white/10">
                   <div className="text-center text-sm group/badge hover:scale-110 transition-transform">
                     <div className="text-xl mb-1 group-hover/badge:text-cyan-400 transition-colors">
                       ✓
@@ -278,18 +278,18 @@ export default function PremiumPage() {
         </div>
 
         {/* Testimonials */}
-        <div id="testimonials" className="mb-32 border-t border-gray-200 dark:border-white/10 pt-20">
-          <h2 className="text-5xl font-black text-gray-900 dark:text-white text-center mb-16 animate-fade-in-down">
+        <div id="testimonials" className="mb-20 md:mb-32 border-t border-gray-200 dark:border-white/10 pt-12 md:pt-20">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white text-center mb-10 md:mb-16 animate-fade-in-down">
             Loved by{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Creators
             </span>
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="bg-white dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 backdrop-blur-xl rounded-xl p-8 border border-gray-200 dark:border-white/10 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 hover:-translate-y-2 group"
+                className="bg-white dark:bg-gradient-to-br dark:from-white/10 dark:to-white/5 backdrop-blur-xl rounded-xl p-6 sm:p-8 border border-gray-200 dark:border-white/10 hover:border-cyan-500/50 transition-all duration-300 hover:scale-105 hover:-translate-y-2 group max-md:hover:scale-100 max-md:hover:translate-y-0"
                 style={{
                   animation: `slideUp 0.6s ease forwards`,
                   animationDelay: `${0.2 + idx * 0.2}s`,
@@ -301,7 +301,7 @@ export default function PremiumPage() {
                 <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed text-sm group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
                   {testimonial.text}
                 </p>
-                <div className="text-white font-bold text-sm bg-gradient-to-r from-cyan-400/50 to-blue-500/50 px-4 py-2 rounded inline-block">
+                <div className="text-white font-bold text-sm bg-gradient-to-r from-cyan-400/50 to-blue-500/50 px-4 py-2 rounded inline-block max-md:max-w-full max-md:break-words">
                   {testimonial.author}
                 </div>
               </div>
@@ -312,9 +312,9 @@ export default function PremiumPage() {
         {/* FAQ */}
         <div
           id="faq"
-          className="max-w-3xl mx-auto border-t border-gray-200 dark:border-white/10 pt-20 pb-20"
+          className="max-w-3xl mx-auto border-t border-gray-200 dark:border-white/10 pt-12 md:pt-20 pb-12 md:pb-20"
         >
-          <h2 className="text-5xl font-black text-gray-900 dark:text-white text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 dark:text-white text-center mb-10 md:mb-16">
             Frequently Asked{" "}
             <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
               Questions
@@ -328,13 +328,13 @@ export default function PremiumPage() {
               >
                 <button
                   onClick={() => toggleFaq(idx)}
-                  className="w-full px-6 py-4 flex justify-between items-center text-gray-900 dark:text-white font-bold hover:bg-gray-100 dark:hover:bg-white/5 transition-all duration-300"
+                  className="w-full px-4 sm:px-6 py-4 flex justify-between items-center gap-3 text-gray-900 dark:text-white font-bold hover:bg-gray-100 dark:hover:bg-white/5 transition-all duration-300"
                 >
-                  <span className="text-left text-gray-700 dark:text-gray-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
+                  <span className="max-md:min-w-0 max-md:text-[0.95rem] text-left text-gray-700 dark:text-gray-200 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">
                     {faq.question}
                   </span>
                   <span
-                    className={`text-cyan-400 transition-transform duration-300 ${
+                    className={`flex-shrink-0 text-cyan-400 transition-transform duration-300 ${
                       openFaq === idx ? "rotate-180" : ""
                     }`}
                   >
@@ -342,7 +342,7 @@ export default function PremiumPage() {
                   </span>
                 </button>
                 {openFaq === idx && (
-                  <div className="px-6 pb-4 text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-white/10 animate-fade-in leading-relaxed">
+                  <div className="px-4 sm:px-6 pb-4 text-sm sm:text-base text-gray-600 dark:text-gray-400 border-t border-gray-200 dark:border-white/10 animate-fade-in leading-relaxed">
                     {faq.answer}
                   </div>
                 )}
@@ -352,13 +352,13 @@ export default function PremiumPage() {
         </div>
 
         {/* Footer CTA */}
-        <div className="text-center py-20 border-t border-gray-200 dark:border-white/10 mt-20">
-          <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-6">
+        <div className="text-center py-12 md:py-20 border-t border-gray-200 dark:border-white/10 mt-12 md:mt-20">
+          <h3 className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white mb-6">
             Ready to Join?
           </h3>
           <button
             onClick={handleSubscription}
-            className="px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 border border-cyan-400/30"
+            className="w-full sm:w-auto px-6 sm:px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-lg hover:shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 border border-cyan-400/30"
           >
             Upgrade to Premium Now 🚀
           </button>

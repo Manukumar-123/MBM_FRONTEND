@@ -4,7 +4,7 @@ import s from "./upload.module.css";
 export default function HeroSection() {
   return (
     <>
-      <div className={s.hero + " mt-20"}>
+      <div className={s.hero + " mt-20 max-[860px]:!mt-0"}>
         <div className={s.heroBadge}>
           <span className={s.dot} />
           Creative Studio

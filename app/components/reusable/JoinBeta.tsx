@@ -16,7 +16,7 @@ interface FlipCardProps {
 const FlipCard: React.FC<FlipCardProps> = ({
   Title,
   Back,
-  width = "w-96",
+  width = "w-[calc(100vw-2.5rem)] max-w-96 md:w-[calc(50vw-3.5rem)]",
   height = "h-[400px] sm:h-[500px]",
   flipDuration = 0.8,
   videoUrl = "https://www.w3schools.com/html/mov_bbb.mp4", // default video
@@ -74,8 +74,8 @@ const FlipCard: React.FC<FlipCardProps> = ({
             />
 
             {/* Bottom Overlay with Name */}
-            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent p-8">
-              <h6 className="text-white text-xl font-semibold tracking-widest">
+            <div className="absolute bottom-0 w-full bg-gradient-to-t from-black/90 to-transparent p-5 sm:p-8">
+              <h6 className="text-white text-lg sm:text-xl font-semibold tracking-wider sm:tracking-widest">
                 {Title}
               </h6>
             </div>

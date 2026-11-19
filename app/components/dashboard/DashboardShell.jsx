@@ -96,7 +96,7 @@ export default function DashboardShell({ profile, badges = {}, panels }) {
       )}
 
       {/* Main */}
-      <div>
+      <div className="max-md:min-w-0">
         <div className="flex items-center gap-4 px-4 sm:px-7 py-4 border-b border-borderline-soft sticky top-0 bg-black/90 backdrop-blur z-20">
           <button onClick={() => setMobileNavOpen(true)} className="md:hidden w-9 h-9 grid place-items-center rounded-lg bg-surface border border-borderline-soft text-gray-300 flex-shrink-0" aria-label="Open menu">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
@@ -110,7 +110,7 @@ export default function DashboardShell({ profile, badges = {}, panels }) {
           </div>
         </div>
 
-        <div className="px-4 sm:px-7 py-6 pb-16 max-w-[980px]">
+        <div className="px-4 sm:px-7 py-6 pb-16 max-w-[980px] max-md:max-w-full">
           {panels[active]}
         </div>
       </div>

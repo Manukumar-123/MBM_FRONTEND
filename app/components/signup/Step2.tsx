@@ -118,12 +118,12 @@ export default function Step2({
   };
 
   return (
-    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4">
+    <div className="auth-screen min-h-screen bg-gradient-to-b from-gray-100 to-white dark:from-[#191414] dark:to-black flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* Back Button */}
         <button
           onClick={onBack}
-          className="mb-8 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
+          className="mb-8 max-md:mb-6 max-md:min-h-10 max-md:-ml-1 max-md:pr-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-2"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
@@ -132,15 +132,15 @@ export default function Step2({
         </button>
 
         {/* Progress Bar */}
-        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-12">
+        <div className="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full mb-8 sm:mb-12">
           <div className="h-full w-1/2 bg-green-500 rounded-full transition-all duration-300"></div>
         </div>
 
         {/* Title */}
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
           Verify your {type === "email" ? "email" : "phone"}
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mb-8">
+        <p className="text-gray-500 dark:text-gray-400 mb-8 break-words">
           We sent a 4-digit code to {emailOrPhone}
         </p>
 
@@ -149,7 +149,7 @@ export default function Step2({
           <label className="block text-gray-900 dark:text-white font-semibold mb-4 text-sm">
             Verification Code
           </label>
-          <div className="flex gap-3 justify-center">
+          <div className="flex gap-2 sm:gap-3 justify-center">
             {otp.map((digit, index) => (
               <input
                 key={index}
@@ -160,7 +160,7 @@ export default function Step2({
                 onChange={(e) => handleOTPChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onKeyPress={handleKeyPress}
-                className="w-14 h-14 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-2xl font-bold text-center focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
+                className="w-12 h-12 sm:w-14 sm:h-14 bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white text-2xl font-bold text-center focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors"
                 placeholder="-"
               />
             ))}
@@ -175,7 +175,7 @@ export default function Step2({
           {canResend ? (
             <button
               onClick={handleResend}
-              className="text-green-500 font-semibold hover:text-green-400 transition-colors text-sm"
+              className="text-green-500 font-semibold hover:text-green-400 transition-colors text-sm max-md:min-h-10 max-md:px-3"
             >
               Resend code
             </button>
@@ -195,7 +195,7 @@ export default function Step2({
           disabled={isPending || otp.join("").length !== 4}
           className={`w-full  ${
             isPending ? "bg-gray-400" : "bg-green-500"
-          }  text-black font-bold h-14 rounded-full transition-colors duration-200 text-lg`}
+          }  text-black font-bold h-12 sm:h-14 rounded-full transition-colors duration-200 text-base sm:text-lg`}
         >
           {isPending ? <Spinner /> : "Verify"}
         </button>

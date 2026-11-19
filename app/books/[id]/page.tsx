@@ -47,11 +47,11 @@ const MetaItem: FC<{ label: string; value: string | number | undefined }> = ({
   label,
   value,
 }) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 max-md:min-w-0">
     <span className="text-[0.7rem] font-mono text-ink-muted uppercase tracking-wider">
       {label}
     </span>
-    <span className="text-sm text-ink">{value || "—"}</span>
+    <span className="text-sm text-ink max-md:break-words max-md:min-w-0">{value || "—"}</span>
   </div>
 );
 
@@ -117,7 +117,7 @@ const BookDetailPage: FC<Props> = () => {
   if (loading) {
     return (
       <>
-        <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-4 text-ink-dim">
+        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-4 text-ink-dim">
           <div className="w-10 h-10 border-3 border-line border-t-gold rounded-full animate-spin-slow" />
           <p>Loading work details…</p>
         </div>
@@ -128,7 +128,7 @@ const BookDetailPage: FC<Props> = () => {
   if (error || !book) {
     return (
       <>
-        <div className="max-w-[1100px] mx-auto px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
+        <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-10 flex flex-col items-center justify-center min-h-[300px] gap-3 text-center">
           <p className="text-lg text-ink">{error || "Book not found"}</p>
           <button
             onClick={() => history.back()}
@@ -143,12 +143,12 @@ const BookDetailPage: FC<Props> = () => {
 
   return (
     <>
-      <div className="fixed top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
-      <div className="fixed bottom-[-200px] right-[-200px] w-[500px] h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
+      <div className="fixed top-[-200px] left-[-200px] w-[300px] h-[300px] sm:w-[600px] sm:h-[600px] rounded-full bg-gold/5 blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-200px] right-[-200px] w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] rounded-full bg-info/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-[1100px] mx-auto px-6 py-10 mt-20">
+      <div className="max-w-[1100px] mx-auto px-4 sm:px-6 py-8 sm:py-10 mt-20 max-md:overflow-x-hidden max-[860px]:!mt-0 max-[860px]:!pt-2">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-6 text-sm">
+        <div className="flex flex-wrap items-center gap-2 mb-6 text-sm min-w-0">
           <span
             className="text-ink-dim cursor-pointer hover:text-gold transition-colors"
             onClick={() => router.push("/workList")}
@@ -156,7 +156,7 @@ const BookDetailPage: FC<Props> = () => {
             Your Works
           </span>
           <span className="text-ink-muted">/</span>
-          <span className="text-ink font-medium">{book.title}</span>
+          <span className="text-ink font-medium break-words min-w-0">{book.title}</span>
         </div>
 
         {/* Action bar */}
@@ -168,16 +168,16 @@ const BookDetailPage: FC<Props> = () => {
             ← Back
           </button>
           {isOwner && (
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => router.push(`/books/${bookId}/edit`)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
+                className="inline-flex items-center gap-2 px-4 sm:px-6 py-3 bg-gradient-to-br from-gold-dim to-gold text-deep rounded-sm font-body text-sm font-semibold hover:shadow-gold-glow hover:-translate-y-0.5 transition-all"
               >
                 <Pencil className="w-4 h-4" /> Edit Work
               </button>
               <button
                 onClick={() => setDeleteModal(true)}
-                className="px-6 py-3 bg-danger/15 border border-danger/30 rounded-sm text-danger font-body text-sm font-semibold hover:bg-danger/25 transition-all"
+                className="px-4 sm:px-6 py-3 bg-danger/15 border border-danger/30 rounded-sm text-danger font-body text-sm font-semibold hover:bg-danger/25 transition-all"
               >
                 Delete
               </button>
@@ -186,9 +186,9 @@ const BookDetailPage: FC<Props> = () => {
         </div>
 
         {/* ── Main grid ── */}
-        <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-8 md:gap-12 mb-12 sm:mb-16">
           {/* Left: Cover */}
-          <div className="flex flex-col gap-4 max-w-[320px] mx-auto md:mx-0">
+          <div className="flex flex-col gap-4 w-full max-w-[320px] mx-auto md:mx-0">
             <div className="rounded-card overflow-hidden border border-line bg-card">
               {book.frontCover ? (
                 <img
@@ -231,7 +231,7 @@ const BookDetailPage: FC<Props> = () => {
           {/* Right: Info */}
           <div className="min-w-0">
             {/* Status row */}
-            <div className="flex items-center gap-2.5 mb-3">
+            <div className="flex items-center gap-2.5 mb-3 max-md:flex-wrap">
               <StatusBadge status={book.status} />
               {book.edition && book.edition !== "1st Edition" && (
                 <span className="text-[0.7rem] font-mono text-info bg-info/10 px-2.5 py-1 rounded">
@@ -239,7 +239,7 @@ const BookDetailPage: FC<Props> = () => {
                 </span>
               )}
             </div>
-            <h1 className="font-serif text-4xl font-semibold text-ink leading-[1.15] tracking-tight">
+            <h1 className="max-sm:text-[1.75rem] font-serif text-3xl sm:text-4xl font-semibold text-ink leading-[1.15] tracking-tight break-words">
               {book.title}
             </h1>
             {book.subtitle && (
@@ -320,7 +320,7 @@ const BookDetailPage: FC<Props> = () => {
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
                 Details
               </h3>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 max-sm:grid-cols-2 max-sm:gap-3">
                 <MetaItem label="Pages" value={book.pageCount} />
                 <MetaItem label="ISBN" value={book.isbn} />
                 <MetaItem label="Edition" value={book.edition} />
@@ -342,7 +342,7 @@ const BookDetailPage: FC<Props> = () => {
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
                 Copyright & Licensing
               </h3>
-              <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4">
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-4 max-sm:grid-cols-2 max-sm:gap-3">
                 <MetaItem
                   label="License"
                   value={COPYRIGHT_LABELS[book.copyrightType ?? "standard"]}
@@ -368,14 +368,14 @@ const BookDetailPage: FC<Props> = () => {
               <h3 className="font-serif text-lg font-semibold text-gold-dim tracking-wide mb-3">
                 Statistics
               </h3>
-              <div className="flex gap-5">
+              <div className="flex flex-wrap gap-3 sm:gap-5">
                 {[
                   { num: book.viewCount ?? 0, label: "Views" },
                   { num: book.downloadCount ?? 0, label: "Downloads" },
                 ].map(({ num, label }) => (
                   <div
                     key={label}
-                    className="flex flex-col items-center px-7 py-4 bg-elevated border border-line rounded-sm"
+                    className="flex flex-col items-center px-5 sm:px-7 py-4 bg-elevated border border-line rounded-sm"
                   >
                     <span className="font-serif text-3xl font-bold text-gold">
                       {num}
@@ -387,7 +387,7 @@ const BookDetailPage: FC<Props> = () => {
                 ))}
                 <Link
                   href={`/book/${bookId}`}
-                  className=" border border-gold p-5 text-center rounded-sm pt-8"
+                  className=" border border-gold p-5 text-center rounded-sm pt-8 max-sm:flex max-sm:items-center max-sm:justify-center max-sm:pt-5"
                   type="button"
                 >
                   View Work

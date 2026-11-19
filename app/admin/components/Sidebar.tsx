@@ -14,6 +14,7 @@ import {
   Settings,
   LogOut,
   Menu,
+  X,
 } from "lucide-react";
 import useAdminAuthStore from "../../store/adminAuthStore";
 
@@ -42,12 +43,18 @@ const NAV: NavSection[] = [
 ];
 
 export default function Sidebar({
-  collapsed,
+  collapsed: collapsedProp,
   onToggle,
+  mobileOpen = false,
+  onMobileClose,
 }: {
   collapsed: boolean;
   onToggle: () => void;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }) {
+  // The icon-only rail is a desktop (lg+) feature; the mobile drawer always shows labels.
+  const collapsed = collapsedProp && !mobileOpen;
   const pathname = usePathname();
   const router = useRouter();
   const { clearAdminToken } = useAdminAuthStore();
@@ -60,8 +67,10 @@ export default function Sidebar({
   return (
     <aside
       className={`fixed inset-y-0 left-0 ${
-        collapsed ? "w-[76px]" : "w-64"
-      } bg-[#0c0c11] border-r border-white/[0.06] flex flex-col z-30 transition-all duration-200`}
+        collapsed ? "w-[76px]" : "w-64 max-w-[85vw]"
+      } ${
+        mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      } bg-[#0c0c11] border-r border-white/[0.06] flex flex-col z-40 transition-all duration-200`}
     >
       <div className="h-16 flex items-center justify-between px-5 border-b border-white/[0.06]">
         {!collapsed && (
@@ -72,10 +81,17 @@ export default function Sidebar({
         )}
         <button
           onClick={onToggle}
-          className="text-[#8a8a98] hover:text-white transition-colors"
+          className="hidden lg:block text-[#8a8a98] hover:text-white transition-colors"
           aria-label="Toggle sidebar"
         >
           <Menu size={18} />
+        </button>
+        <button
+          onClick={onMobileClose}
+          className="lg:hidden text-[#8a8a98] hover:text-white transition-colors max-md:p-2.5 max-md:-mr-2.5"
+          aria-label="Close sidebar"
+        >
+          <X size={18} />
         </button>
       </div>
 
@@ -93,7 +109,7 @@ export default function Sidebar({
                   <Link
                     key={href}
                     href={href}
-                    className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium transition-colors relative ${
+                    className={`w-full flex items-center gap-3 px-3 py-2 max-md:py-2.5 rounded-lg text-[13.5px] font-medium transition-colors relative ${
                       active
                         ? "text-white bg-white/[0.06]"
                         : "text-[#9a9aa8] hover:text-white hover:bg-white/[0.03]"
@@ -120,7 +136,7 @@ export default function Sidebar({
       <div className="p-3 border-t border-white/[0.06]">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] font-medium text-[#9a9aa8] hover:text-rose-300 hover:bg-rose-400/[0.06] transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2 max-md:py-2.5 rounded-lg text-[13.5px] font-medium text-[#9a9aa8] hover:text-rose-300 hover:bg-rose-400/[0.06] transition-colors"
         >
           <LogOut size={17} />
           {!collapsed && "Log out"}

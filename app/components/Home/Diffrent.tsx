@@ -72,24 +72,26 @@ const Diffrent: React.FC = () => {
   if (!mounted) return null; // ✅ SSR-safe: render only on client
 
   return (
-    <div className="relative isolate overflow-hidden bg-white dark:bg-black py-20">
+    <div className="relative isolate overflow-hidden bg-white dark:bg-black py-20 max-md:py-14">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_8%_12%,rgba(244,114,182,0.14),transparent_36%),radial-gradient(ellipse_at_90%_70%,rgba(34,211,238,0.14),transparent_42%)]"
       />
       <div className="relative z-10 text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+        <h1 className="text-3xl min-[380px]:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           What makes us <br /> different?
         </h1>
-        <p className="text-gray-700 dark:text-white text-sm md:text-base max-w-2xl mx-auto">
+        <p className="text-gray-700 dark:text-white text-sm md:text-base max-w-2xl mx-auto px-4 max-md:leading-6">
           Other social media apps treat music <br /> as just another piece of
           content, M_B_M treats <br /> it as an experience.
         </p>
       </div>
 
+      {/* Scale the fixed-radius orbit down on narrow phones so it fits the viewport */}
+      <div className="relative z-10 scale-[0.8] min-[380px]:scale-90 sm:scale-100">
       <div
         ref={containerRef}
-        className="relative z-10 md:h-[500px] md:w-[500px] h-70 w-70 mx-auto mt-20"
+        className="relative z-10 md:h-[500px] md:w-[500px] h-70 w-70 mx-auto mt-16 sm:mt-20"
       >
         {/* Rotating outer ring */}
         <div
@@ -126,7 +128,7 @@ const Diffrent: React.FC = () => {
                   {/* Tooltip */}
                   {hoveredIndex === index && (
                     <div
-                      className="absolute top-1/2 left-full -translate-y-1/2 ml-3 w-80 h-40 rounded-lg overflow-hidden shadow-lg z-[100] cursor-pointer"
+                      className="absolute top-1/2 left-full -translate-y-1/2 ml-3 w-44 h-24 sm:w-80 sm:h-40 rounded-lg overflow-hidden shadow-lg z-[100] cursor-pointer"
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
@@ -151,6 +153,7 @@ const Diffrent: React.FC = () => {
             </h1>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
